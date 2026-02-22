@@ -19,8 +19,8 @@ public static class ElementTransformUtilsExtensions
         [CodeTemplate(
             searchTemplate: "$expr$.CanMirrorElement()",
             Message = "CanMirrorElement is obsolete, use CanBeMirrored instead",
-            ReplaceTemplate = "$expr$.CanBeMirrored()",
-            ReplaceMessage = "Replace with CanBeMirrored()")]
+            ReplaceTemplate = "$expr$.CanBeMirrored",
+            ReplaceMessage = "Replace with CanBeMirrored")]
         public bool CanMirrorElement()
         {
             return ElementTransformUtils.CanMirrorElement(element.Document, element.Id);
@@ -28,11 +28,7 @@ public static class ElementTransformUtilsExtensions
 
         /// <summary>Determines whether element can be mirrored</summary>
         /// <returns>True if the element can be mirrored</returns>
-        [Pure]
-        public bool CanBeMirrored()
-        {
-            return ElementTransformUtils.CanMirrorElement(element.Document, element.Id);
-        }
+        public bool CanBeMirrored => ElementTransformUtils.CanMirrorElement(element.Document, element.Id);
 
         /// <summary>
         ///     Copies an element and places the copy at a location indicated by a given transformation

@@ -122,7 +122,7 @@ elementId.Rotate(document, axis, angle);
 **CanBeMirrored** extension determines whether an element can be mirrored.
 
 ```csharp
-var canMirror = element.CanBeMirrored();
+var canMirror = element.CanBeMirrored;
 var canMirror = elementId.CanBeMirrored(document);
 ```
 
@@ -147,7 +147,7 @@ var isPhysical = elementId.IsPhysicalElement(document);
 **CanBeDeleted** extension indicates whether an element can be deleted.
 
 ```csharp
-var canDelete = element.CanBeDeleted();
+var canDelete = element.CanBeDeleted;
 var canDelete = elementId.CanBeDeleted(document);
 ```
 
@@ -1158,7 +1158,7 @@ var decimal = color.ToDecimal();
 **CanBeConvertedToFaceHostBased** extension indicates whether the family can be converted to face host based.
 
 ```csharp
-var canConvert = family.CanBeConvertedToFaceHostBased();
+var canConvert = family.CanBeConvertedToFaceHostBased;
 var canConvert = familyId.CanBeConvertedToFaceHostBased(document);
 ```
 

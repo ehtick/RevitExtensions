@@ -1,7 +1,6 @@
-﻿// ReSharper disable once CheckNamespace
+﻿using JetBrains.Annotations;
 
-using JetBrains.Annotations;
-
+// ReSharper disable once CheckNamespace
 namespace Nice3point.Revit.Extensions;
 
 /// <summary>
@@ -19,8 +18,8 @@ public static class FamilyUtilsExtensions
         [CodeTemplate(
             searchTemplate: "$expr$.CanConvertToFaceHostBased()",
             Message = "CanConvertToFaceHostBased is obsolete, use CanBeConvertedToFaceHostBased instead",
-            ReplaceTemplate = "$expr$.CanBeConvertedToFaceHostBased()",
-            ReplaceMessage = "Replace with CanBeConvertedToFaceHostBased()")]
+            ReplaceTemplate = "$expr$.CanBeConvertedToFaceHostBased",
+            ReplaceMessage = "Replace with CanBeConvertedToFaceHostBased")]
         public bool CanConvertToFaceHostBased()
         {
             return FamilyUtils.FamilyCanConvertToFaceHostBased(family.Document, family.Id);
@@ -32,11 +31,7 @@ public static class FamilyUtilsExtensions
         /// Otherwise false, which will be returned if there any family instances exist in the project, the family is already face-based, or the family does not have a host.
         /// Also, false is returned if the family does not belong to one of the following categories:
         /// <list type="bullet"><item>OST_CommunicationDevices</item><item>OST_DataDevices</item><item>OST_DuctTerminal</item><item>OST_ElectricalEquipment</item><item>OST_ElectricalFixtures</item><item>OST_FireAlarmDevices</item><item>OST_LightingDevices</item><item>OST_LightingFixtures</item><item>OST_MechanicalControlDevices</item><item>OST_MechanicalEquipment</item><item>OST_NurseCallDevices</item><item>OST_PlumbingEquipment</item><item>OST_PlumbingFixtures</item><item>OST_SecurityDevices</item><item>OST_Sprinklers</item><item>OST_TelephoneDevices</item></list></returns>
-        [Pure]
-        public bool CanBeConvertedToFaceHostBased()
-        {
-            return FamilyUtils.FamilyCanConvertToFaceHostBased(family.Document, family.Id);
-        }
+        public bool CanBeConvertedToFaceHostBased => FamilyUtils.FamilyCanConvertToFaceHostBased(family.Document, family.Id);
 
         /// <summary>Converts a family to be face host based.</summary>
         /// <remarks>

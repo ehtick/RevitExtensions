@@ -19,8 +19,8 @@ public static class DocumentValidationExtensions
         [CodeTemplate(
             searchTemplate: "$expr$.CanDeleteElement()",
             Message = "CanDeleteElement is obsolete, use CanBeDeleted instead",
-            ReplaceTemplate = "$expr$.CanBeDeleted()",
-            ReplaceMessage = "Replace with CanBeDeleted()")]
+            ReplaceTemplate = "$expr$.CanBeDeleted",
+            ReplaceMessage = "Replace with CanBeDeleted")]
         public bool CanDeleteElement()
         {
             return DocumentValidation.CanDeleteElement(element.Document, element.Id);
@@ -28,11 +28,7 @@ public static class DocumentValidationExtensions
 
         /// <summary>Indicates if an element can be deleted.</summary>
         /// <returns>True if the element can be deleted, false otherwise.</returns>
-        [Pure]
-        public bool CanBeDeleted()
-        {
-            return DocumentValidation.CanDeleteElement(element.Document, element.Id);
-        }
+        public bool CanBeDeleted => DocumentValidation.CanDeleteElement(element.Document, element.Id);
     }
 
     /// <param name="elementId">The element id to check.</param>
