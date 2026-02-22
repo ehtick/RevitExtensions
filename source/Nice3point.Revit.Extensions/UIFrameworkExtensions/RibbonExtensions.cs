@@ -630,6 +630,39 @@ public static partial class RibbonExtensions
             AddButtonShortcuts(button, string.Join("#", shortcuts));
             return button;
         }
+
+        /// <summary>
+        ///     Attempts to add keyboard shortcuts to the specified <see cref="PushButton"/> using the provided string representation.
+        ///     Shortcuts are added only if they do not conflict with existing commands.
+        /// </summary>
+        /// <param name="representation">A string representation of the shortcuts.</param>
+        /// <returns><see langword="true"/> if at least one shortcut was successfully added; otherwise, <see langword="false"/>.</returns>
+        /// <remarks>The representation can be a single shortcut, or a group of shortcuts with a '#' delimiter</remarks>
+        /// <example>
+        ///     <code>
+        ///         button.TryAddShortcuts("RE");
+        ///     </code>
+        /// </example>
+        public bool TryAddShortcuts(string representation)
+        {
+            return TryAddButtonShortcuts(button, representation);
+        }
+
+        /// <summary>
+        ///     Attempts to add keyboard shortcuts to the specified <see cref="PushButton"/> using the provided collection of shortcut strings.
+        ///     Shortcuts are added only if they do not conflict with existing commands.
+        /// </summary>
+        /// <param name="shortcuts">A collection of shortcut strings to be added to the button.</param>
+        /// <returns><see langword="true"/> if at least one shortcut was successfully added; otherwise, <see langword="false"/>.</returns>
+        /// <example>
+        ///     <code>
+        ///         button.TryAddShortcuts("RE", "NP", "QQ");
+        ///     </code>
+        /// </example>
+        public bool TryAddShortcuts(params IEnumerable<string> shortcuts)
+        {
+            return TryAddButtonShortcuts(button, string.Join("#", shortcuts));
+        }
     }
 
     /// <param name="item">The source ribbon item.</param>

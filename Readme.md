@@ -393,6 +393,17 @@ pushButton.AddShortcuts(new List<string>() {"RE", "NP"});
 
 The method design is intended to add only the default shortcut assignment, and does not override the user's settings if they decide to change it.
 
+**TryAddShortcuts** extension attempts to add keyboard shortcuts to the PushButton.
+Shortcuts are added only if they do not conflict with existing commands.
+
+```csharp
+var isAdded = pushButton.TryAddShortcuts("RE");
+var isAdded = pushButton.TryAddShortcuts("RE#NP");
+var isAdded = pushButton.TryAddShortcuts("RE", "NP");
+var isAdded = pushButton.TryAddShortcuts(["RE", "NP"]);
+var isAdded = pushButton.TryAddShortcuts(new List<string>() {"RE", "NP"});
+```
+
 **AddStackPanel** extension adds a vertical stack panel to the Ribbon panel.
 
 ```csharp

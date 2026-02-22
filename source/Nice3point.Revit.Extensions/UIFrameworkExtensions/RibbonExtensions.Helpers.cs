@@ -53,6 +53,53 @@ public static partial class RibbonExtensions
     }
 
     /// <summary>
+    ///     Attempts to add keyboard shortcuts for the specified <see cref="PushButton"/> using the provided string representation.
+    ///     Shortcuts are added only if they do not conflict with existing commands.
+    /// </summary>
+    /// <param name="button">The <see cref="PushButton"/> to which the shortcuts will be applied.</param>
+    /// <param name="representation">A string representation of the shortcuts, where each shortcut is separated by the '#' character.</param>
+    /// <returns><see langword="true"/> if at least one shortcut was successfully added; otherwise, <see langword="false"/>.</returns>
+    private static bool TryAddButtonShortcuts(PushButton button, string representation)
+    {
+        var internalItem = button.GetInternalItem();
+        ShortcutsHelper.LoadCommands(); // Update the command list after button creation
+
+        if (!ShortcutsHelper.Commands.TryGetValue(internalItem.Id, out var shortcutItem))
+        {
+            throw new InvalidOperationException("The specified button does not exist in the command list.");
+        }
+
+        var newShortcuts = representation.Split(['#'], StringSplitOptions.RemoveEmptyEntries);
+        if (newShortcuts.Length == 0) return false;
+
+        var allShortcuts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var command in ShortcutsHelper.Commands.Values)
+        {
+            if (command.Shortcuts is null) continue;
+            foreach (var shortcut in command.Shortcuts)
+            {
+                allShortcuts.Add(shortcut);
+            }
+        }
+
+        var added = false;
+        foreach (var newShortcut in newShortcuts)
+        {
+            if (!allShortcuts.Add(newShortcut)) continue;
+
+            shortcutItem.Shortcuts.Add(newShortcut);
+            added = true;
+        }
+
+        if (added)
+        {
+            KeyboardShortcutService.applyShortcutChanges(ShortcutsHelper.Commands);
+        }
+
+        return added;
+    }
+
+    /// <summary>
     ///     Creates a new <see cref="Autodesk.Revit.UI.RibbonPanel"/> using the specified internal <see cref="Autodesk.Windows.RibbonPanel"/>.
     /// </summary>
     /// <param name="panel">The internal <see cref="Autodesk.Windows.RibbonPanel"/> instance.</param>
