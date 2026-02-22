@@ -108,5 +108,14 @@ public static class ParameterExtensions
 
             return parameter;
         }
+
+        /// <summary>
+        ///     Create an ElementId handle with the given BuiltInParameter id.
+        /// </summary>
+        [Pure]
+        public ElementId ToElementId()
+        {
+            return new ElementId(builtInParameter);
+        }
     }
 }
