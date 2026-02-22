@@ -12,12 +12,17 @@ internal sealed class RibbonStackPanel : IRibbonStackPanel
 
     private RibbonRowPanel _currentPanel;
     private readonly RibbonPanel _host;
-    private readonly MethodInfo _addItemMethod;
     private readonly Autodesk.Windows.RibbonPanel _rawPanel;
+#if !NET8_0_OR_GREATER
+    private readonly MethodInfo _addItemMethod;
+#endif
 
     internal RibbonStackPanel(RibbonPanel host)
     {
         _host = host;
+#if NET8_0_OR_GREATER
+        _rawPanel = UnsafeAccessors.GetInternalPanel(host);
+#else
         var ribbonPanelType = host.GetType();
 
         _addItemMethod = ribbonPanelType
@@ -26,6 +31,7 @@ internal sealed class RibbonStackPanel : IRibbonStackPanel
         _rawPanel = (Autodesk.Windows.RibbonPanel)ribbonPanelType
             .GetField("m_RibbonPanel", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)!
             .GetValue(host)!;
+#endif
 
         _currentPanel = new RibbonRowPanel();
     }
@@ -106,7 +112,11 @@ internal sealed class RibbonStackPanel : IRibbonStackPanel
         object item;
         try
         {
+#if NET8_0_OR_GREATER
+            item = UnsafeAccessors.AddItemToRowPanel(_host, _currentPanel, itemData);
+#else
             item = _addItemMethod.Invoke(_host, [_currentPanel, itemData])!;
+#endif
         }
         catch (TargetInvocationException exception)
         {

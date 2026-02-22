@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.UI;
 using Autodesk.Windows;
 using JetBrains.Annotations;
 using UIFramework;
@@ -11,6 +10,12 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Media.Imaging;
 using RibbonButton = Autodesk.Revit.UI.RibbonButton;
+#endif
+#if NET8_0_OR_GREATER
+using Nice3point.Revit.Extensions.Internal;
+
+#else
+using System.Reflection;
 #endif
 
 // ReSharper disable once CheckNamespace
@@ -35,7 +40,11 @@ public static partial class RibbonExtensions
         var internalItem = button.GetInternalItem();
         ShortcutsHelper.LoadCommands(); // Update the command list after button creation
 
-        var shortcutItem = ShortcutsHelper.Commands[internalItem.Id];
+        if (!ShortcutsHelper.Commands.TryGetValue(internalItem.Id, out var shortcutItem))
+        {
+            throw new InvalidOperationException("The specified button does not exist in the command list.");
+        }
+
         if (shortcutItem.ShortcutsRep is not null) return;
 
         shortcutItem.ShortcutsRep = representation;
@@ -51,6 +60,9 @@ public static partial class RibbonExtensions
     /// <returns>The created <see cref="Autodesk.Revit.UI.RibbonPanel"/>.</returns>
     private static RibbonPanel CreatePanel(Autodesk.Windows.RibbonPanel panel, string tabId)
     {
+#if NET8_0_OR_GREATER
+        return UnsafeAccessors.CreateRibbonPanel(panel, tabId);
+#else
         var type = typeof(RibbonPanel);
 #if NET
         var constructorInfo = type.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly,
@@ -62,6 +74,7 @@ public static partial class RibbonExtensions
             null)!;
 #endif
         return (RibbonPanel)constructorInfo.Invoke([panel, tabId]);
+#endif
     }
 
     /// <summary>
@@ -100,9 +113,13 @@ public static partial class RibbonExtensions
     [Pure]
     private static Dictionary<string, Dictionary<string, RibbonPanel>> GetCachedTabs()
     {
+#if NET8_0_OR_GREATER
+        return UnsafeAccessors.GetCachedTabs(null);
+#else
         var applicationType = typeof(UIApplication);
         var panelsField = applicationType.GetField("m_ItemsNameDictionary", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly)!;
         return (Dictionary<string, Dictionary<string, RibbonPanel>>)panelsField.GetValue(null)!;
+#endif
     }
 
     /// <summary>
@@ -113,8 +130,12 @@ public static partial class RibbonExtensions
     /// <returns>The internal <see cref="Autodesk.Windows.RibbonItem"/> instance.</returns>
     private static Autodesk.Windows.RibbonItem GetInternalItem(this RibbonItem ribbonItem)
     {
+#if NET8_0_OR_GREATER
+        return UnsafeAccessors.GetInternalItem(ribbonItem);
+#else
         var internalField = typeof(RibbonItem).GetField("m_RibbonItem", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
         return (Autodesk.Windows.RibbonItem)internalField.GetValue(ribbonItem)!;
+#endif
     }
 
     /// <summary>
@@ -125,8 +146,12 @@ public static partial class RibbonExtensions
     /// <returns>The internal <see cref="Autodesk.Windows.RibbonPanel"/> instance.</returns>
     private static Autodesk.Windows.RibbonPanel GetInternalPanel(this RibbonPanel panel)
     {
+#if NET8_0_OR_GREATER
+        return UnsafeAccessors.GetInternalPanel(panel);
+#else
         var internalField = panel.GetType().GetField("m_RibbonPanel", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
         return (Autodesk.Windows.RibbonPanel)internalField.GetValue(panel)!;
+#endif
     }
 
 #if REVIT2024_OR_GREATER
