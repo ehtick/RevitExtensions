@@ -122,7 +122,7 @@ public sealed class ElementIdExtensionsTests : RevitApiTest
             document = Application.OpenDocumentFile(filePath);
 
 #if REVIT2024_OR_GREATER
-            var invalidId = new ElementId(999999999);
+            var invalidId = new ElementId(999999999L);
 #else
             var invalidId = new ElementId(999999999);
 #endif
