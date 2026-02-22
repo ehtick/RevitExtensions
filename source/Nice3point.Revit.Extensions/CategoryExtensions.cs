@@ -44,5 +44,14 @@ public static class CategoryExtensions
 
             return category;
         }
+
+        /// <summary>
+        ///     Create an ElementId handle with the given BuiltInCategory id.
+        /// </summary>
+        [Pure]
+        public ElementId ToElementId()
+        {
+            return new ElementId(builtInCategory);
+        }
     }
 }
