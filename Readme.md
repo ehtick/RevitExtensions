@@ -40,7 +40,6 @@ Package included by default in [Revit Templates](https://github.com/Nice3point/R
 ## Table of contents
 
 <!-- TOC -->
-
 * [Element extensions](#element-extensions)
     * [Element transform extensions](#element-transform-extensions)
     * [Element association extensions](#element-association-extensions)
@@ -50,6 +49,7 @@ Package included by default in [Revit Templates](https://github.com/Nice3point/R
 * [ElementId extensions](#elementid-extensions)
     * [ElementId transform extensions](#elementid-transform-extensions)
 * [Application extensions](#application-extensions)
+* [UIApplication Extensions](#uiapplication-extensions)
     * [Ribbon Extensions](#ribbon-extensions)
     * [ContextMenu Extensions](#contextmenu-extensions)
 * [Document extensions](#document-extensions)
@@ -72,6 +72,8 @@ Package included by default in [Revit Templates](https://github.com/Nice3point/R
     * [View managers extensions](#view-managers-extensions)
 * [Imperial Extensions](#imperial-extensions)
 * [System Extensions](#system-extensions)
+
+<!-- TOC -->
 
 ## Element extensions
 
@@ -272,6 +274,22 @@ var copy = elementIds.CopyElements(document, new XYZ(1, 1, 1));
 ```
 
 ## Application extensions
+
+**AsControlledApplication** extension creates a `ControlledApplication` from the current `Application` instance.
+This allows using APIs that require a `ControlledApplication` outside of the `IExternalDBApplication.OnStartup` context.
+
+```csharp
+var controlledApplication = application.AsControlledApplication();
+```
+
+## UIApplication Extensions
+
+**AsControlledApplication** extension creates a `UIControlledApplication` from the current `UIApplication` instance.
+This allows using APIs that require a `UIControlledApplication`, such as ribbon customization, outside of the `IExternalApplication.OnStartup` context.
+
+```csharp
+var controlledApplication = uiApplication.AsControlledApplication();
+```
 
 ### Ribbon Extensions
 

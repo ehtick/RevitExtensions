@@ -1,6 +1,6 @@
 # Release 2027.0.0-preview.1.20260120
 
-This update focuses on improved API design through C# 14 extension methods syntax, .NET 10 support, Revit 2027 support, and extensive ElementId overloads.
+This update focuses on improved API design through C# 14 extension methods syntax, .NET 10 support, Revit 2027 support, and ElementId overloads.
 
 ## Breaking changes
 
@@ -49,6 +49,14 @@ family.CanConvertToFaceHostBased();      // Old, IDE suggests: family.CanBeConve
 ```
 
 ## New Features
+
+**Application Extensions:**
+
+- `application.AsControlledApplication()` - creates a `ControlledApplication` from an `Application` instance
+
+**UIApplication Extensions:**
+
+- `uiApplication.AsControlledApplication()` - creates a `UIControlledApplication` from a `UIApplication` instance
 
 **ElementId Extension Overloads**
 
