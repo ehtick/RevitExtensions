@@ -48,6 +48,8 @@ Package included by default in [Revit Templates](https://github.com/Nice3point/R
     * [Element schema extensions](#element-schema-extensions)
 * [ElementId extensions](#elementid-extensions)
     * [ElementId transform extensions](#elementid-transform-extensions)
+    * [ElementId category extensions](#elementid-category-extensions)
+    * [ElementId parameter extensions](#elementid-parameter-extensions)
 * [Application extensions](#application-extensions)
 * [UIApplication Extensions](#uiapplication-extensions)
     * [Ribbon Extensions](#ribbon-extensions)
@@ -72,7 +74,6 @@ Package included by default in [Revit Templates](https://github.com/Nice3point/R
     * [View managers extensions](#view-managers-extensions)
 * [Imperial Extensions](#imperial-extensions)
 * [System Extensions](#system-extensions)
-
 <!-- TOC -->
 
 ## Element extensions
@@ -271,6 +272,22 @@ var copy = elementIds.CopyElements(source, destination, transform, options);
 
 ```csharp
 var copy = elementIds.CopyElements(document, new XYZ(1, 1, 1));
+```
+
+### ElementId category extensions
+
+**ToElementId** extension creates an ElementId handle from a BuiltInCategory value.
+
+```csharp
+var elementId = BuiltInCategory.OST_Walls.ToElementId();
+```
+
+### ElementId parameter extensions
+
+**ToElementId** extension creates an ElementId handle from a BuiltInParameter value.
+
+```csharp
+var elementId = BuiltInParameter.WALL_TOP_OFFSET.ToElementId();
 ```
 
 ## Application extensions
