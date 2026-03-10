@@ -21,7 +21,7 @@ internal sealed class RibbonStackPanel : IRibbonStackPanel
     {
         _host = host;
 #if NET8_0_OR_GREATER
-        _rawPanel = UnsafeAccessors.GetInternalPanel(host);
+        _rawPanel = UnsafeUiAccessors.GetInternalPanel(host);
 #else
         var ribbonPanelType = host.GetType();
 
@@ -113,7 +113,7 @@ internal sealed class RibbonStackPanel : IRibbonStackPanel
         try
         {
 #if NET8_0_OR_GREATER
-            item = UnsafeAccessors.AddItemToRowPanel(_host, _currentPanel, itemData);
+            item = UnsafeUiAccessors.AddItemToRowPanel(_host, _currentPanel, itemData);
 #else
             item = _addItemMethod.Invoke(_host, [_currentPanel, itemData])!;
 #endif

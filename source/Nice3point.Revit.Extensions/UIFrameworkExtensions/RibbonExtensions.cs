@@ -14,7 +14,7 @@ using RibbonPanel = Autodesk.Revit.UI.RibbonPanel;
 using TextBox = Autodesk.Revit.UI.TextBox;
 
 // ReSharper disable once CheckNamespace
-namespace Nice3point.Revit.Extensions;
+namespace Nice3point.Revit.Extensions.UI;
 
 /// <summary>
 ///     Contains extension methods for creating and managing custom Ribbon elements in the Revit UI.

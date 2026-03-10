@@ -15,7 +15,7 @@ internal static class ColorRepresentationUtils
     /// <summary>
     /// Return a <see cref="string"/> representation of a CMYK color
     /// </summary>
-    /// <param name="color">The <see cref="System.Windows.Media.Color"/> for the CMYK color presentation</param>
+    /// <param name="color">The <see cref="global::System.Windows.Media.Color"/> for the CMYK color presentation</param>
     /// <returns>A <see cref="string"/> representation of a CMYK color</returns>
     internal static string ColorToCmyk(Color color)
     {

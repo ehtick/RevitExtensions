@@ -11,7 +11,7 @@ namespace Nice3point.Revit.Extensions.Internal.Formats;
 internal static class ColorFormatUtils
 {
     /// <summary>
-    ///     Return a drawing color of a given <see cref="System.Windows.Media.Color"/>
+    ///     Return a drawing color of a given <see cref="global::System.Windows.Media.Color"/>
     /// </summary>
     internal static Color GetDrawingColor(this System.Windows.Media.Color color)
     {

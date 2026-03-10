@@ -5,7 +5,8 @@ using JetBrains.Annotations;
 using Nice3point.Revit.Extensions.Internal;
 using ContextMenu = Autodesk.Revit.UI.ContextMenu;
 
-namespace Nice3point.Revit.Extensions;
+// ReSharper disable once CheckNamespace
+namespace Nice3point.Revit.Extensions.UI;
 
 /// <summary>
 ///     Revit Context Menu Extensions

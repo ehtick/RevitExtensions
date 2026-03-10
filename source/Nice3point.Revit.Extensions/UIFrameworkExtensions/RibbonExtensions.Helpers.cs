@@ -19,7 +19,7 @@ using System.Reflection;
 #endif
 
 // ReSharper disable once CheckNamespace
-namespace Nice3point.Revit.Extensions;
+namespace Nice3point.Revit.Extensions.UI;
 
 public static partial class RibbonExtensions
 {
@@ -108,7 +108,7 @@ public static partial class RibbonExtensions
     private static RibbonPanel CreatePanel(Autodesk.Windows.RibbonPanel panel, string tabId)
     {
 #if NET8_0_OR_GREATER
-        return UnsafeAccessors.CreateRibbonPanel(panel, tabId);
+        return UnsafeUiAccessors.CreateRibbonPanel(panel, tabId);
 #else
         var type = typeof(RibbonPanel);
 #if NET
@@ -161,7 +161,7 @@ public static partial class RibbonExtensions
     private static Dictionary<string, Dictionary<string, RibbonPanel>> GetCachedTabs()
     {
 #if NET8_0_OR_GREATER
-        return UnsafeAccessors.GetCachedTabs(null);
+        return UnsafeUiAccessors.GetCachedTabs(null);
 #else
         var applicationType = typeof(UIApplication);
         var panelsField = applicationType.GetField("m_ItemsNameDictionary", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly)!;
@@ -178,7 +178,7 @@ public static partial class RibbonExtensions
     private static Autodesk.Windows.RibbonItem GetInternalItem(this RibbonItem ribbonItem)
     {
 #if NET8_0_OR_GREATER
-        return UnsafeAccessors.GetInternalItem(ribbonItem);
+        return UnsafeUiAccessors.GetInternalItem(ribbonItem);
 #else
         var internalField = typeof(RibbonItem).GetField("m_RibbonItem", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
         return (Autodesk.Windows.RibbonItem)internalField.GetValue(ribbonItem)!;
@@ -194,7 +194,7 @@ public static partial class RibbonExtensions
     private static Autodesk.Windows.RibbonPanel GetInternalPanel(this RibbonPanel panel)
     {
 #if NET8_0_OR_GREATER
-        return UnsafeAccessors.GetInternalPanel(panel);
+        return UnsafeUiAccessors.GetInternalPanel(panel);
 #else
         var internalField = panel.GetType().GetField("m_RibbonPanel", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
         return (Autodesk.Windows.RibbonPanel)internalField.GetValue(panel)!;

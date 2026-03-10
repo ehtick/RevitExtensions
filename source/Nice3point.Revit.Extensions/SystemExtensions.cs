@@ -2,13 +2,13 @@
 using JetBrains.Annotations;
 
 // ReSharper disable once CheckNamespace
-namespace Nice3point.Revit.Extensions.SystemExtensions;
+namespace Nice3point.Revit.Extensions.Bcl;
 
 /// <summary>
-///     System Extensions
+///     Object Extensions
 /// </summary>
 [PublicAPI]
-public static class SystemExtensions
+public static class ObjectExtensions
 {
     /// <param name="obj">The source object</param>
     extension(object obj)
@@ -22,7 +22,14 @@ public static class SystemExtensions
             return (T)obj;
         }
     }
+}
 
+/// <summary>
+///     Double Extensions
+/// </summary>
+[PublicAPI]
+public static class DoubleExtensions
+{
     /// <param name="source">A double-precision floating-point number</param>
     extension(double source)
     {
@@ -39,7 +46,7 @@ public static class SystemExtensions
         ///     Rounds a decimal value to a specified number of fractional digits, and rounds midpoint values to the nearest even number
         /// </summary>
         /// <param name="digits">The number of fractional digits in the return value</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Digits is less than 0 or greater than 15</exception>
+        /// <exception cref="global::System.ArgumentOutOfRangeException">Digits is less than 0 or greater than 15</exception>
         [Pure]
         public double Round(int digits)
         {
@@ -68,7 +75,14 @@ public static class SystemExtensions
             return Math.Abs(source - value) < tolerance;
         }
     }
+}
 
+/// <summary>
+///     String Extensions
+/// </summary>
+[PublicAPI]
+public static class StringExtensions
+{
     /// <param name="source">The source string</param>
     extension(string? source)
     {
@@ -100,10 +114,10 @@ public static class SystemExtensions
         ///     If one of the specified paths is a zero-length string, this method returns the other path.
         ///     If path2 contains an absolute path, this method returns path2.
         /// </returns>
-        /// <exception cref="System.ArgumentException">
+        /// <exception cref="global::System.ArgumentException">
         ///     NET Framework and .NET Core versions older than 2.1: path1 or path2 contains one or more of the invalid characters defined in <see cref="Path.GetInvalidPathChars" />
         /// </exception>
-        /// <exception cref="System.ArgumentNullException">source or path is null</exception>
+        /// <exception cref="global::System.ArgumentNullException">source or path is null</exception>
         [Pure]
         public string AppendPath(string path)
         {
