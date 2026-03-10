@@ -1,5 +1,9 @@
-﻿using System.Reflection;
+﻿#if NET
+using System.Runtime.CompilerServices;
+#else
 using System.Runtime.InteropServices;
+#endif
+using System.Reflection;
 using JetBrains.Annotations;
 
 namespace Nice3point.Revit.Extensions;
@@ -10,6 +14,12 @@ namespace Nice3point.Revit.Extensions;
 [PublicAPI]
 public static class CategoryExtensions
 {
+    private static readonly Assembly CategoryAssembly = Assembly.GetAssembly(typeof(Category))!;
+    private static readonly Type ADocumentType = CategoryAssembly.GetType("ADocument")!;
+    private static readonly Type ElementIdType = CategoryAssembly.GetType("ElementId")!;
+    private static readonly MethodInfo GetADocumentMethod = typeof(Document).GetMethod("getADocument", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
+    private static readonly ConstructorInfo CategoryConstructor = typeof(Category).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly, null, [ADocumentType.MakePointerType(), ElementIdType.MakePointerType()], null)!;
+
     /// <param name="builtInCategory">The source category</param>
     extension(BuiltInCategory builtInCategory)
     {
@@ -19,30 +29,31 @@ public static class CategoryExtensions
         /// <param name="document">The Revit Document associated with the category conversion.</param>
         /// <returns>A Category object corresponding to the specified BuiltInCategory.</returns>
         /// <remarks>This method performs low-level operation to instantiate a Category object.</remarks>
-        public Category ToCategory(Document document)
+        public
+#if NET
+            unsafe
+#endif
+            Category ToCategory(Document document)
         {
-            const BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+#if REVIT2024_OR_GREATER
+            var elementId = (long)builtInCategory;
+#else
+            var elementId = (int)builtInCategory;
+#endif
+#if NET
+            var aDocument = GetADocumentMethod.Invoke(document, null);
+            var category = (Category)CategoryConstructor.Invoke([aDocument, (nint)Unsafe.AsPointer(ref elementId)]);
 
-            var documentType = typeof(Document);
-            var categoryType = typeof(Category);
-            var assembly = Assembly.GetAssembly(categoryType)!;
-            var aDocumentType = assembly.GetType("ADocument")!;
-            var elementIdType = assembly.GetType("ElementId")!;
-            var elementIdIdType = elementIdType.GetField("<alignment member>", bindingFlags)!;
-            var getADocumentType = documentType.GetMethod("getADocument", bindingFlags)!;
-            var categoryCtorType = categoryType.GetConstructor(bindingFlags, null, [aDocumentType.MakePointerType(), elementIdType.MakePointerType()], null)!;
+            return category;
+#else
+            var aDocument = GetADocumentMethod.Invoke(document, null);
 
-            var elementId = Activator.CreateInstance(elementIdType)!;
-            elementIdIdType.SetValue(elementId, builtInCategory);
-
-            var handle = GCHandle.Alloc(elementId);
-            var elementIdPointer = GCHandle.ToIntPtr(handle);
-            Marshal.StructureToPtr(elementId, elementIdPointer, true);
-
-            var category = (Category)categoryCtorType.Invoke([getADocumentType.Invoke(document, null), elementIdPointer]);
+            var handle = GCHandle.Alloc(elementId, GCHandleType.Pinned);
+            var category = (Category)CategoryConstructor.Invoke([aDocument, handle.AddrOfPinnedObject()]);
             handle.Free();
 
             return category;
+#endif
         }
 
         /// <summary>

@@ -1,5 +1,9 @@
-﻿using System.Reflection;
+﻿#if NET
+using System.Runtime.CompilerServices;
+#else
 using System.Runtime.InteropServices;
+#endif
+using System.Reflection;
 using JetBrains.Annotations;
 
 namespace Nice3point.Revit.Extensions;
@@ -10,6 +14,12 @@ namespace Nice3point.Revit.Extensions;
 [PublicAPI]
 public static class ParameterExtensions
 {
+    private static readonly Assembly ParameterAssembly = Assembly.GetAssembly(typeof(Parameter))!;
+    private static readonly Type ADocumentType = ParameterAssembly.GetType("ADocument")!;
+    private static readonly Type ElementIdType = ParameterAssembly.GetType("ElementId")!;
+    private static readonly MethodInfo GetADocumentMethod = typeof(Document).GetMethod("getADocument", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
+    private static readonly ConstructorInfo ParameterConstructor = typeof(Parameter).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly, null, [ADocumentType.MakePointerType(), ElementIdType.MakePointerType()], null)!;
+
     /// <param name="parameter">The source parameter</param>
     extension(Parameter parameter)
     {
@@ -83,30 +93,31 @@ public static class ParameterExtensions
         /// <param name="document">The Revit Document associated with the parameter conversion.</param>
         /// <returns>A Parameter object corresponding to the specified BuiltInParameter.</returns>
         /// <remarks>This method performs low-level operation to instantiate a Parameter object.</remarks>
-        public Parameter ToParameter(Document document)
+        public
+#if NET
+            unsafe
+#endif
+            Parameter ToParameter(Document document)
         {
-            const BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+#if REVIT2024_OR_GREATER
+            var elementId = (long)builtInParameter;
+#else
+            var elementId = (int)builtInParameter;
+#endif
+#if NET
+            var aDocument = GetADocumentMethod.Invoke(document, null);
+            var parameter = (Parameter)ParameterConstructor.Invoke([aDocument, (nint)Unsafe.AsPointer(ref elementId)]);
 
-            var documentType = typeof(Document);
-            var parameterType = typeof(Parameter);
-            var assembly = Assembly.GetAssembly(parameterType)!;
-            var aDocumentType = assembly.GetType("ADocument")!;
-            var elementIdType = assembly.GetType("ElementId")!;
-            var elementIdIdType = elementIdType.GetField("<alignment member>", bindingFlags)!;
-            var getADocumentType = documentType.GetMethod("getADocument", bindingFlags)!;
-            var parameterCtorType = parameterType.GetConstructor(bindingFlags, null, [aDocumentType.MakePointerType(), elementIdType.MakePointerType()], null)!;
+            return parameter;
+#else
+            var aDocument = GetADocumentMethod.Invoke(document, null);
 
-            var elementId = Activator.CreateInstance(elementIdType)!;
-            elementIdIdType.SetValue(elementId, builtInParameter);
-
-            var handle = GCHandle.Alloc(elementId);
-            var elementIdPointer = GCHandle.ToIntPtr(handle);
-            Marshal.StructureToPtr(elementId, elementIdPointer, true);
-
-            var parameter = (Parameter)parameterCtorType.Invoke([getADocumentType.Invoke(document, null), elementIdPointer]);
+            var handle = GCHandle.Alloc(elementId, GCHandleType.Pinned);
+            var parameter = (Parameter)ParameterConstructor.Invoke([aDocument, handle.AddrOfPinnedObject()]);
             handle.Free();
 
             return parameter;
+#endif
         }
 
         /// <summary>
