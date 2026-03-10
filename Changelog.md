@@ -1,52 +1,6 @@
-# Release 2027.0.0-preview.1.20260120
+# Release 2027.0.0-preview.2.20260310
 
 This update focuses on improved API design through C# 14 extension methods syntax, .NET 10 support, Revit 2027 support, and ElementId overloads.
-
-## Breaking changes
-
-**Extension Methods**
-
-The following boolean methods have been converted to properties for improved syntax and consistency with modern C# conventions:
-
-- **IsAnalyticalElement:** Changed from method to property
-- **IsPhysicalElement:** Changed from method to property
-- **AreGlobalParametersAllowed:** Changed from method to property
-- **IsBuiltInParameter (ForgeTypeId):** Changed from method to property
-- **IsBuiltInParameter (Parameter):** Changed from method to property
-- **IsBuiltInGroup:** Changed from method to property
-- **HasOpenConnector:** Changed from method to property
-- **IsAllowedForSolidCut:** Changed from method to property
-- **IsElementFromAppropriateContext:** Changed from method to property
-- **IsValidForTessellation:** Changed from method to property
-- **IsSpec:** Changed from method to property
-- **IsValidDataType:** Changed from method to property
-- **IsSymbol:** Changed from method to property
-- **IsUnit:** Changed from method to property
-- **IsMeasurableSpec:** Changed from method to property
-
-**Renamed Methods (Revit API naming consistency):**
-
-- **CanDeleteElement:** Renamed to **CanBeDeleted** (passive voice pattern)
-- **CanMirrorElement:** Renamed to **CanBeMirrored** (passive voice pattern)
-- **CanMirrorElements:** Renamed to **CanBeMirrored** (passive voice pattern)
-- **CanConvertToFaceHostBased:** Renamed to **CanBeConvertedToFaceHostBased** (passive voice pattern)
-
-**Obsolete methods with auto-conversion:**
-
-Old method names are marked as `[Obsolete]` with `[CodeTemplate]` attributes for automatic IDE conversion to new names.
-
-**Migration examples:**
-
-```csharp
-// Properties (old → new, auto-conversion is not available because of the same name)
-if (element.IsAnalyticalElement())  // Old
-if (element.IsAnalyticalElement)    // New
-
-// Renamed methods (old → new, auto-conversion available)
-element.CanDeleteElement();              // Old, IDE suggests: element.CanBeDeleted()
-element.CanMirrorElement();              // Old, IDE suggests: element.CanBeMirrored()
-family.CanConvertToFaceHostBased();      // Old, IDE suggests: family.CanBeConvertedToFaceHostBased()
-```
 
 ## New Features
 
@@ -58,12 +12,25 @@ family.CanConvertToFaceHostBased();      // Old, IDE suggests: family.CanBeConve
 
 - `uiApplication.AsControlledApplication()` - creates a `UIControlledApplication` from a `UIApplication` instance
 
+**BuiltInCategory Extensions**
+
+- `builtInCategory.ToCategory(Document document)` - creates a a Revit Category object from BuiltInCategory value
+- `builtInCategory.ToElementId()` - creates an ElementId handle from a BuiltInCategory value
+
+**BuiltInParameter Extensions**
+
+- `builtInParameter.ToParameter(Document document)` - creates a Revit Parameter object from BuiltInParameter value
+- `builtInParameter.ToElementId()` - creates an ElementId handle from a BuiltInParameter value
+
+**Ribbon Extensions:**
+
+- `pushButton.TryAddShortcuts(string representation)` - attempts to add keyboard shortcuts, returns `false` if shortcuts conflict with existing commands
+- `pushButton.TryAddShortcuts(params IEnumerable<string> shortcuts)` - attempts to add multiple keyboard shortcuts with conflict detection
+
 **ElementId Extension Overloads**
 
 Added comprehensive ElementId overloads for all extension methods that work with `element.Document` and `element.Id`.
 This allows working directly with ElementId when you don't have the Element instance.
-
-**Utils Extensions:**
 
 - **DocumentValidationExtensions**
     - `elementId.CanBeDeleted(Document document)`
@@ -87,8 +54,6 @@ This allows working directly with ElementId when you don't have the Element inst
     - `elementId.GetWorksharingTooltipInfo(Document document)`
     - `elementId.GetModelUpdatesStatus(Document document)`
 
-**Manager Extensions:**
-
 - **AnalyticalToPhysicalAssociationManagerExtensions**
     - `elementId.IsAnalyticalElement(Document document)`
     - `elementId.IsPhysicalElement(Document document)`
@@ -96,14 +61,6 @@ This allows working directly with ElementId when you don't have the Element inst
 - **GlobalParametersManagerExtensions**
     - `elementId.MoveGlobalParameterUpOrder(Document document)`
     - `elementId.MoveGlobalParameterDownOrder(Document document)`
-
-**Other Extensions:**
-
-- **CategoryExtensions**
-    - `builtInCategory.ToCategory(Document document)`
-
-- **ParameterExtensions**
-    - `builtInParameter.ToParameter(Document document)`
 
 **Usage examples:**
 
@@ -148,6 +105,59 @@ Parameter parameter = BuiltInParameter.WALL_ATTR_ROOM_BOUNDING.ToParameter(docum
 - **Documentation:** Updated parameter descriptions and variable names to align with C# 14 syntax
 - **Build System:** Migration from Nuke to ModularPipilines
 - **API Consistency:** Renamed Can* methods to follow Revit API passive voice pattern (CanBe*)
+- **Reflexion:** API covered with UnsafeAccessor attribute when possible in .NET 8+ builds
+
+## Breaking changes
+
+The following boolean methods have been converted to properties for improved syntax and consistency with modern C# conventions:
+
+- **IsAnalyticalElement:** Changed from method to property
+- **IsPhysicalElement:** Changed from method to property
+- **AreGlobalParametersAllowed:** Changed from method to property
+- **IsBuiltInParameter (ForgeTypeId):** Changed from method to property
+- **IsBuiltInParameter (Parameter):** Changed from method to property
+- **IsBuiltInGroup:** Changed from method to property
+- **HasOpenConnector:** Changed from method to property
+- **IsAllowedForSolidCut:** Changed from method to property
+- **IsElementFromAppropriateContext:** Changed from method to property
+- **IsValidForTessellation:** Changed from method to property
+- **IsSpec:** Changed from method to property
+- **IsValidDataType:** Changed from method to property
+- **IsSymbol:** Changed from method to property
+- **IsUnit:** Changed from method to property
+- **IsMeasurableSpec:** Changed from method to property
+
+**Renamed Methods (Revit API naming consistency):**
+
+- **CanDeleteElement:** Renamed to **CanBeDeleted** (passive voice pattern)
+- **CanMirrorElement:** Renamed to **CanBeMirrored** (passive voice pattern)
+- **CanMirrorElements:** Renamed to **CanBeMirrored** (passive voice pattern)
+- **CanConvertToFaceHostBased:** Renamed to **CanBeConvertedToFaceHostBased** (passive voice pattern)
+
+**Namespace change for UI Extensions:**
+
+Ribbon and UIApplication extensions have been moved to a dedicated namespace to support proper type resolution in no-UI scenarios:
+
+- `Nice3point.Revit.Extensions` → `Nice3point.Revit.Extensions.UI`
+
+Affected classes: `RibbonExtensions`, `ContextMenuExtensions`, `UiApplicationExtensions`.
+
+**Obsolete methods with auto-conversion:**
+
+Old method names are marked as `[Obsolete]` with `[CodeTemplate]` attributes for automatic IDE conversion to new names.
+
+**Migration examples:**
+
+```csharp
+// Properties (old → new, auto-conversion is not available because of the same name)
+if (element.IsAnalyticalElement())  // Old
+if (element.IsAnalyticalElement)    // New
+
+// Renamed methods (old → new, auto-conversion available)
+element.CanDeleteElement();              // Old, IDE suggests: element.CanBeDeleted()
+element.CanMirrorElement();              // Old, IDE suggests: element.CanBeMirrored()
+family.CanConvertToFaceHostBased();      // Old, IDE suggests: family.CanBeConvertedToFaceHostBased()
+```
 
 # Release 2026.0.1
 
