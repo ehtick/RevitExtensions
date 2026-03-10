@@ -2,6 +2,9 @@
 using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
 using Nice3point.BenchmarkDotNet.Revit;
+#if NET
+using System.Runtime.CompilerServices;
+#endif
 
 namespace Nice3point.Revit.Extensions.Benchmarks.Benchmarks;
 

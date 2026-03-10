@@ -2,6 +2,9 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
 using Nice3point.BenchmarkDotNet.Revit;
+#if NET
+using System.Runtime.CompilerServices;
+#endif
 
 namespace Nice3point.Revit.Extensions.Benchmarks.Benchmarks;
 
@@ -74,7 +77,7 @@ public class ToCategoryBenchmark : RevitApiBenchmark
     public unsafe Category ReflectionUnsafe()
     {
         const BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-    
+
         var documentType = typeof(Document);
         var categoryType = typeof(Category);
         var assembly = Assembly.GetAssembly(categoryType)!;
@@ -82,11 +85,11 @@ public class ToCategoryBenchmark : RevitApiBenchmark
         var elementIdType = assembly.GetType("ElementId")!;
         var getADocumentMethod = documentType.GetMethod("getADocument", bindingFlags)!;
         var categoryConstructor = categoryType.GetConstructor(bindingFlags, null, [aDocumentType.MakePointerType(), elementIdType.MakePointerType()], null)!;
-    
+
         var elementId = (long)Constants.Category;
         var aDocument = getADocumentMethod.Invoke(_document, null);
         var category = (Category)categoryConstructor.Invoke([aDocument, (nint)Unsafe.AsPointer(ref elementId)]);
-    
+
         return category;
     }
 
@@ -96,7 +99,7 @@ public class ToCategoryBenchmark : RevitApiBenchmark
         var elementId = (long)Constants.Category;
         var aDocument = GetADocumentMethod.Invoke(_document, null);
         var category = (Category)CategoryConstructor.Invoke([aDocument, (nint)Unsafe.AsPointer(ref elementId)]);
-    
+
         return category;
     }
 #endif
