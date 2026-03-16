@@ -50,15 +50,6 @@ public static class GlobalParametersManagerExtensions
             return parameterId.ToElement<GlobalParameter>(document);
         }
 
-        /// <summary>Tests whether an ElementId is of a global parameter in the given document.</summary>
-        /// <param name="parameterId">Id of a global parameter</param>
-        /// <returns>Returns True if the Id is of a valid global parameter; False otherwise.</returns>
-        [Pure]
-        public bool IsValidGlobalParameter(ElementId parameterId)
-        {
-            return GlobalParametersManager.IsValidGlobalParameter(document, parameterId);
-        }
-
         /// <summary>
         ///    Tests whether a name is unique among existing global parameters of a given document.
         /// </summary>
@@ -110,10 +101,9 @@ public static class GlobalParametersManagerExtensions
         ///    A possible cause is that it is not a project document,
         ///    for global parameters are not supported in Revit families.
         /// </exception>
-        public Document SortGlobalParameters(ParametersOrder order)
+        public void SortGlobalParameters(ParametersOrder order)
         {
             GlobalParametersManager.SortParameters(document, order);
-            return document;
         }
     }
 
@@ -155,9 +145,18 @@ public static class GlobalParametersManagerExtensions
         }
     }
 
-    /// <param name="elementId">The global parameter element id.</param>
-    extension(ElementId elementId)
+    /// <param name="parameterId">The global parameter element id.</param>
+    extension(ElementId parameterId)
     {
+        /// <summary>Tests whether an ElementId is of a global parameter in the given document.</summary>
+        /// <param name="document">The document containing the parameter.</param>
+        /// <returns>Returns True if the Id is of a valid global parameter; False otherwise.</returns>
+        [Pure]
+        public bool IsValidGlobalParameter(Document document)
+        {
+            return GlobalParametersManager.IsValidGlobalParameter(document, parameterId);
+        }
+
         /// <summary>Moves given global parameter Up in the current order.</summary>
         /// <remarks>
         ///      <p>A parameter can only be moved within its parameter group, meaning that
@@ -173,7 +172,7 @@ public static class GlobalParametersManagerExtensions
         /// <returns>Indicates whether the parameter could be moved Up in order or not.</returns>
         public bool MoveGlobalParameterUpOrder(Document document)
         {
-            return GlobalParametersManager.MoveParameterUpOrder(document, elementId);
+            return GlobalParametersManager.MoveParameterUpOrder(document, parameterId);
         }
 
         /// <summary>Moves given global parameter Down in the current order.</summary>
@@ -191,7 +190,7 @@ public static class GlobalParametersManagerExtensions
         /// <returns>Indicates whether the parameter could be moved Down in order or not.</returns>
         public bool MoveGlobalParameterDownOrder(Document document)
         {
-            return GlobalParametersManager.MoveParameterDownOrder(document, elementId);
+            return GlobalParametersManager.MoveParameterDownOrder(document, parameterId);
         }
     }
 }
