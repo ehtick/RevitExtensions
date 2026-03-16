@@ -109,13 +109,13 @@ internal sealed class RibbonStackPanel : IRibbonStackPanel
             _currentPanel.Items.Add(new RibbonRowBreak());
         }
 
-        object item;
+        RibbonItem item;
         try
         {
 #if NET8_0_OR_GREATER
             item = UnsafeUiAccessors.AddItemToRowPanel(_host, _currentPanel, itemData);
 #else
-            item = _addItemMethod.Invoke(_host, [_currentPanel, itemData])!;
+            item = (RibbonItem)_addItemMethod.Invoke(_host, [_currentPanel, itemData])!;
 #endif
         }
         catch (TargetInvocationException exception)
@@ -128,7 +128,7 @@ internal sealed class RibbonStackPanel : IRibbonStackPanel
             _rawPanel.Source.Items.Add(_currentPanel);
         }
 
-        return (RibbonItem)item;
+        return item;
     }
 
     private void AddStakedItem(Autodesk.Windows.RibbonItem itemData)

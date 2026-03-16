@@ -1,7 +1,9 @@
 #if NET8_0_OR_GREATER
 using System.Runtime.CompilerServices;
 using Autodesk.Revit.UI;
+using Autodesk.Windows;
 using RibbonItem = Autodesk.Windows.RibbonItem;
+using RibbonPanel = Autodesk.Revit.UI.RibbonPanel;
 
 namespace Nice3point.Revit.Extensions.Internal;
 
@@ -20,7 +22,7 @@ internal static class UnsafeUiAccessors
     public static extern ref Autodesk.Windows.RibbonPanel GetInternalPanel(RibbonPanel panelPointer);
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "addItemToRowPanel")]
-    public static extern object AddItemToRowPanel(RibbonPanel panelPointer, object panel, RibbonItemData itemData);
+    public static extern Autodesk.Revit.UI.RibbonItem AddItemToRowPanel(RibbonPanel panelPointer, RibbonRowPanel panel, RibbonItemData itemData);
 
     [UnsafeAccessor(UnsafeAccessorKind.Constructor)]
     public static extern UIControlledApplication CreateUiControlledApplication(UIApplication uiApplication);
