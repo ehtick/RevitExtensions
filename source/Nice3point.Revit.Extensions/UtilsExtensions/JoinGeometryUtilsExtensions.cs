@@ -51,10 +51,9 @@ public static class JoinGeometryUtilsExtensions
         /// <exception cref="T:Autodesk.Revit.Exceptions.InvalidOperationException">
         ///    Please remove or add segments on curtain grids instead of joining or unjoining geometry of the panels
         /// </exception>
-        public Element UnjoinGeometry(Element secondElement)
+        public void UnjoinGeometry(Element secondElement)
         {
             JoinGeometryUtils.UnjoinGeometry(element.Document, element, secondElement);
-            return element;
         }
 
         /// <summary>
@@ -101,10 +100,9 @@ public static class JoinGeometryUtilsExtensions
         /// <exception cref="T:Autodesk.Revit.Exceptions.InvalidOperationException">
         ///    Unable to switch the join order of these elements
         /// </exception>
-        public Element SwitchJoinOrder(Element secondElement)
+        public void SwitchJoinOrder(Element secondElement)
         {
             JoinGeometryUtils.SwitchJoinOrder(element.Document, element, secondElement);
-            return element;
         }
 
         /// <summary>
