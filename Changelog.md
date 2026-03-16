@@ -136,11 +136,9 @@ The following boolean methods have been converted to properties for improved syn
 
 **Namespace change for UI Extensions:**
 
-Ribbon and UIApplication extensions have been moved to a dedicated namespace to support proper type resolution in no-UI scenarios:
+`RibbonExtensions`, `ContextMenuExtensions`, `UiApplicationExtensions` extensions have been moved to a dedicated namespace to support proper type resolution in a headless mode (Unit tests or Design Automation):
 
 - `Nice3point.Revit.Extensions` → `Nice3point.Revit.Extensions.UI`
-
-Affected classes: `RibbonExtensions`, `ContextMenuExtensions`, `UiApplicationExtensions`.
 
 **Obsolete methods with auto-conversion:**
 
