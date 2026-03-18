@@ -86,7 +86,7 @@ public static class FamilyUtilsExtensions
         /// <param name="document">The document containing the family.</param>
         /// <remarks>
         ///    Converts a family hosted by some element other than a face to be hosted by a face. This is done by replacing the existing host (wall, roof, ceiling, floor) with a face.
-        ///    Conversion can succeed only if FamilyUtils.FamilyCanConvertToFaceHostBased() returns true.
+        ///    Conversion can succeed only if CanBeConvertedToFaceHostBased returns true.
         /// </remarks>
         /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentException">
         ///    The input familyId cannot be converted to face host based.
