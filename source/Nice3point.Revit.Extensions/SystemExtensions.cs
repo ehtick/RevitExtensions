@@ -2,13 +2,13 @@
 using JetBrains.Annotations;
 
 // ReSharper disable once CheckNamespace
-namespace Nice3point.Revit.Extensions.Bcl;
+namespace Nice3point.Revit.Extensions.Runtime;
 
 /// <summary>
 ///     Object Extensions
 /// </summary>
 [PublicAPI]
-public static class ObjectExtensions
+public static class SystemExtensions
 {
     /// <param name="obj">The source object</param>
     extension(object obj)
@@ -22,14 +22,7 @@ public static class ObjectExtensions
             return (T)obj;
         }
     }
-}
 
-/// <summary>
-///     Double Extensions
-/// </summary>
-[PublicAPI]
-public static class DoubleExtensions
-{
     /// <param name="source">A double-precision floating-point number</param>
     extension(double source)
     {
@@ -75,14 +68,7 @@ public static class DoubleExtensions
             return Math.Abs(source - value) < tolerance;
         }
     }
-}
 
-/// <summary>
-///     String Extensions
-/// </summary>
-[PublicAPI]
-public static class StringExtensions
-{
     /// <param name="source">The source string</param>
     extension(string? source)
     {

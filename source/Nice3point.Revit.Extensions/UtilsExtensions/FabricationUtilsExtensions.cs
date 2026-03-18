@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 
 // ReSharper disable once CheckNamespace
-namespace Nice3point.Revit.Extensions;
+namespace Nice3point.Revit.Extensions.Fabrication;
 
 /// <summary>
 ///     Represent extension methods for the <see cref="Autodesk.Revit.DB.Fabrication.FabricationUtils"/> class.
