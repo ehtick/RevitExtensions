@@ -51,6 +51,19 @@ public static class FamilyUtilsExtensions
             FamilyUtils.ConvertFamilyToFaceHostBased(family.Document, family.Id);
             return family;
         }
+
+        /// <summary>Gets the profile Family Symbols of the document.</summary>
+        /// <param name="document">The document.</param>
+        /// <param name="profileFamilyUsage">The profile family usage.</param>
+        /// <param name="oneCurveLoopOnly">
+        ///    Whether or not to return only profiles with one curve loop.
+        /// </param>
+        /// <returns>The set of profile Family Symbol element ids.</returns>
+        [Pure]
+        public static ICollection<ElementId> GetProfileSymbols(Document document, ProfileFamilyUsage profileFamilyUsage, bool oneCurveLoopOnly)
+        {
+            return FamilyUtils.GetProfileSymbols(document, profileFamilyUsage, oneCurveLoopOnly);
+        }
     }
 
     /// <param name="elementId">The family element id.</param>
@@ -87,22 +100,6 @@ public static class FamilyUtilsExtensions
         {
             FamilyUtils.ConvertFamilyToFaceHostBased(document, elementId);
             return elementId;
-        }
-    }
-
-    /// <param name="document">The source document.</param>
-    extension(Document document)
-    {
-        /// <summary>Gets the profile Family Symbols of the document.</summary>
-        /// <param name="profileFamilyUsage">The profile family usage.</param>
-        /// <param name="oneCurveLoopOnly">
-        ///    Whether or not to return only profiles with one curve loop.
-        /// </param>
-        /// <returns>The set of profile Family Symbol element ids.</returns>
-        [Pure]
-        public ICollection<ElementId> GetProfileSymbols(ProfileFamilyUsage profileFamilyUsage, bool oneCurveLoopOnly)
-        {
-            return FamilyUtils.GetProfileSymbols(document, profileFamilyUsage, oneCurveLoopOnly);
         }
     }
 }

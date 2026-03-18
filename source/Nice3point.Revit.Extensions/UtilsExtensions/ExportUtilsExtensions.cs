@@ -17,7 +17,7 @@ public static class ExportUtilsExtensions
         ///    This id can be used to cross-reference different gbXML exports from the same document.
         /// </remarks>
         /// <returns>The value of the GUID representing this document in gbXML export.</returns>
-        public Guid GbXmlDocumentId => ExportUtils.GetGBXMLDocumentId(document);
+        public Guid GbXmlId => ExportUtils.GetGBXMLDocumentId(document);
     }
 
     /// <param name="element">The source element.</param>
@@ -44,7 +44,7 @@ public static class ExportUtilsExtensions
         ///    <see cref="P:Autodesk.Revit.DB.Subelement.UniqueId" /> must be used.
         /// </remarks>
         /// <returns>The value of the GUID representing the subelement in the export context.</returns>
-        public Guid GetExportId => ExportUtils.GetExportId(subelement);
+        public Guid ExportId => ExportUtils.GetExportId(subelement);
     }
 
     /// <param name="elementId">The element id.</param>

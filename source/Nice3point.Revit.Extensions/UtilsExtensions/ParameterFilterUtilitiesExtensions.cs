@@ -9,15 +9,15 @@ namespace Nice3point.Revit.Extensions;
 [PublicAPI]
 public static class ParameterFilterUtilitiesExtensions
 {
-    /// <param name="document">The source document.</param>
-    extension(Document document)
+    /// <param name="parameterFilter">The source parameter filter.</param>
+    extension(ParameterFilterElement parameterFilter)
     {
         /// <summary>
         ///    Returns the set of categories that may be used in a ParameterFilterElement.
         /// </summary>
         /// <returns>The set of all filterable categories.</returns>
         [Pure]
-        public ICollection<ElementId> GetAllFilterableCategories()
+        public static ICollection<ElementId> GetAllFilterableCategories()
         {
             return ParameterFilterUtilities.GetAllFilterableCategories();
         }
@@ -30,13 +30,14 @@ public static class ParameterFilterUtilitiesExtensions
         ///      <p>This set defines the set of parameters that may be used to define
         /// a rule on a ParameterFilterElement with a certain set of categories.</p>
         ///    </remarks>
+        /// <param name="document">The document containing the categories and parameters to query.</param>
         /// <param name="categories">The categories for which to determine the common parameters.</param>
         /// <returns>The set of filterable parameters common to the given categories.</returns>
         /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentNullException">
         ///    A non-optional argument was null
         /// </exception>
         [Pure]
-        public ICollection<ElementId> GetFilterableParametersInCommon(ICollection<ElementId> categories)
+        public static ICollection<ElementId> GetFilterableParametersInCommon(Document document, ICollection<ElementId> categories)
         {
             return ParameterFilterUtilities.GetFilterableParametersInCommon(document, categories);
         }
@@ -45,6 +46,7 @@ public static class ParameterFilterUtilitiesExtensions
         ///    Returns the parameters that are not among the set of filterable
         ///    parameters common to the given categories.
         /// </summary>
+        /// <param name="document">The document containing the categories and parameters to query.</param>
         /// <param name="categories">
         ///    The categories that define the set of possibly filterable parameters.
         /// </param>
@@ -57,7 +59,7 @@ public static class ParameterFilterUtilitiesExtensions
         ///    A non-optional argument was null
         /// </exception>
         [Pure]
-        public IList<ElementId> GetInapplicableParameters(ICollection<ElementId> categories, IList<ElementId> parameters)
+        public static IList<ElementId> GetInapplicableParameters(Document document, ICollection<ElementId> categories, IList<ElementId> parameters)
         {
             return ParameterFilterUtilities.GetInapplicableParameters(document, categories, parameters);
         }
