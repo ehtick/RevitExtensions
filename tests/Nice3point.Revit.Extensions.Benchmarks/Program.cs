@@ -7,4 +7,4 @@ using Nice3point.Revit.Extensions.Benchmarks.Benchmarks;
 var configuration = ManualConfig.Create(DefaultConfig.Instance)
     .AddJob(Job.ShortRun.WithCurrentConfiguration());
 
-BenchmarkRunner.Run<ToParameterBenchmark>(configuration);
+BenchmarkRunner.Run<RebarCrankTypeUtilsBenchmarks>(configuration);
