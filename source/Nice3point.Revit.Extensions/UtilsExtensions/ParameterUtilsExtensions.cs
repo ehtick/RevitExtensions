@@ -20,6 +20,15 @@ public static class ParameterUtilsExtensions
         /// <returns>True if the ForgeTypeId identifies a built-in parameter, false otherwise.</returns>
         public bool IsBuiltInParameter => ParameterUtils.IsBuiltInParameter(typeId);
 
+        /// <summary>Checks whether a ForgeTypeId identifies a built-in parameter group.</summary>
+        /// <remarks>
+        ///    A ForgeTypeId identifies a built-in parameter group if it corresponds to a valid BuiltInParameterGroup value.
+        /// </remarks>
+        /// <returns>
+        ///    True if the ForgeTypeId identifies a built-in parameter group, false otherwise.
+        /// </returns>
+        public bool IsBuiltInGroup => ParameterUtils.IsBuiltInGroup(typeId);
+
         /// <summary> Gets the BuiltInParameter value corresponding to built-in parameter identified by the given ForgeTypeId.</summary>
         /// <returns>The BuiltInParameter value corresponding to the given parameter identifier.</returns>
         /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentException">
@@ -31,16 +40,23 @@ public static class ParameterUtilsExtensions
             return ParameterUtils.GetBuiltInParameter(typeId);
         }
 
-        /// <summary>Checks whether a ForgeTypeId identifies a built-in parameter group.</summary>
-        /// <remarks>
-        ///    A ForgeTypeId identifies a built-in parameter group if it corresponds to a valid BuiltInParameterGroup value.
-        /// </remarks>
-        /// <returns>
-        ///    True if the ForgeTypeId identifies a built-in parameter group, false otherwise.
-        /// </returns>
-        public bool IsBuiltInGroup => ParameterUtils.IsBuiltInGroup(typeId);
+        /// <summary>Gets the identifiers of all built-in parameters.</summary>
+        /// <returns>The built-in parameter identifiers.</returns>
+        [Pure]
+        public IList<ForgeTypeId> GetAllBuiltInParameters()
+        {
+            return ParameterUtils.GetAllBuiltInParameters();
+        }
 
+        /// <summary>Gets the identifiers of all built-in parameter groups.</summary>
+        /// <returns>The built-in group identifiers.</returns>
+        [Pure]
+        public IList<ForgeTypeId> GetAllBuiltInGroups()
+        {
+            return ParameterUtils.GetAllBuiltInGroups();
+        }
 #if REVIT2024_OR_GREATER
+
         /// <summary>
         ///    Retrieves settings associated with the given parameter from the Parameters Service.
         /// </summary>
