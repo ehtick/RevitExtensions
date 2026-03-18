@@ -22,10 +22,12 @@ public static class ExternallyTaggedGeometryValidationExtensions
         /// <remarks>This validation is different than negating IsNonSolid().</remarks>
         /// <returns>True if the supplied geometry object is a Solid.</returns>
         public bool IsSolid => ExternallyTaggedGeometryValidation.IsSolid(geometry);
+#if REVIT2024_OR_GREATER
 
         /// <summary>Makes sure that the input geometry object does not have sub-nodes.</summary>
         /// <returns>True if the supplied geometry object does not have sub-nodes.</returns>
         public bool LacksSubnodes => ExternallyTaggedGeometryValidation.LacksSubnodes(geometry);
+#endif  
     }
 }
 #endif
