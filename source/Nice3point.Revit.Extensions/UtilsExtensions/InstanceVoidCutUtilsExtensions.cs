@@ -22,32 +22,12 @@ public static class InstanceVoidCutUtilsExtensions
         /// </returns>
         public bool CanBeCutWithVoid => InstanceVoidCutUtils.CanBeCutWithVoid(element);
 
-        /// <summary>
-        ///    Indicates if the element is a family instance with unattached voids that can cut other elements.
-        /// </summary>
-        /// <remarks>
-        ///    A family instance can cut if the family has unattached voids and the family's parameter
-        ///    "Cut with Voids When Loaded" is checked.
-        /// </remarks>
-        /// <returns>
-        ///    Returns true if the element is a family instance with unattached voids that can cut other elements.
-        /// </returns>
-        public bool IsVoidInstanceCuttingElement => InstanceVoidCutUtils.IsVoidInstanceCuttingElement(element);
-
         /// <summary>Return ids of the instances with unattached voids cutting the element.</summary>
         /// <returns>Ids of instances with unattached voids that cut this element</returns>
         [Pure]
         public ICollection<ElementId> GetCuttingVoidInstances()
         {
             return InstanceVoidCutUtils.GetCuttingVoidInstances(element);
-        }
-
-        /// <summary>Return ids of the elements being cut by the instance</summary>
-        /// <returns>Ids of elements being cut by cuttingInstance</returns>
-        [Pure]
-        public ICollection<ElementId> GetElementsBeingCut()
-        {
-            return InstanceVoidCutUtils.GetElementsBeingCut(element);
         }
 
         /// <summary>
@@ -68,7 +48,7 @@ public static class InstanceVoidCutUtilsExtensions
         /// <exception cref="T:Autodesk.Revit.Exceptions.InvalidOperationException">
         ///    Failed to cut element with the instances
         /// </exception>
-        public void AddInstanceVoidCut(Element cuttingInstance)
+        public void AddInstanceVoidCut(FamilyInstance cuttingInstance)
         {
             InstanceVoidCutUtils.AddInstanceVoidCut(element.Document, element, cuttingInstance);
         }
@@ -86,7 +66,7 @@ public static class InstanceVoidCutUtilsExtensions
         /// <exception cref="T:Autodesk.Revit.Exceptions.InvalidOperationException">
         ///    Failed to remove the instance cut from the element
         /// </exception>
-        public void RemoveInstanceVoidCut(Element cuttingInstance)
+        public void RemoveInstanceVoidCut(FamilyInstance cuttingInstance)
         {
             InstanceVoidCutUtils.RemoveInstanceVoidCut(element.Document, element, cuttingInstance);
         }
@@ -95,9 +75,33 @@ public static class InstanceVoidCutUtilsExtensions
         /// <param name="cuttingInstance">The cutting family instance</param>
         /// <returns>Returns true if the instance is cutting the element.</returns>
         [Pure]
-        public bool InstanceVoidCutExists(Element cuttingInstance)
+        public bool InstanceVoidCutExists(FamilyInstance cuttingInstance)
         {
             return InstanceVoidCutUtils.InstanceVoidCutExists(element, cuttingInstance);
+        }
+    }
+
+    /// <param name="familyInstance">The source family instance.</param>
+    extension(FamilyInstance familyInstance)
+    {
+        /// <summary>
+        ///    Indicates if the family instance with unattached voids that can cut other elements.
+        /// </summary>
+        /// <remarks>
+        ///    A family instance can cut if the family has unattached voids and the family's parameter
+        ///    "Cut with Voids When Loaded" is checked.
+        /// </remarks>
+        /// <returns>
+        ///    Returns true if the element is a family instance with unattached voids that can cut other elements.
+        /// </returns>
+        public bool IsVoidInstanceCuttingElement => InstanceVoidCutUtils.IsVoidInstanceCuttingElement(familyInstance);
+
+        /// <summary>Return ids of the elements being cut by the instance</summary>
+        /// <returns>Ids of elements being cut by cuttingInstance</returns>
+        [Pure]
+        public ICollection<ElementId> GetElementsBeingCut()
+        {
+            return InstanceVoidCutUtils.GetElementsBeingCut(familyInstance);
         }
     }
 }
