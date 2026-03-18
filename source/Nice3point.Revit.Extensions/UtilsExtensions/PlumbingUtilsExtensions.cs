@@ -98,6 +98,12 @@ public static class PlumbingUtilsExtensions
     extension(Pipe pipe)
     {
         /// <summary>
+        ///    Checks if there is open piping connector for the given pipe curve.
+        /// </summary>
+        /// <returns>True if given pipe has open piping connector, false otherwise.</returns>
+        public bool HasOpenConnector => PlumbingUtils.HasOpenConnector(pipe.Document, pipe.Id);
+
+        /// <summary>
         ///    Places caps on the open connectors of the pipe curve.
         /// </summary>
         /// <remarks>
@@ -132,33 +138,54 @@ public static class PlumbingUtilsExtensions
         /// <exception cref="T:Autodesk.Revit.Exceptions.InvalidOperationException">
         ///    this operation failed.
         /// </exception>
-        public Pipe PlaceCapOnOpenEnds(ElementId typeId)
+        public void PlaceCapOnOpenEnds(ElementId typeId)
         {
             PlumbingUtils.PlaceCapOnOpenEnds(pipe.Document, pipe.Id, typeId);
-            return pipe;
         }
-
-        /// <summary>
-        ///    Checks if there is open piping connector for the given pipe curve.
-        /// </summary>
-        /// <returns>True if given pipe has open piping connector, false otherwise.</returns>
-        public bool HasOpenConnector => PlumbingUtils.HasOpenConnector(pipe.Document, pipe.Id);
 
         /// <summary>Breaks the pipe curve into two parts at the given position.</summary>
         /// <remarks>This method is not applicable for breaking the flex pipe.</remarks>
         /// <param name="breakPoint">The break point on the pipe curve.</param>
         /// <returns>
-        ///    The new pipe curve element if successful otherwise null if a failure occurred.
+        ///    The new pipe curve element id if successful otherwise if a failure occurred an invalidElementId is returned.
         /// </returns>
         /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentException">
-        ///    The given point is not on the pipe curve.
+        ///    "The element is neither a pipe nor a pipe placeholder."
+        ///    -or-
+        ///    "The given point is not on the pipe curve."
         /// </exception>
-        public Pipe? BreakCurve(XYZ breakPoint)
+        /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentNullException">
+        ///    A non-optional argument was null
+        /// </exception>
+        public ElementId BreakCurve(XYZ breakPoint)
         {
-            var curveId = PlumbingUtils.BreakCurve(pipe.Document, pipe.Id, breakPoint);
-            if (curveId == ElementId.InvalidElementId) return null;
+            return PlumbingUtils.BreakCurve(pipe.Document, pipe.Id, breakPoint);
+        }
+    }
 
-            return curveId.ToElement<Pipe>(pipe.Document);
+    /// <param name="placeholderIds">The source placeholders.</param>
+    extension(ICollection<ElementId> placeholderIds)
+    {
+        /// <summary>Converts a collection of pipe placeholder elements into pipe elements.</summary>
+        /// <remarks>
+        ///    Once conversion succeeds, the pipe placeholder elements are deleted.
+        ///    The new pipe and fitting elements are created and connections are established.
+        /// </remarks>
+        /// <param name="document">The document.</param>
+        /// <returns>A collection of element IDs of pipe and fitting.</returns>
+        /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentException">
+        ///    The given element id set is empty.
+        ///    -or-
+        ///    The given element ids (placeholderIds) are not pipe placeholders.
+        ///    -or-
+        ///    The elements belong to different types of system.
+        /// </exception>
+        /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentNullException">
+        ///    A non-optional argument was null
+        /// </exception>
+        public ICollection<ElementId> ConvertPipePlaceholders(Document document)
+        {
+            return PlumbingUtils.ConvertPipePlaceholders(document, placeholderIds);
         }
     }
 }
