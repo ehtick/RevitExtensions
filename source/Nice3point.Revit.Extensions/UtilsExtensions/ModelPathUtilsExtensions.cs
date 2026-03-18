@@ -54,8 +54,9 @@ public static class ModelPathUtilsExtensions
         {
             return ModelPathUtils.ConvertCloudGUIDsToCloudPath(region, projectGuid, modelGuid);
         }
-#endif
     }
+#endif
+#if REVIT2026_OR_GREATER
 
     /// <param name="application">The source application.</param>
     extension(Application application)
@@ -73,4 +74,5 @@ public static class ModelPathUtilsExtensions
             return ModelPathUtils.GetAllCloudRegions();
         }
     }
+#endif
 }
