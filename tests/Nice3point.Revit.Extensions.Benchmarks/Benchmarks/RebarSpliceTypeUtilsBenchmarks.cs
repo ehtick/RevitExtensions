@@ -1,4 +1,5 @@
-﻿using Autodesk.Revit.DB.Structure;
+﻿#if REVIT2025_OR_GREATER
+using Autodesk.Revit.DB.Structure;
 using BenchmarkDotNet.Attributes;
 using Nice3point.BenchmarkDotNet.Revit;
 
@@ -25,7 +26,6 @@ public class RebarSpliceTypeUtilsBenchmarks : RevitApiBenchmark
     {
         _document?.Close(false);
     }
-#if REVIT2025_OR_GREATER
 
     [Benchmark]
     public IList<ElementId> GetAllRebarCrankTypes()
@@ -40,5 +40,5 @@ public class RebarSpliceTypeUtilsBenchmarks : RevitApiBenchmark
             .OfCategory(BuiltInCategory.OST_RebarSpliceType)
             .ToElementIds();
     }
-#endif
 }
+#endif

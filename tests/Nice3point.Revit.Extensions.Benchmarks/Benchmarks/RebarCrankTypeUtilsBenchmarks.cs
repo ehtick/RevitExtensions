@@ -1,4 +1,5 @@
-﻿using Autodesk.Revit.DB.Structure;
+﻿#if REVIT2026_OR_GREATER
+using Autodesk.Revit.DB.Structure;
 using BenchmarkDotNet.Attributes;
 using Nice3point.BenchmarkDotNet.Revit;
 
@@ -25,7 +26,6 @@ public class RebarCrankTypeUtilsBenchmarks : RevitApiBenchmark
     {
         _document?.Close(false);
     }
-#if REVIT2026_OR_GREATER
 
     [Benchmark]
     public IList<ElementId> GetAllRebarCrankTypes()
