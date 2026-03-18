@@ -200,7 +200,6 @@ public static class RebarCrankTypeUtilsExtensions
         /// <summary>Sets the crank ratio value.</summary>
         /// <remarks>The crank slope is 1/crankRatio.</remarks>
         /// <param name="document">The document.</param>
-        /// <param name="rebarCrankTypeId">The Rebar Crank Type id.</param>
         /// <param name="crankRatio">The crank ratio value.</param>
         /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentException">
         ///    The rebarCrankTypeId doesn't represent a valid Rebar Crank Type. It should be an ElementType of BuiltInCategory.OST_RebarCrankType category.
