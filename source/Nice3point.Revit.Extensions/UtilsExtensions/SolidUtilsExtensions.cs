@@ -12,6 +12,10 @@ public static class SolidUtilsExtensions
     /// <param name="solid">The source solid.</param>
     extension(Solid solid)
     {
+        /// <summary>Tests if the input solid or shell is valid for tessellation</summary>
+        /// <returns>True if the solid or shell is valid for tessellation, false otherwise</returns>
+        public bool IsValidForTessellation => SolidUtils.IsValidForTessellation(solid);
+
         /// <summary>Creates a new Solid which is a copy of the input Solid</summary>
         /// <returns>The newly created Solid</returns>
         [Pure]
@@ -46,10 +50,6 @@ public static class SolidUtilsExtensions
         {
             return SolidUtils.SplitVolumes(solid);
         }
-
-        /// <summary>Tests if the input solid or shell is valid for tessellation</summary>
-        /// <returns>True if the solid or shell is valid for tessellation, false otherwise</returns>
-        public bool IsValidForTessellation => SolidUtils.IsValidForTessellation(solid);
 
         /// <summary>
         ///    This function facets (i.e., triangulates) a solid or an open shell. Each boundary

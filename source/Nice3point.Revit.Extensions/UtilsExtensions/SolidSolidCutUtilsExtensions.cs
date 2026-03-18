@@ -12,22 +12,6 @@ public static class SolidSolidCutUtilsExtensions
     /// <param name="element">The source element.</param>
     extension(Element element)
     {
-        /// <summary>Gets all the solids which cut the input element.</summary>
-        /// <returns>The ids of the solids which cut the input element.</returns>
-        [Pure]
-        public ICollection<ElementId> GetCuttingSolids()
-        {
-            return SolidSolidCutUtils.GetCuttingSolids(element);
-        }
-
-        /// <summary>Get all the solids which are cut by the input element.</summary>
-        /// <returns>The ids of the solids which are cut by the input element.</returns>
-        [Pure]
-        public ICollection<ElementId> GetSolidsBeingCut()
-        {
-            return SolidSolidCutUtils.GetSolidsBeingCut(element);
-        }
-
         /// <summary>Validates that the element is eligible for a solid-solid cut.</summary>
         /// <remarks>
         ///    The element must be solid and must be a GenericForm, GeomCombination, or a FamilyInstance.
@@ -46,6 +30,22 @@ public static class SolidSolidCutUtilsExtensions
         ///    True if the element is from an appropriate document for solid-solid cuts, false otherwise.
         /// </returns>
         public bool IsElementFromAppropriateContext => SolidSolidCutUtils.IsElementFromAppropriateContext(element);
+
+        /// <summary>Gets all the solids which cut the input element.</summary>
+        /// <returns>The ids of the solids which cut the input element.</returns>
+        [Pure]
+        public ICollection<ElementId> GetCuttingSolids()
+        {
+            return SolidSolidCutUtils.GetCuttingSolids(element);
+        }
+
+        /// <summary>Get all the solids which are cut by the input element.</summary>
+        /// <returns>The ids of the solids which are cut by the input element.</returns>
+        [Pure]
+        public ICollection<ElementId> GetSolidsBeingCut()
+        {
+            return SolidSolidCutUtils.GetSolidsBeingCut(element);
+        }
 
         /// <summary>Verifies if the cutting element can add a solid cut to the target element.</summary>
         /// <param name="cutElement">The element to be cut.</param>
