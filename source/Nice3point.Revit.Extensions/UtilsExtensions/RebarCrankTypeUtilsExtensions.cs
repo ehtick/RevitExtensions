@@ -31,11 +31,7 @@ public static class RebarCrankTypeUtilsExtensions
         /// </exception>
         public ElementType NewRebarCrankType(string typeName)
         {
-#if NET8_0_OR_GREATER
             var dbDocument = UnsafeAccessors.GetDocument(document);
-#else
-            throw new NotSupportedException("Revit 2026 and greater do not support .NET lower than 8.0");
-#endif
             return RebarCrankTypeUtils.CreateRebarCrankType(dbDocument, typeName);
         }
     }

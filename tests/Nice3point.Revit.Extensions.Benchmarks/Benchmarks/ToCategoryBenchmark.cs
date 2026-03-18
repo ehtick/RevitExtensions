@@ -16,7 +16,6 @@ file static class Constants
     public static BuiltInCategory Category => BuiltInCategory.OST_Walls;
 }
 
-[MemoryDiagnoser]
 public class ToCategoryBenchmark : RevitApiBenchmark
 {
     private Document _document;

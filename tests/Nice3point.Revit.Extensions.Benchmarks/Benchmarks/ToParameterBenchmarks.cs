@@ -16,7 +16,6 @@ file static class Constants
     public static BuiltInParameter Parameter => BuiltInParameter.ALL_MODEL_DESCRIPTION;
 }
 
-[MemoryDiagnoser]
 public class ToParameterBenchmark : RevitApiBenchmark
 {
     private Document _document;
