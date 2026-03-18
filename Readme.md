@@ -228,11 +228,17 @@ IList<Wall> walls = wallIds.ToOrderedElements<Wall>(document);
 
 The elements will be retrieved in the same order as the original ElementIds collection.
 
-**AreEquals** extension checks if an ID matches BuiltInCategory or BuiltInParameter.
+**IsCategory** extension checks if an ID matches BuiltInCategory.
 
 ```csharp
-categoryId.AreEquals(BuiltInCategory.OST_Walls);
-parameterId.AreEquals(BuiltInParameter.WALL_BOTTOM_IS_ATTACHED);
+categoryId.IsCategory(BuiltInCategory.OST_Walls);
+
+```
+
+**IsParameter** extension checks if an ID matches BuiltInParameter.
+
+```csharp
+parameterId.IsParameter(BuiltInParameter.WALL_BOTTOM_IS_ATTACHED);
 ```
 
 ### ElementId transform extensions

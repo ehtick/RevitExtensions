@@ -36,44 +36,44 @@ public sealed class ElementIdExtensionsTests : RevitApiTest
 
     [Test]
     [TestExecutor<RevitThreadExecutor>]
-    public async Task AreEquals_BuiltInCategory_MatchingCategory_ReturnsTrue()
+    public async Task IsCategory_BuiltInCategory_MatchingCategory_ReturnsTrue()
     {
         var wallCategoryId = new ElementId(BuiltInCategory.OST_Walls);
 
-        var result = wallCategoryId.AreEquals(BuiltInCategory.OST_Walls);
+        var result = wallCategoryId.IsCategory(BuiltInCategory.OST_Walls);
 
         await Assert.That(result).IsTrue();
     }
 
     [Test]
     [TestExecutor<RevitThreadExecutor>]
-    public async Task AreEquals_BuiltInCategory_DifferentCategory_ReturnsFalse()
+    public async Task IsCategory_BuiltInCategory_DifferentCategory_ReturnsFalse()
     {
         var wallCategoryId = new ElementId(BuiltInCategory.OST_Walls);
 
-        var result = wallCategoryId.AreEquals(BuiltInCategory.OST_Doors);
+        var result = wallCategoryId.IsCategory(BuiltInCategory.OST_Doors);
 
         await Assert.That(result).IsFalse();
     }
 
     [Test]
     [TestExecutor<RevitThreadExecutor>]
-    public async Task AreEquals_BuiltInParameter_MatchingParameter_ReturnsTrue()
+    public async Task IsCategory_BuiltInParameter_MatchingParameter_ReturnsTrue()
     {
         var parameterId = new ElementId(BuiltInParameter.WALL_BOTTOM_IS_ATTACHED);
 
-        var result = parameterId.AreEquals(BuiltInParameter.WALL_BOTTOM_IS_ATTACHED);
+        var result = parameterId.IsParameter(BuiltInParameter.WALL_BOTTOM_IS_ATTACHED);
 
         await Assert.That(result).IsTrue();
     }
 
     [Test]
     [TestExecutor<RevitThreadExecutor>]
-    public async Task AreEquals_BuiltInParameter_DifferentParameter_ReturnsFalse()
+    public async Task IsCategory_BuiltInParameter_DifferentParameter_ReturnsFalse()
     {
         var parameterId = new ElementId(BuiltInParameter.WALL_BOTTOM_IS_ATTACHED);
 
-        var result = parameterId.AreEquals(BuiltInParameter.WALL_TOP_OFFSET);
+        var result = parameterId.IsParameter(BuiltInParameter.WALL_TOP_OFFSET);
 
         await Assert.That(result).IsFalse();
     }

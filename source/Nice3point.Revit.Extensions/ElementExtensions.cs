@@ -11,28 +11,6 @@ public static class ElementExtensions
     /// <param name="element">The source element</param>
     extension(Element element)
     {
-#if REVIT2022_OR_GREATER
-        /// <summary>
-        ///     Find a parameter in the instance or symbol by identifier
-        /// </summary>
-        /// <param name="parameter">Identifier of the built-in parameter</param>
-        /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentException">
-        ///     ForgeTypeId does not identify a built-in parameter. See Parameter.IsBuiltInParameter(ForgeTypeId) and Parameter.GetParameterTypeId(BuiltInParameter).
-        /// </exception>
-        [Pure]
-        public Parameter? FindParameter(ForgeTypeId parameter)
-        {
-            var instanceParameter = element.GetParameter(parameter);
-            if (instanceParameter is not null) return instanceParameter;
-
-            var elementTypeId = element.GetTypeId();
-            if (elementTypeId == ElementId.InvalidElementId) return null;
-
-            var elementType = element.Document.GetElement(elementTypeId);
-            return elementType.GetParameter(parameter);
-        }
-
-#endif
         /// <summary>
         ///     Find a parameter in the instance or symbol by identifier
         /// </summary>
@@ -100,5 +78,27 @@ public static class ElementExtensions
             var elementType = element.Document.GetElement(elementTypeId);
             return elementType.LookupParameter(parameter);
         }
+#if REVIT2022_OR_GREATER
+
+        /// <summary>
+        ///     Find a parameter in the instance or symbol by identifier
+        /// </summary>
+        /// <param name="parameter">Identifier of the built-in parameter</param>
+        /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentException">
+        ///     ForgeTypeId does not identify a built-in parameter. See Parameter.IsBuiltInParameter(ForgeTypeId) and Parameter.GetParameterTypeId(BuiltInParameter).
+        /// </exception>
+        [Pure]
+        public Parameter? FindParameter(ForgeTypeId parameter)
+        {
+            var instanceParameter = element.GetParameter(parameter);
+            if (instanceParameter is not null) return instanceParameter;
+
+            var elementTypeId = element.GetTypeId();
+            if (elementTypeId == ElementId.InvalidElementId) return null;
+
+            var elementType = element.Document.GetElement(elementTypeId);
+            return elementType.GetParameter(parameter);
+        }
+#endif
     }
 }

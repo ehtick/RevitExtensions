@@ -74,7 +74,7 @@ public sealed class BuiltInExtensionsTests : RevitApiTest
     {
         var category = BuiltInCategory.OST_Walls.ToCategory(_document);
 
-        await Assert.That(category.Id.AreEquals(BuiltInCategory.OST_Walls)).IsTrue();
+        await Assert.That(category.Id.IsCategory(BuiltInCategory.OST_Walls)).IsTrue();
     }
 
     [Test]

@@ -15,7 +15,7 @@ public static class ElementIdExtensions
         ///     Checks if ElementID is a category identifier
         /// </summary>
         [Pure]
-        public bool AreEquals(BuiltInCategory category)
+        public bool IsCategory(BuiltInCategory category)
         {
 #if REVIT2024_OR_GREATER
             return elementId.Value == (long)category;
@@ -28,7 +28,7 @@ public static class ElementIdExtensions
         ///     Checks if ElementID is a parameter identifier
         /// </summary>
         [Pure]
-        public bool AreEquals(BuiltInParameter parameter)
+        public bool IsParameter(BuiltInParameter parameter)
         {
 #if REVIT2024_OR_GREATER
             return elementId.Value == (long)parameter;

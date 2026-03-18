@@ -79,7 +79,7 @@ public sealed class FilteredElementCollectorExtensionsTests : RevitApiTest
                 await Assert.That(instances).IsNotEmpty();
                 await Assert.That(instances)
                     .All()
-                    .Satisfy(element => element.Category?.Id.AreEquals(BuiltInCategory.OST_Dimensions),
+                    .Satisfy(element => element.Category?.Id.IsCategory(BuiltInCategory.OST_Dimensions),
                         source => source.IsTrue());
             }
         }
