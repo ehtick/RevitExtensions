@@ -1,10 +1,10 @@
-﻿#if NET
+﻿using System.Reflection;
+using JetBrains.Annotations;
+#if NET
 using System.Runtime.CompilerServices;
 #else
 using System.Runtime.InteropServices;
 #endif
-using System.Reflection;
-using JetBrains.Annotations;
 
 namespace Nice3point.Revit.Extensions;
 
@@ -127,6 +127,23 @@ public static class ParameterExtensions
         public ElementId ToElementId()
         {
             return new ElementId(builtInParameter);
+        }
+    }
+
+    /// <param name="elementId">The unique identification for an element.</param>
+    extension(ElementId elementId)
+    {
+        /// <summary>
+        ///     Checks if ElementID is a parameter identifier
+        /// </summary>
+        [Pure]
+        public bool IsParameter(BuiltInParameter parameter)
+        {
+#if REVIT2024_OR_GREATER
+            return elementId.Value == (long)parameter;
+#else
+            return elementId.IntegerValue == (int)parameter;
+#endif
         }
     }
 }

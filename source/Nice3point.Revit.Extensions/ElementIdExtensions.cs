@@ -12,32 +12,6 @@ public static class ElementIdExtensions
     extension(ElementId elementId)
     {
         /// <summary>
-        ///     Checks if ElementID is a category identifier
-        /// </summary>
-        [Pure]
-        public bool IsCategory(BuiltInCategory category)
-        {
-#if REVIT2024_OR_GREATER
-            return elementId.Value == (long)category;
-#else
-            return elementId.IntegerValue == (int)category;
-#endif
-        }
-
-        /// <summary>
-        ///     Checks if ElementID is a parameter identifier
-        /// </summary>
-        [Pure]
-        public bool IsParameter(BuiltInParameter parameter)
-        {
-#if REVIT2024_OR_GREATER
-            return elementId.Value == (long)parameter;
-#else
-            return elementId.IntegerValue == (int)parameter;
-#endif
-        }
-
-        /// <summary>
         ///     Retrieves the Element associated with the specified ElementId.
         /// </summary>
         /// <param name="document">The document containing the element.</param>
