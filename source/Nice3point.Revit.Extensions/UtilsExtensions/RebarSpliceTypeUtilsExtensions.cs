@@ -29,14 +29,9 @@ public static class RebarSpliceTypeUtilsExtensions
         /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentNullException">
         ///    A non-optional argument was null
         /// </exception>
-        [Pure]
         public ElementType NewRebarSpliceType(string typeName)
         {
-#if NET8_0_OR_GREATER
             var dbDocument = UnsafeAccessors.GetDocument(document);
-#else
-            throw new NotSupportedException("Revit 2026 and greater do not support .NET lower than 8.0");
-#endif
             return RebarSpliceTypeUtils.CreateRebarSpliceType(dbDocument, typeName);
         }
     }

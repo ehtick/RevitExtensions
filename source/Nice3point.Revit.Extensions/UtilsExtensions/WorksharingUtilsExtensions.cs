@@ -433,7 +433,6 @@ public static class WorksharingUtilsExtensions
         /// <param name="document">The document containing the worksets.</param>
         /// <param name="options">
         ///    Options to customize access to the central model.
-        ///    <see langword="null" /> is allowed and means no customization.
         /// </param>
         /// <returns>
         ///    The ids of all specified worksets that are now owned,
@@ -485,7 +484,7 @@ public static class WorksharingUtilsExtensions
         /// <exception cref="T:Autodesk.Revit.Exceptions.RevitServerInternalException">
         ///    An internal error happened on the server, please contact the server administrator.
         /// </exception>
-        public ICollection<WorksetId> CheckoutWorksets(Document document, TransactWithCentralOptions? options)
+        public ICollection<WorksetId> CheckoutWorksets(Document document, TransactWithCentralOptions options)
         {
             return WorksharingUtils.CheckoutWorksets(document, worksets, options);
         }

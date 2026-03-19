@@ -333,7 +333,7 @@ public static class PartUtilsExtensions
         /// <exception cref="T:Autodesk.Revit.Exceptions.ModificationOutsideTransactionException">
         ///    The document has no open transaction.
         /// </exception>
-        public PartMaker CreateMergedPart(Document document)
+        public PartMaker? CreateMergedPart(Document document)
         {
             return PartUtils.CreateMergedPart(document, elements);
         }
@@ -501,7 +501,7 @@ public static class PartUtilsExtensions
         ///    A non-optional argument was null
         /// </exception>
         [Pure]
-        public PartMaker GetAssociatedPartMaker(Document document)
+        public PartMaker? GetAssociatedPartMaker(Document document)
         {
             return PartUtils.GetAssociatedPartMaker(document, linkElementId);
         }

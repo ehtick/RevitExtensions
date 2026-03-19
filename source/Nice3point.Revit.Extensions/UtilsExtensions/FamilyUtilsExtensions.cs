@@ -51,7 +51,11 @@ public static class FamilyUtilsExtensions
             FamilyUtils.ConvertFamilyToFaceHostBased(family.Document, family.Id);
             return family;
         }
+    }
 
+    /// <param name="familySymbol">The source family symbol.</param>
+    extension(FamilySymbol familySymbol)
+    {
         /// <summary>Gets the profile Family Symbols of the document.</summary>
         /// <param name="document">The document.</param>
         /// <param name="profileFamilyUsage">The profile family usage.</param>

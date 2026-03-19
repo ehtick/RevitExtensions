@@ -21,7 +21,7 @@ public static class RebarShapeParametersExtensions
         /// </remarks>
         /// <returns>ElementIds corresponding to the external parameters.</returns>
         [Pure]
-        public IList<ElementId> GetAllRebarShapeParameters()
+        public IList<ElementId> GetAllParameters()
         {
             return RebarShapeParameters.GetAllRebarShapeParameters(rebarShape.Document);
         }

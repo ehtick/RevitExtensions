@@ -43,7 +43,7 @@ public static class ParameterUtilsExtensions
         /// <summary>Gets the identifiers of all built-in parameters.</summary>
         /// <returns>The built-in parameter identifiers.</returns>
         [Pure]
-        public IList<ForgeTypeId> GetAllBuiltInParameters()
+        public static IList<ForgeTypeId> GetAllBuiltInParameters()
         {
             return ParameterUtils.GetAllBuiltInParameters();
         }
@@ -51,7 +51,7 @@ public static class ParameterUtilsExtensions
         /// <summary>Gets the identifiers of all built-in parameter groups.</summary>
         /// <returns>The built-in group identifiers.</returns>
         [Pure]
-        public IList<ForgeTypeId> GetAllBuiltInGroups()
+        public static IList<ForgeTypeId> GetAllBuiltInGroups()
         {
             return ParameterUtils.GetAllBuiltInGroups();
         }

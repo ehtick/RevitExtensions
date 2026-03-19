@@ -14,6 +14,34 @@ public static class GeometryCreationUtilitiesExtensions
         /// <summary>
         ///    Creates a solid by blending two closed curve loops lying in non-coincident planes.
         /// </summary>
+        /// <remarks>
+        ///     The function chooses vertex connections that will result in a geometrically reasonable blend
+        /// </remarks>
+        /// <param name="firstLoop">
+        ///    The first curve loop. The loop must be a closed planar loop without intersections or degeneracies. No orientation conditions are imposed. The loop may not contain just one closed curve - split such a loop into two or more curves beforehand.
+        /// </param>
+        /// <param name="secondLoop">
+        ///    The second curve loop, satisfying the same conditions as the first loop.
+        ///    The planes of the first and second loops must not be coincident, but they need not be parallel.
+        /// </param>
+        /// <returns>The requested solid.</returns>
+        /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentException">
+        ///    The first profile CurveLoop do not satisfy the input requirements.
+        ///    -or-
+        ///    The second profile CurveLoop do not satisfy the input requirements.
+        /// </exception>
+        /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentNullException">
+        ///    A non-optional argument was null
+        /// </exception>
+        [Pure]
+        public static Solid CreateBlendGeometry(CurveLoop firstLoop, CurveLoop secondLoop)
+        {
+            return GeometryCreationUtilities.CreateBlendGeometry(firstLoop, secondLoop, null);
+        }
+
+        /// <summary>
+        ///    Creates a solid by blending two closed curve loops lying in non-coincident planes.
+        /// </summary>
         /// <param name="firstLoop">
         ///    The first curve loop. The loop must be a closed planar loop without intersections or degeneracies. No orientation conditions are imposed. The loop may not contain just one closed curve - split such a loop into two or more curves beforehand.
         /// </param>
@@ -23,7 +51,6 @@ public static class GeometryCreationUtilitiesExtensions
         /// </param>
         /// <param name="vertexPairs">
         ///    This input specifies how the two profile loops should be connected.
-        ///    If null, the function chooses vertex connections that will result in a geometrically reasonable blend.
         /// </param>
         /// <returns>The requested solid.</returns>
         /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentException">

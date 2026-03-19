@@ -144,6 +144,7 @@ public static class MassInstanceUtilsExtensions
         /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentNullException">
         ///    A non-optional argument was null
         /// </exception>
+        [Pure]
         public bool IsMassFamilyInstance(Document document)
         {
             return MassLevelData.IsMassFamilyInstance(document, massInstanceId);

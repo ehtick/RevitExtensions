@@ -115,10 +115,9 @@ public static class PlumbingUtilsExtensions
         /// <exception cref="T:Autodesk.Revit.Exceptions.InvalidOperationException">
         ///    this operation failed.
         /// </exception>
-        public Pipe PlaceCapOnOpenEnds()
+        public void PlaceCapOnOpenEnds()
         {
             PlumbingUtils.PlaceCapOnOpenEnds(pipe.Document, pipe.Id, ElementId.InvalidElementId);
-            return pipe;
         }
 
         /// <summary>
