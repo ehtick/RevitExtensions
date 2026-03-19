@@ -1,161 +1,686 @@
-# Release 2027.0.0-preview.2.20260310
+# Release 2027.0.0-preview.3.20260319
 
-This update focuses on improved API design through C# 14 extension methods syntax, .NET 10 support, Revit 2027 support, and ElementId overloads.
+This update focuses on improved API design through C# 14 extension methods syntax, .NET 10 support, Revit 2027 support, and covers all known Utils classes.
 
-## New Features
+## New Extensions
 
-**Application Extensions:**
+### Element
 
-- `application.AsControlledApplication()` - creates a `ControlledApplication` from an `Application` instance
+- `element.CanBeDeleted`
+- `elementId.CanBeDeleted(Document)`
 
-**UIApplication Extensions:**
+#### Transformation
 
-- `uiApplication.AsControlledApplication()` - creates a `UIControlledApplication` from a `UIApplication` instance
+- `element.Copy(XYZ)`, `Copy(double, double, double)`
+- `elementId.Copy(Document, XYZ)`, `Copy(Document, double, double, double)`
+- `element.Mirror(Plane)`
+- `elementId.Mirror(Document, Plane)`
+- `element.Move(XYZ)`, `Move(double, double, double)`
+- `elementId.Move(Document, XYZ)`, `Move(Document, double, double, double)`
+- `element.Rotate(Line, double)`
+- `elementId.Rotate(Document, Line, double)`
+- `element.CanBeMirrored`
+- `elementId.CanBeMirrored(Document)`
+- `elementIds.CanBeMirrored(Document)`
+- `elementIds.MirrorElements(Document, Plane, bool)`
+- `elementIds.MoveElements(Document, XYZ)`
+- `elementIds.RotateElements(Document, Line, double)`
+- `elementIds.CopyElements(Document, XYZ)`
+- `elementIds.CopyElements(Document, Document)`
+- `elementIds.CopyElements(Document, Document, Transform, CopyPasteOptions)`
+- `elementIds.CopyElements(View, View)`
+- `elementIds.CopyElements(View, View, Transform, CopyPasteOptions)`
+- `view.GetTransformFromViewToView(View)`
 
-**BuiltInCategory Extensions**
+#### Joins and cuts
 
-- `builtInCategory.ToCategory(Document document)` - creates a a Revit Category object from BuiltInCategory value
-- `builtInCategory.ToElementId()` - creates an ElementId handle from a BuiltInCategory value
+- `element.JoinGeometry(Element)`
+- `element.UnjoinGeometry(Element)`
+- `element.AreElementsJoined(Element)`
+- `element.GetJoinedElements()`
+- `element.SwitchJoinOrder(Element)`
+- `element.IsCuttingElementInJoin(Element)`
+- `element.CanBeCutWithVoid`
+- `element.GetCuttingVoidInstances()`
+- `element.AddInstanceVoidCut(FamilyInstance)`
+- `element.RemoveInstanceVoidCut(FamilyInstance)`
+- `element.InstanceVoidCutExists(FamilyInstance)`
+- `element.IsAllowedForSolidCut`
+- `element.IsElementFromAppropriateContext`
+- `element.GetCuttingSolids()`
+- `element.GetSolidsBeingCut()`
+- `element.CanElementCutElement(Element, out CutFailureReason)`
+- `element.CutExistsBetweenElements(Element, out bool)`
+- `element.AddCutBetweenSolids(Element)`
+- `element.AddCutBetweenSolids(Element, bool)`
+- `element.RemoveCutBetweenSolids(Element)`
+- `element.SplitFacesOfCuttingSolid(Element, bool)`
 
-**BuiltInParameter Extensions**
+### Application extensions
 
-- `builtInParameter.ToParameter(Document document)` - creates a Revit Parameter object from BuiltInParameter value
-- `builtInParameter.ToElementId()` - creates an ElementId handle from a BuiltInParameter value
+- `application.AsControlledApplication()`
+- `application.IsDgnExportAvailable`
+- `application.IsDgnImportLinkAvailable`
+- `application.IsDwfExportAvailable`
+- `application.IsDwgExportAvailable`
+- `application.IsDwgImportLinkAvailable`
+- `application.IsDxfExportAvailable`
+- `application.IsFbxExportAvailable`
+- `application.IsGraphicsAvailable`
+- `application.IsIfcAvailable`
+- `application.IsNavisworksExporterAvailable`
+- `application.IsSatImportLinkAvailable`
+- `application.IsShapeImporterAvailable`
+- `application.IsSkpImportLinkAvailable`
+- `application.Is3DmImportLinkAvailable`
+- `application.IsAxmImportLinkAvailable`
+- `application.IsObjImportLinkAvailable`
+- `application.IsStlImportLinkAvailable`
+- `application.IsStepImportLinkAvailable`
+- `application.IsMaterialLibraryAvailable`
+- `application.GetAllCloudRegions()`
 
-**Ribbon Extensions:**
+### UIApplication extensions
 
-- `pushButton.TryAddShortcuts(string representation)` - attempts to add keyboard shortcuts, returns `false` if shortcuts conflict with existing commands
-- `pushButton.TryAddShortcuts(params IEnumerable<string> shortcuts)` - attempts to add multiple keyboard shortcuts with conflict detection
+- `uiApplication.AsControlledApplication()`
 
-**ElementId Extension Overloads**
+#### Ribbon
 
-Added comprehensive ElementId overloads for all extension methods that work with `element.Document` and `element.Id`.
-This allows working directly with ElementId when you don't have the Element instance.
+- `pushButton.TryAddShortcuts(string)`
+- `pushButton.TryAddShortcuts(params IEnumerable<string>)`
 
-- **DocumentValidationExtensions**
-    - `elementId.CanBeDeleted(Document document)`
+### Document
 
-- **ElementTransformUtilsExtensions**
-    - `elementId.CanBeMirrored(Document document)`
-    - `elementId.Copy(Document document, XYZ vector)`
-    - `elementId.Copy(Document document, double deltaX, double deltaY, double deltaZ)`
-    - `elementId.Mirror(Document document, Plane plane)`
-    - `elementId.Move(Document document, double deltaX, double deltaY, double deltaZ)`
-    - `elementId.Move(Document document, XYZ vector)`
-    - `elementId.Rotate(Document document, Line axis, double angle)`
+- `document.Version`
+- `document.IsValidVersionGuid(Guid)`
+- `document.CheckAllFamilies(out ISet<ElementId>)`
+- `document.CheckAllFamiliesSlow(out ISet<ElementId>)`
 
-- **FamilyUtilsExtensions**
-    - `elementId.CanBeConvertedToFaceHostBased(Document document)`
-    - `elementId.ConvertToFaceHostBased(Document document)`
+#### Global parameters
 
-- **WorksharingUtilsExtensions**
-    - `elementId.GetCheckoutStatus(Document document)`
-    - `elementId.GetCheckoutStatus(Document document, out string owner)`
-    - `elementId.GetWorksharingTooltipInfo(Document document)`
-    - `elementId.GetModelUpdatesStatus(Document document)`
+- `document.AreGlobalParametersAllowed`
+- `document.FindGlobalParameter(string)`
+- `document.GetAllGlobalParameters()`
+- `document.GetGlobalParametersOrdered()`
+- `document.SortGlobalParameters(ParametersOrder)`
+- `document.IsUniqueGlobalParameterName(string)`
+- `globalParameter.MoveUpOrder()`
+- `globalParameter.MoveDownOrder()`
+- `elementId.IsValidGlobalParameter(Document)`
+- `elementId.MoveGlobalParameterUpOrder(Document)`
+- `elementId.MoveGlobalParameterDownOrder(Document)`
 
-- **AnalyticalToPhysicalAssociationManagerExtensions**
-    - `elementId.IsAnalyticalElement(Document document)`
-    - `elementId.IsPhysicalElement(Document document)`
+#### Managers and services
 
-- **GlobalParametersManagerExtensions**
-    - `elementId.MoveGlobalParameterUpOrder(Document document)`
-    - `elementId.MoveGlobalParameterDownOrder(Document document)`
+- `document.GetTemporaryGraphicsManager()`
+- `document.GetAnalyticalToPhysicalAssociationManager()`
+- `document.GetLightGroupManager()`
+- `view.CreateSpatialFieldManager(int)`
+- `view.GetSpatialFieldManager()`
 
-**Usage examples:**
+### Parameters
 
-```csharp
-// Work with ElementId directly without Element instance
-ElementId elementId = /* ... */;
+- `parameter.IsBuiltInParameter`
 
-// Validation
-if (elementId.CanBeDeleted(document))
-{
-    document.Delete(elementId);
-}
+#### BuiltInParameter
 
-// Transformations
-elementId.Copy(document, new XYZ(10, 0, 0));
-elementId.Move(document, 5, 5, 0);
-elementId.Mirror(document, plane);
-elementId.Rotate(document, axis, angle);
+- `builtInParameter.ToParameter(Document)`
+- `builtInParameter.ToElementId()`
+- `builtInParameter.GetParameterTypeId()`
+- `elementId.IsParameter(BuiltInParameter)`
 
-// Worksharing
-var status = elementId.GetCheckoutStatus(document);
-var tooltipInfo = elementId.GetWorksharingTooltipInfo(document);
+#### Filtering
 
-// Family operations
-if (familyId.CanBeConvertedToFaceHostBased(document))
-{
-    familyId.ConvertToFaceHostBased(document);
-}
+- `element.IsParameterApplicable(ElementId)`
+- `element.IsParameterApplicable(Parameter)`
+- `categories.RemoveUnfilterableCategories()`
+- `ParameterFilterElement.GetAllFilterableCategories()`
+- `ParameterFilterElement.GetFilterableParametersInCommon(Document, ICollection<ElementId>)`
+- `ParameterFilterElement.GetInapplicableParameters(Document, ICollection<ElementId>, IList<ElementId>)`
 
-// Global parameters
-globalParamId.MoveGlobalParameterUpOrder(document);
+### Category
 
-// Built-in conversions
-Category category = BuiltInCategory.OST_Walls.ToCategory(document);
-Parameter parameter = BuiltInParameter.WALL_ATTR_ROOM_BOUNDING.ToParameter(document);
-```
+#### BuiltInCategory
 
-## Improvements
+- `builtInCategory.ToCategory(Document)`
+- `builtInCategory.ToElementId()`
+- `elementId.IsCategory(BuiltInCategory)`
 
-- **Revit 2019** support by @ZedMoster in https://github.com/Nice3point/RevitExtensions/pull/13
-- **SDK Update:** Updated to stable .NET 10 SDK
-- **Documentation:** Updated parameter descriptions and variable names to align with C# 14 syntax
-- **Build System:** Migration from Nuke to ModularPipilines
-- **API Consistency:** Renamed Can* methods to follow Revit API passive voice pattern (CanBe*)
-- **Reflexion:** API covered with UnsafeAccessor attribute when possible in .NET 8+ builds
+### Geometry
 
-## Breaking changes
+#### Bounding box
 
-The following boolean methods have been converted to properties for improved syntax and consistency with modern C# conventions:
+- `boundingBox.Contains(XYZ)`
+- `boundingBox.Contains(XYZ, bool)`
+- `boundingBox.Contains(BoundingBoxXYZ)`
+- `boundingBox.Contains(BoundingBoxXYZ, bool)`
+- `boundingBox.Overlaps(BoundingBoxXYZ)`
 
-- **IsAnalyticalElement:** Changed from method to property
-- **IsPhysicalElement:** Changed from method to property
-- **AreGlobalParametersAllowed:** Changed from method to property
-- **IsBuiltInParameter (ForgeTypeId):** Changed from method to property
-- **IsBuiltInParameter (Parameter):** Changed from method to property
-- **IsBuiltInGroup:** Changed from method to property
-- **HasOpenConnector:** Changed from method to property
-- **IsAllowedForSolidCut:** Changed from method to property
-- **IsElementFromAppropriateContext:** Changed from method to property
-- **IsValidForTessellation:** Changed from method to property
-- **IsSpec:** Changed from method to property
-- **IsValidDataType:** Changed from method to property
-- **IsSymbol:** Changed from method to property
-- **IsUnit:** Changed from method to property
-- **IsMeasurableSpec:** Changed from method to property
+#### Curve
 
-**Renamed Methods (Revit API naming consistency):**
+- `curveElement.GetHostFace()`
+- `curveElement.GetProjectionType()`
+- `curveElement.SetProjectionType(CurveProjectionType)`
+- `curveElement.GetSketchOnSurface()`
+- `curveElement.SetSketchOnSurface(bool)`
+- `reference.GetFaceRegions(Document)`
+- `CurveElement.CreateArcThroughPoints(Document, ReferencePoint, ReferencePoint, ReferencePoint)`
+- `CurveElement.AddCurvesToFaceRegion(Document, IList<ElementId>)`
+- `CurveElement.CreateRectangle(Document, ReferencePoint, ReferencePoint, CurveProjectionType, bool, bool, out IList<ElementId>, out IList<ElementId>)`
+- `CurveElement.ValidateForFaceRegions(Document, IList<ElementId>)`
+- `CurveLoop.IsValidHorizontalBoundary(IList<CurveLoop>)`
+- `CurveLoop.IsValidBoundaryOnSketchPlane(SketchPlane, IList<CurveLoop>)`
+- `CurveLoop.IsValidBoundaryOnView(Document, ElementId, IList<CurveLoop>)`
 
-- **CanDeleteElement:** Renamed to **CanBeDeleted** (passive voice pattern)
-- **CanMirrorElement:** Renamed to **CanBeMirrored** (passive voice pattern)
-- **CanMirrorElements:** Renamed to **CanBeMirrored** (passive voice pattern)
-- **CanConvertToFaceHostBased:** Renamed to **CanBeConvertedToFaceHostBased** (passive voice pattern)
+#### Solid
 
-**Namespace change for UI Extensions:**
+- `geometry.IsNonSolid`
+- `geometry.IsSolid`
+- `geometry.LacksSubnodes`
+- `solid.CutWithHalfSpace(Plane)`
+- `solid.CutWithHalfSpaceModifyingOriginalSolid(Plane)`
+- `solid.ExecuteBooleanOperation(Solid, BooleanOperationsType)`
+- `solid.ExecuteBooleanOperationModifyingOriginalSolid(Solid, BooleanOperationsType)`
+- `Solid.CreateBlendGeometry(CurveLoop, CurveLoop)`
+- `Solid.CreateBlendGeometry(CurveLoop, CurveLoop, ICollection<VertexPair>)`
+- `Solid.CreateBlendGeometry(CurveLoop, CurveLoop, ICollection<VertexPair>, SolidOptions)`
+- `Solid.CreateExtrusionGeometry(IList<CurveLoop>, XYZ, double)`
+- `Solid.CreateExtrusionGeometry(IList<CurveLoop>, XYZ, double, SolidOptions)`
+- `Solid.CreateRevolvedGeometry(Frame, IList<CurveLoop>, double, double)`
+- `Solid.CreateRevolvedGeometry(Frame, IList<CurveLoop>, double, double, SolidOptions)`
+- `Solid.CreateSweptGeometry(CurveLoop, int, double, IList<CurveLoop>)`
+- `Solid.CreateSweptGeometry(CurveLoop, int, double, IList<CurveLoop>, SolidOptions)`
+- `Solid.CreateSweptBlendGeometry(Curve, IList<double>, IList<CurveLoop>, IList<ICollection<VertexPair>>)`
+- `Solid.CreateSweptBlendGeometry(Curve, IList<double>, IList<CurveLoop>, IList<ICollection<VertexPair>>, SolidOptions)`
+- `Solid.CreateFixedReferenceSweptGeometry(CurveLoop, int, double, IList<CurveLoop>, XYZ)`
+- `Solid.CreateFixedReferenceSweptGeometry(CurveLoop, int, double, IList<CurveLoop>, XYZ, SolidOptions)`
+- `Solid.CreateLoftGeometry(IList<CurveLoop>, SolidOptions)`
 
-`RibbonExtensions`, `ContextMenuExtensions`, `UiApplicationExtensions` extensions have been moved to a dedicated namespace to support proper type resolution in a headless mode (Unit tests or Design Automation):
+#### Tessellation
 
-- `Nice3point.Revit.Extensions` → `Nice3point.Revit.Extensions.UI`
+- `triangulation.ConvertTrianglesToQuads()`
+- `filter.GetFilteredOutline(Outline)`
 
-**Obsolete methods with auto-conversion:**
+### View
 
-Old method names are marked as `[Obsolete]` with `[CodeTemplate]` attributes for automatic IDE conversion to new names.
+- `view.GetDrawOrderForDetails(ISet<ElementId>)`
+- `element.GetReferencedViewId()`
+- `element.ChangeReferencedView(ElementId)`
+- `elementId.GetReferencedViewId(Document)`
+- `elementId.ChangeReferencedView(Document, ElementId)`
 
-**Migration examples:**
+#### SSE point
 
-```csharp
-// Properties (old → new, auto-conversion is not available because of the same name)
-if (element.IsAnalyticalElement())  // Old
-if (element.IsAnalyticalElement)    // New
+- `category.GetSsePointVisibility(Document)`
+- `category.SetSsePointVisibility(Document, bool)`
 
-// Renamed methods (old → new, auto-conversion available)
-element.CanDeleteElement();              // Old, IDE suggests: element.CanBeDeleted()
-element.CanMirrorElement();              // Old, IDE suggests: element.CanBeMirrored()
-family.CanConvertToFaceHostBased();      // Old, IDE suggests: family.CanBeConvertedToFaceHostBased()
-```
+### ForgeTypeId
+
+- `typeId.IsBuiltInParameter`
+- `typeId.IsBuiltInGroup`
+- `typeId.IsSpec`
+- `typeId.IsValidDataType`
+- `typeId.IsSymbol`
+- `typeId.IsUnit`
+- `typeId.IsMeasurableSpec`
+- `typeId.IsValidUnit(ForgeTypeId)`
+- `typeId.GetBuiltInParameter()`
+- `typeId.GetDiscipline()`
+- `typeId.GetValidUnits()`
+- `typeId.GetTypeCatalogStringForSpec()`
+- `typeId.GetTypeCatalogStringForUnit()`
+- `typeId.DownloadCompanyName(Document)`
+- `typeId.DownloadCompanyName(Document, string)`
+- `typeId.DownloadParameterOptions()`
+- `typeId.DownloadParameterOptions(string)`
+- `typeId.DownloadParameter(Document, ParameterDownloadOptions)`
+- `typeId.DownloadParameter(Document, ParameterDownloadOptions, string)`
+- `ForgeTypeId.GetAllBuiltInParameters()`
+- `ForgeTypeId.GetAllBuiltInGroups()`
+
+### Label
+
+- `typeId.ToLabel()`
+- `typeId.ToSpecLabel()`
+- `typeId.ToSymbolLabel()`
+- `typeId.ToUnitLabel()`
+- `typeId.ToGroupLabel()`
+- `typeId.ToParameterLabel()`
+
+### Families and modeling
+
+#### Family
+
+- `family.CanBeConvertedToFaceHostBased`
+- `family.ConvertToFaceHostBased()`
+- `family.CheckIntegrity()`
+- `elementId.CanBeConvertedToFaceHostBased(Document)`
+- `elementId.ConvertToFaceHostBased(Document)`
+- `elementId.CheckFamilyIntegrity(Document)`
+- `Form.CanBeDissolved(Document, ICollection<ElementId>)`
+- `Form.DissolveForms(Document, ICollection<ElementId>)`
+- `Form.DissolveForms(Document, ICollection<ElementId>, out ICollection<ElementId>)`
+
+#### FamilySymbol
+
+- `familySymbol.IsAdaptiveFamilySymbol`
+- `familySymbol.CreateAdaptiveComponentInstance()`
+- `familySymbol.SetStructuralSection(StructuralSection)`
+- `FamilySymbol.GetProfileSymbols(Document, ProfileFamilyUsage, bool)`
+
+#### FamilyInstance
+
+- `familyInstance.IsVoidInstanceCuttingElement`
+- `familyInstance.GetElementsBeingCut()`
+- `familyInstance.GetStructuralSection()`
+- `familyInstance.GetStructuralElementDefinitionData(out StructuralElementDefinitionData)`
+
+#### Wall
+
+- `wall.IsJoinAllowedAtEnd(int)`
+- `wall.AllowJoinAtEnd(int)`
+- `wall.DisallowJoinAtEnd(int)`
+
+#### Adaptive components
+
+- `family.IsAdaptiveComponentFamily`
+- `family.GetNumberOfAdaptivePoints()`
+- `family.GetNumberOfAdaptivePlacementPoints()`
+- `family.GetNumberOfAdaptiveShapeHandlePoints()`
+- `familySymbol.IsAdaptiveFamilySymbol`
+- `familySymbol.CreateAdaptiveComponentInstance()`
+- `familyInstance.HasAdaptiveFamilySymbol`
+- `familyInstance.IsAdaptiveComponentInstance`
+- `familyInstance.IsAdaptiveInstanceFlipped`
+- `familyInstance.SetAdaptiveInstanceFlipped(bool)`
+- `familyInstance.MoveAdaptiveComponentInstance(Transform, bool)`
+- `familyInstance.GetAdaptivePlacementPointElementRefIds()`
+- `familyInstance.GetAdaptivePointElementRefIds()`
+- `familyInstance.GetAdaptiveShapeHandlePointElementRefIds()`
+- `referencePoint.IsAdaptivePlacementPoint`
+- `referencePoint.IsAdaptivePoint`
+- `referencePoint.IsAdaptiveShapeHandlePoint`
+- `referencePoint.MakeAdaptivePoint(AdaptivePointType)`
+- `referencePoint.GetAdaptivePlacementNumber()`
+- `referencePoint.GetAdaptivePointConstraintType()`
+- `referencePoint.GetAdaptivePointOrientationType()`
+- `referencePoint.SetAdaptivePlacementNumber(int)`
+- `referencePoint.SetAdaptivePointConstraintType(AdaptivePointConstraintType)`
+- `referencePoint.SetAdaptivePointOrientationType(AdaptivePointOrientationType)`
+
+#### Annotation
+
+- `element.SupportsMultiAlign`
+- `element.GetAnnotationOutlineWithoutLeaders()`
+- `element.MoveWithAnchoredLeaders(XYZ)`
+
+#### Detail
+
+- `element.IsDetailElement(View)`
+- `element.BringForward(View)`
+- `element.BringToFront(View)`
+- `element.SendBackward(View)`
+- `element.SendToBack(View)`
+- `elementId.IsDetailElement(Document, View)`
+- `elementId.BringForward(Document, View)`
+- `elementId.BringToFront(Document, View)`
+- `elementId.SendBackward(Document, View)`
+- `elementId.SendToBack(Document, View)`
+- `elementIds.AreDetailElements(Document, View)`
+- `elementIds.BringForward(Document, View)`
+- `elementIds.BringToFront(Document, View)`
+- `elementIds.SendBackward(Document, View)`
+- `elementIds.SendToBack(Document, View)`
+- `view.GetDrawOrderForDetails(ISet<ElementId>)`
+
+#### Parts
+
+- `element.HasAssociatedParts`
+- `element.GetAssociatedParts(bool, bool)`
+- `element.GetAssociatedPartMaker()`
+- `elementId.HasAssociatedParts(Document)`
+- `elementId.GetAssociatedParts(Document, bool, bool)`
+- `elementId.GetAssociatedPartMaker(Document)`
+- `elementId.GetSplittingCurves(Document)`
+- `elementId.GetSplittingCurves(Document, out Plane)`
+- `elementId.GetSplittingElements(Document)`
+- `linkElementId.IsValidForCreateParts(Document)`
+- `linkElementId.HasAssociatedParts(Document)`
+- `linkElementId.GetAssociatedParts(Document, bool, bool)`
+- `linkElementId.GetAssociatedPartMaker(Document)`
+- `part.IsMergedPart`
+- `part.IsPartDerivedFromLink`
+- `part.GetChainLengthToOriginal()`
+- `part.GetMergedParts()`
+- `part.GetSplittingCurves()`
+- `part.GetSplittingCurves(out Plane)`
+- `part.GetSplittingElements()`
+- `partMaker.GetPartMakerMethodToDivideVolumeFw()`
+- `elementIds.AreElementsValidForCreateParts(Document)`
+- `elementIds.ArePartsValidForDivide(Document)`
+- `elementIds.ArePartsValidForMerge(Document)`
+- `elementIds.CreateParts(Document)`
+- `elementIds.CreateMergedPart(Document)`
+- `elementIds.DivideParts(Document, ICollection<ElementId>, IList<Curve>, ElementId)`
+- `elementIds.FindMergeableClusters(Document)`
+- `hostOrLinkElements.CreateParts(Document)`
+
+#### Assembly
+
+- `assemblyInstance.AcquireViews(AssemblyInstance)`
+- `assemblyInstance.Create3DOrthographic()`
+- `assemblyInstance.Create3DOrthographic(ElementId, bool)`
+- `assemblyInstance.CreateDetailSection(AssemblyDetailViewOrientation)`
+- `assemblyInstance.CreateDetailSection(AssemblyDetailViewOrientation, ElementId, bool)`
+- `assemblyInstance.CreateMaterialTakeoff()`
+- `assemblyInstance.CreateMaterialTakeoff(ElementId, bool)`
+- `assemblyInstance.CreatePartList()`
+- `assemblyInstance.CreatePartList(ElementId, bool)`
+- `assemblyInstance.CreateSheet(ElementId)`
+- `assemblyInstance.CreateSingleCategorySchedule(ElementId)`
+- `assemblyInstance.CreateSingleCategorySchedule(ElementId, ElementId, bool)`
+
+#### Mass
+
+- `massInstance.IsMassFamilyInstance`
+- `massInstance.GetMassGrossFloorArea()`
+- `massInstance.GetMassGrossSurfaceArea()`
+- `massInstance.GetMassGrossVolume()`
+- `massInstance.GetMassLevelDataIds()`
+- `massInstance.GetMassJoinedElementIds()`
+- `massInstance.GetMassLevelIds()`
+- `massInstance.AddMassLevelData(ElementId)`
+- `massInstance.RemoveMassLevelData(ElementId)`
+- `massInstanceId.IsMassFamilyInstance(Document)`
+- `massInstanceId.GetMassGrossFloorArea(Document)`
+- `massInstanceId.GetMassGrossSurfaceArea(Document)`
+- `massInstanceId.GetMassGrossVolume(Document)`
+- `massInstanceId.GetMassLevelDataIds(Document)`
+- `massInstanceId.GetMassJoinedElementIds(Document)`
+- `massInstanceId.GetMassLevelIds(Document)`
+- `massInstanceId.AddMassLevelData(Document, ElementId)`
+- `massInstanceId.RemoveMassLevelData(Document, ElementId)`
+
+### Disciplines
+
+#### MEP
+
+##### Pipe
+
+- `pipe.HasOpenConnector`
+- `pipe.PlaceCapOnOpenEnds()`
+- `pipe.PlaceCapOnOpenEnds(ElementId)`
+- `pipe.BreakCurve(XYZ)`
+- `connector.ConnectPipePlaceholdersAtElbow(Connector)`
+- `connector.ConnectPipePlaceholdersAtTee(Connector, Connector)`
+- `connector.ConnectPipePlaceholdersAtCross(Connector, Connector, Connector)`
+- `placeholderIds.ConvertPipePlaceholders(Document)`
+
+##### Duct
+
+- `duct.BreakCurve(XYZ)`
+- `duct.ConnectAirTerminal(ElementId)`
+- `connector.ConnectDuctPlaceholdersAtElbow(Connector)`
+- `connector.ConnectDuctPlaceholdersAtTee(Connector, Connector)`
+- `connector.ConnectDuctPlaceholdersAtCross(Connector, Connector, Connector)`
+- `placeholderIds.ConvertDuctPlaceholders(Document)`
+
+##### Fabrication
+
+- `document.ExportToPcf(string, IList<ElementId>)`
+- `connector.ValidateFabricationConnectivity(Connector)`
+
+##### MEP Support
+
+- `document.NewDuctworkStiffener(FamilySymbol, Element, double)`
+
+#### Structure
+
+##### Rebar
+
+- `rebar.CanBeSpliced(RebarSpliceOptions, Line, XYZ)`
+- `rebar.CanBeSpliced(RebarSpliceOptions, Line, ElementId)`
+- `rebar.CanBeSpliced(RebarSpliceOptions, RebarSpliceGeometry)`
+- `rebar.GetLapDirectionForSpliceGeometryAndPosition(RebarSpliceGeometry, RebarSplicePosition)`
+- `rebar.GetSpliceChain()`
+- `rebar.GetSpliceGeometries(RebarSpliceOptions, RebarSpliceRules)`
+- `rebar.Splice(RebarSpliceOptions, Line, XYZ)`
+- `rebar.Splice(RebarSpliceOptions, Line, ElementId)`
+- `rebar.Splice(RebarSpliceOptions, IList<RebarSpliceGeometry>)`
+- `rebar.UnifyRebarsIntoOne(ElementId)`
+- `elementId.GetRebarSpliceGeometries(Document, RebarSpliceOptions, RebarSpliceRules)`
+- `elementId.SpliceRebar(Document, RebarSpliceOptions, Line, XYZ)`
+- `elementId.SpliceRebar(Document, RebarSpliceOptions, Line, ElementId)`
+- `elementId.SpliceRebar(Document, RebarSpliceOptions, IList<RebarSpliceGeometry>)`
+- `elementId.UnifyRebarsIntoOne(Document, ElementId)`
+- `sourceRebars.AlignByFace(Document, Reference, Reference)`
+- `sourceRebars.AlignByHost(Document, Element)`
+- `rebarShape.GetAllParameters()`
+- `externalDefinition.IsValidRebarShapeParameter`
+- `externalDefinition.GetRebarShapeParameterElementId(Document)`
+- `externalDefinition.GetOrCreateRebarShapeParameterElementId(Document)`
+- `definitionFile.SearchExternalDefinition(Document, ElementId)`
+- `definitionFile.SearchExternalDefinition(Parameter)`
+- `document.NewRebarSpliceType(string)`
+- `document.NewRebarCrankType(string)`
+- `element.GetRebarSpliceLapLengthMultiplier()`
+- `element.GetRebarSpliceShiftOption()`
+- `element.GetRebarSpliceStaggerLengthMultiplier()`
+- `element.SetRebarSpliceLapLengthMultiplier(double)`
+- `element.SetRebarSpliceShiftOption(RebarSpliceShiftOption)`
+- `element.SetRebarSpliceStaggerLengthMultiplier(double)`
+- `element.GetRebarCrankLengthMultiplier()`
+- `element.GetRebarCrankOffsetMultiplier()`
+- `element.GetRebarCrankRatio()`
+- `element.SetRebarCrankLengthMultiplier(double)`
+- `element.SetRebarCrankOffsetMultiplier(double)`
+- `element.SetRebarCrankRatio(double)`
+- `elementId.GetRebarSpliceLapLengthMultiplier(Document)`
+- `elementId.GetRebarSpliceShiftOption(Document)`
+- `elementId.GetRebarSpliceStaggerLengthMultiplier(Document)`
+- `elementId.SetRebarSpliceLapLengthMultiplier(Document, double)`
+- `elementId.SetRebarSpliceShiftOption(Document, RebarSpliceShiftOption)`
+- `elementId.SetRebarSpliceStaggerLengthMultiplier(Document, double)`
+- `elementId.GetRebarCrankLengthMultiplier(Document)`
+- `elementId.GetRebarCrankOffsetMultiplier(Document)`
+- `elementId.GetRebarCrankRatio(Document)`
+- `elementId.SetRebarCrankLengthMultiplier(Document, double)`
+- `elementId.SetRebarCrankOffsetMultiplier(Document, double)`
+- `elementId.SetRebarCrankRatio(Document, double)`
+
+##### Structural framing
+
+- `familyInstance.CanFlipFramingEnds`
+- `familyInstance.FlipFramingEnds()`
+- `familyInstance.IsFramingJoinAllowedAtEnd(int)`
+- `familyInstance.AllowFramingJoinAtEnd(int)`
+- `familyInstance.DisallowFramingJoinAtEnd(int)`
+- `familyInstance.GetFramingEndReference(int)`
+- `familyInstance.IsFramingEndReferenceValid(int, Reference)`
+- `familyInstance.CanSetFramingEndReference(int)`
+- `familyInstance.SetFramingEndReference(int, Reference)`
+- `familyInstance.RemoveFramingEndReference(int)`
+
+##### Structural sections
+
+- `familyInstance.GetStructuralSection()`
+- `familyInstance.GetStructuralElementDefinitionData(out StructuralElementDefinitionData)`
+- `familySymbol.SetStructuralSection(StructuralSection)`
+- `elementId.GetStructuralSection(Document)`
+- `elementId.SetStructuralSection(Document, StructuralSection)`
+- `elementId.GetStructuralElementDefinitionData(Document, out StructuralElementDefinitionData)`
+
+#### Analytical
+
+- `element.IsAnalyticalElement`
+- `element.IsPhysicalElement`
+- `elementId.IsAnalyticalElement(Document)`
+- `elementId.IsPhysicalElement(Document)`
+- `document.GetAnalyticalToPhysicalAssociationManager()`
+
+### Model access and interoperability
+
+#### ModelPath
+
+- `modelPath.ConvertToUserVisiblePath()`
+- `modelPath.CreateNewLocal(ModelPath)`
+- `modelPath.GetUserWorksetInfo()`
+- `modelGuid.ConvertToCloudPath(Guid, string)`
+- `application.GetAllCloudRegions()`
+
+#### Worksharing
+
+- `element.GetCheckoutStatus()`
+- `element.GetCheckoutStatus(out string)`
+- `element.GetWorksharingTooltipInfo()`
+- `element.GetModelUpdatesStatus()`
+- `elementId.GetCheckoutStatus(Document)`
+- `elementId.GetCheckoutStatus(Document, out string)`
+- `elementId.GetWorksharingTooltipInfo(Document)`
+- `elementId.GetModelUpdatesStatus(Document)`
+- `document.RelinquishOwnership(RelinquishOptions, TransactWithCentralOptions)`
+- `worksets.CheckoutWorksets(Document)`
+- `worksets.CheckoutWorksets(Document, TransactWithCentralOptions)`
+- `elementIds.CheckoutElements(Document)`
+- `elementIds.CheckoutElements(Document, TransactWithCentralOptions)`
+
+#### Coordination model
+
+- `element.IsCoordinationModelInstance`
+- `element.IsCoordinationModelType`
+- `element.GetCoordinationModelVisibilityOverride(View)`
+- `element.SetCoordinationModelVisibilityOverride(View, bool)`
+- `element.GetAllPropertiesForReferenceInsideCoordinationModel(Reference)`
+- `element.GetCategoryForReferenceInsideCoordinationModel(Reference)`
+- `element.GetVisibilityOverrideForReferenceInsideCoordinationModel(View, Reference)`
+- `element.SetVisibilityOverrideForReferenceInsideCoordinationModel(View, Reference, bool)`
+- `elementType.GetCoordinationModelTypeData()`
+- `elementType.GetCoordinationModelColorOverride(View)`
+- `elementType.SetCoordinationModelColorOverride(View, Color)`
+- `elementType.GetCoordinationModelTransparencyOverride(View)`
+- `elementType.SetCoordinationModelTransparencyOverride(View, int)`
+- `elementType.ContainsCoordinationModelCategory(string)`
+- `elementType.GetCoordinationModelColorOverrideForCategory(View, string)`
+- `elementType.SetCoordinationModelColorOverrideForCategory(View, string, Color)`
+- `elementType.GetCoordinationModelVisibilityOverrideForCategory(View, string)`
+- `elementType.SetCoordinationModelVisibilityOverrideForCategory(View, string, bool)`
+- `elementType.ReloadCoordinationModel()`
+- `elementType.ReloadAutodeskDocsCoordinationModelFrom(string, string, string, string)`
+- `elementType.ReloadLocalCoordinationModelFrom(string)`
+- `elementType.UnloadCoordinationModel()`
+- `document.GetAllCoordinationModelInstanceIds()`
+- `document.GetAllCoordinationModelTypeIds()`
+- `document.LinkCoordinationModelFromLocalPath(string, CoordinationModelLinkOptions)`
+- `document.Link3DViewFromAutodeskDocs(string, string, string, string, CoordinationModelLinkOptions)`
+
+#### Export
+
+- `element.ExportId`
+- `subelement.ExportId`
+- `elementId.GetExportId(Document)`
+- `document.GbXmlId`
+- `surface.GetNurbsSurfaceData()`
+
+#### External files
+
+- `element.IsExternalFileReference`
+- `element.GetExternalFileReference()`
+- `elementId.IsExternalFileReference(Document)`
+- `elementId.GetExternalFileReference(Document)`
+- `document.GetAllExternalFileReferences()`
+
+#### External resources
+
+- `document.GetAllExternalResourceReferences()`
+- `document.GetAllExternalResourceReferences(ExternalResourceType)`
+- `resourceType.GetServers()`
+- `externalResourceReference.ServerSupportsAssemblyCodeData`
+- `externalResourceReference.ServerSupportsCadLinks`
+- `externalResourceReference.ServerSupportsIfcLinks`
+- `externalResourceReference.ServerSupportsKeynotes`
+- `externalResourceReference.ServerSupportsRevitLinks`
+- `ExternalResourceReference.IsValidShortName(Guid, string)`
+
+#### Point clouds
+
+- `filter.GetFilteredOutline(Outline)`
+
+### DirectContext3D
+
+- `category.IsADirectContext3DHandleCategory`
+- `category.GetDirectContext3DHandleInstances(Document)`
+- `category.GetDirectContext3DHandleTypes(Document)`
+- `element.IsADirectContext3DHandleInstance`
+- `element.IsADirectContext3DHandleType`
+
+## Breaking Changes
+
+**The entire library has been rewritten using C# 14 extension member syntax.**
+All extension methods are now declared inside `extension(T)` blocks, which means they participate in member lookup and appear in IntelliSense alongside native Revit API members. There are no changes to call sites — all
+existing code continues to compile without modification.
+
+**Methods converted to properties.**
+The following boolean methods have been converted to read-only properties to align with modern C# conventions and Revit API style:
+
+- `element.CanBeDeleted` (was `CanDeleteElement()`)
+- `element.CanBeMirrored` (was `CanMirrorElement()`)
+- `family.CanBeConvertedToFaceHostBased` (was `CanConvertToFaceHostBased()`)
+- `element.IsAnalyticalElement` (was `IsAnalyticalElement()`)
+- `element.IsPhysicalElement` (was `IsPhysicalElement()`)
+- `document.AreGlobalParametersAllowed` (was `AreGlobalParametersAllowed()`)
+- `typeId.IsBuiltInParameter` (was `IsBuiltInParameter()`)
+- `parameter.IsBuiltInParameter` (was `IsBuiltInParameter()`)
+- `typeId.IsBuiltInGroup` (was `IsBuiltInGroup()`)
+- `typeId.IsSpec` (was `IsSpec()`)
+- `typeId.IsValidDataType` (was `IsValidDataType()`)
+- `typeId.IsSymbol` (was `IsSymbol()`)
+- `typeId.IsUnit` (was `IsUnit()`)
+- `typeId.IsMeasurableSpec` (was `IsMeasurableSpec()`)
+- `pipe.HasOpenConnector` (was `HasOpenConnector()`)
+- `element.IsAllowedForSolidCut` (was `IsAllowedForSolidCut()`)
+- `element.IsElementFromAppropriateContext` (was `IsElementFromAppropriateContext()`)
+- `solid.IsValidForTessellation` (was `IsValidForTessellation()`)
+- `familyInstance.CanFlipFramingEnds` (was `CanFlipFramingEnds()`)
+- `family.CanBeConvertedToFaceHostBased` (was `CanBeConvertedToFaceHostBased()`)
+- `externalDefinition.IsValidRebarShapeParameter` (was `IsValidRebarShapeParameter()`)
+- `referencePoint.IsAdaptivePlacementPoint` (was `IsAdaptivePlacementPoint`)
+- `referencePoint.IsAdaptivePoint` (was `IsAdaptivePoint`)
+- `referencePoint.IsAdaptiveShapeHandlePoint` (was `IsAdaptiveShapeHandlePoint`)
+
+**Renamed methods.**
+Old names are marked `[Obsolete]` with `[CodeTemplate]` attributes that provide automatic IDE quick-fixes:
+
+- `CanDeleteElement()` → `CanBeDeleted`
+- `CanMirrorElement()` → `CanBeMirrored`
+- `CanMirrorElements()` → `CanBeMirrored`
+- `CanConvertToFaceHostBased()` → `CanBeConvertedToFaceHostBased`
+- `AreEquals(BuiltInCategory)` → `IsCategory(BuiltInCategory)`
+- `AreEquals(BuiltInParameter)` → `IsParameter(BuiltInParameter)`
+
+**Namespace changes.**
+Several extension classes have been moved to dedicated namespaces to prevent type resolution conflicts in headless environments such as unit tests and Revit Design Automation:
+
+| Class                                              | Old namespace                 | New namespace                              |
+|----------------------------------------------------|-------------------------------|--------------------------------------------|
+| `RibbonExtensions`                                 | `Nice3point.Revit.Extensions` | `Nice3point.Revit.Extensions.UI`           |
+| `ContextMenuExtensions`                            | `Nice3point.Revit.Extensions` | `Nice3point.Revit.Extensions.UI`           |
+| `UiApplicationExtensions`                          | `Nice3point.Revit.Extensions` | `Nice3point.Revit.Extensions.UI`           |
+| `PresentationFrameworkExtensions`                  | `Nice3point.Revit.Extensions` | `Nice3point.Revit.Extensions.UI`           |
+| `SystemExtensions`                                 | `Nice3point.Revit.Extensions` | `Nice3point.Revit.Extensions.Runtime`      |
+| `AnalyticalToPhysicalAssociationManagerExtensions` | `Nice3point.Revit.Extensions` | `Nice3point.Revit.Extensions.Structure`    |
+| `LightGroupManagerExtensions`                      | `Nice3point.Revit.Extensions` | `Nice3point.Revit.Extensions.Lighting`     |
+| `SpatialFieldManagerExtensions`                    | `Nice3point.Revit.Extensions` | `Nice3point.Revit.Extensions.Analysis`     |
+| `PlumbingUtilsExtensions`                          | `Nice3point.Revit.Extensions` | `Nice3point.Revit.Extensions.Plumbing`     |
+| `MechanicalUtilsExtensions`                        | —                             | `Nice3point.Revit.Extensions.Mechanical`   |
+| `CoordinationModelLinkUtilsExtensions`             | —                             | `Nice3point.Revit.Extensions.ExternalData` |
+
+**Removed members.**
+The following members have been removed without a replacement or superseded by built-in language and framework features:
+
+- `SystemExtensions.AppendPath(string, params string[])` — use `Path.Combine` directly
+- `SystemExtensions.Contains(string, StringComparison)` — use Polyfills package
+
+**ImperialExtensions** are marked `[Obsolete]`. Use the **UnitsNet** package instead.
 
 # Release 2026.0.1
 
