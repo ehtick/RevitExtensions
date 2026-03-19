@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 #if NET
 using System.Runtime.CompilerServices;
+
 #else
 using System.Runtime.InteropServices;
 #endif
@@ -133,6 +134,21 @@ public static class ParameterExtensions
     /// <param name="elementId">The unique identification for an element.</param>
     extension(ElementId elementId)
     {
+        /// <summary>
+        ///     Checks if ElementID is a parameter identifier
+        /// </summary>
+        [Pure]
+        [Obsolete("Use IsParameter() instead")]
+        [CodeTemplate(
+            searchTemplate: "$expr$.AreEquals($parameter$)",
+            Message = "AreEquals is obsolete, use IsParameter instead",
+            ReplaceTemplate = "$expr$.IsParameter($parameter$)",
+            ReplaceMessage = "Replace with IsParameter")]
+        public bool AreEquals(BuiltInParameter parameter)
+        {
+            return elementId.IsParameter(parameter);
+        }
+
         /// <summary>
         ///     Checks if ElementID is a parameter identifier
         /// </summary>

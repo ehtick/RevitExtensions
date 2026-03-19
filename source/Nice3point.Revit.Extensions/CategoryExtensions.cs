@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 #if NET
 using System.Runtime.CompilerServices;
+
 #else
 using System.Runtime.InteropServices;
 #endif
@@ -69,6 +70,21 @@ public static class CategoryExtensions
     /// <param name="elementId">The unique identification for an element.</param>
     extension(ElementId elementId)
     {
+        /// <summary>
+        ///     Checks if ElementID is a category identifier
+        /// </summary>
+        [Pure]
+        [Obsolete("Use IsCategory() instead")]
+        [CodeTemplate(
+            searchTemplate: "$expr$.AreEquals($category$)",
+            Message = "AreEquals is obsolete, use IsCategory instead",
+            ReplaceTemplate = "$expr$.IsCategory($category$)",
+            ReplaceMessage = "Replace with IsCategory")]
+        public bool AreEquals(BuiltInCategory category)
+        {
+            return elementId.IsCategory(category);
+        }
+
         /// <summary>
         ///     Checks if ElementID is a category identifier
         /// </summary>
