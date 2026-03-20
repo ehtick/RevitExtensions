@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
-using Nice3point.BenchmarkDotNet.Revit;
+using Nice3point.Revit.Extensions.Benchmarks.Abstractions;
 #if NET
 using System.Runtime.CompilerServices;
 #endif
@@ -11,30 +11,18 @@ namespace Nice3point.Revit.Extensions.Benchmarks.Benchmarks;
 /// <summary>
 ///     Provides test values for benchmarks, avoiding early JIT resolution of Revit API structs.
 /// </summary>
-file static class Constants
+file static class Arguments
 {
-    public static BuiltInParameter Parameter => BuiltInParameter.ALL_MODEL_DESCRIPTION;
+    public const BuiltInParameter Parameter = BuiltInParameter.ALL_MODEL_DESCRIPTION;
 }
 
-public class ToParameterBenchmark : RevitApiBenchmark
+public class ToParameterBenchmark : RevitDocumentBenchmark
 {
-    private Document _document;
-
     private static readonly Assembly Assembly = Assembly.GetAssembly(typeof(Parameter))!;
     private static readonly Type ADocumentType = Assembly.GetType("ADocument")!;
     private static readonly Type ElementIdType = Assembly.GetType("ElementId")!;
     private static readonly MethodInfo GetADocumentMethod = typeof(Document).GetMethod("getADocument", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
     private static readonly ConstructorInfo ParameterConstructor = typeof(Parameter).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly, null, [ADocumentType.MakePointerType(), ElementIdType.MakePointerType()], null)!;
-
-    protected override void OnGlobalSetup()
-    {
-        _document = Application.NewProjectDocument(UnitSystem.Metric);
-    }
-
-    protected override void OnGlobalCleanup()
-    {
-        _document?.Close(false);
-    }
 
     [Benchmark]
     public Parameter ReflectionPinned()
@@ -49,8 +37,8 @@ public class ToParameterBenchmark : RevitApiBenchmark
         var getADocumentMethod = documentType.GetMethod("getADocument", bindingFlags)!;
         var parameterConstructor = parameterType.GetConstructor(bindingFlags, null, [aDocumentType.MakePointerType(), elementIdType.MakePointerType()], null)!;
 
-        var elementId = (long)Constants.Parameter;
-        var aDocument = getADocumentMethod.Invoke(_document, null);
+        var elementId = (long)Arguments.Parameter;
+        var aDocument = getADocumentMethod.Invoke(Document, null);
 
         var handle = GCHandle.Alloc(elementId, GCHandleType.Pinned);
         var parameter = (Parameter)parameterConstructor.Invoke([aDocument, handle.AddrOfPinnedObject()]);
@@ -62,8 +50,8 @@ public class ToParameterBenchmark : RevitApiBenchmark
     [Benchmark]
     public Parameter CachedPinned()
     {
-        var elementId = (long)Constants.Parameter;
-        var aDocument = GetADocumentMethod.Invoke(_document, null);
+        var elementId = (long)Arguments.Parameter;
+        var aDocument = GetADocumentMethod.Invoke(Document, null);
 
         var handle = GCHandle.Alloc(elementId, GCHandleType.Pinned);
         var parameter = (Parameter)ParameterConstructor.Invoke([aDocument, handle.AddrOfPinnedObject()]);
@@ -72,6 +60,7 @@ public class ToParameterBenchmark : RevitApiBenchmark
         return parameter;
     }
 #if NET
+
     [Benchmark]
     public unsafe Parameter ReflectionUnsafe()
     {
@@ -85,8 +74,8 @@ public class ToParameterBenchmark : RevitApiBenchmark
         var getADocumentMethod = documentType.GetMethod("getADocument", bindingFlags)!;
         var parameterConstructor = parameterType.GetConstructor(bindingFlags, null, [aDocumentType.MakePointerType(), elementIdType.MakePointerType()], null)!;
 
-        var elementId = (long)Constants.Parameter;
-        var aDocument = getADocumentMethod.Invoke(_document, null);
+        var elementId = (long)Arguments.Parameter;
+        var aDocument = getADocumentMethod.Invoke(Document, null);
         var parameter = (Parameter)parameterConstructor.Invoke([aDocument, (nint)Unsafe.AsPointer(ref elementId)]);
 
         return parameter;
@@ -95,8 +84,8 @@ public class ToParameterBenchmark : RevitApiBenchmark
     [Benchmark(Baseline = true)]
     public unsafe Parameter CachedUnsafe()
     {
-        var elementId = (long)Constants.Parameter;
-        var aDocument = GetADocumentMethod.Invoke(_document, null);
+        var elementId = (long)Arguments.Parameter;
+        var aDocument = GetADocumentMethod.Invoke(Document, null);
         var parameter = (Parameter)ParameterConstructor.Invoke([aDocument, (nint)Unsafe.AsPointer(ref elementId)]);
 
         return parameter;

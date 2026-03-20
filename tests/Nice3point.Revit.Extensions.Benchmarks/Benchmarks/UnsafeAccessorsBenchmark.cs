@@ -8,7 +8,7 @@ using Application = Autodesk.Revit.ApplicationServices.Application;
 
 namespace Nice3point.Revit.Extensions.Benchmarks.Benchmarks;
 
-public class UnsafeAccessorsBenchmarks : RevitApiBenchmark
+public class UnsafeAccessorsBenchmark : RevitApiBenchmark
 {
     [Benchmark]
     public ControlledApplication UnsafeAccessorsSingleton()
