@@ -177,6 +177,8 @@ This update focuses on improved API design through C# 14 extension methods synta
 - `geometry.IsNonSolid`
 - `geometry.IsSolid`
 - `geometry.LacksSubnodes`
+- `solid.ComputeIsGeometricallyClosed()`
+- `solid.ComputeIsTopologicallyClosed()`
 - `solid.CutWithHalfSpace(Plane)`
 - `solid.CutWithHalfSpaceModifyingOriginalSolid(Plane)`
 - `solid.ExecuteBooleanOperation(Solid, BooleanOperationsType)`
@@ -237,6 +239,10 @@ This update focuses on improved API design through C# 14 extension methods synta
 - `typeId.DownloadParameter(Document, ParameterDownloadOptions, string)`
 - `ForgeTypeId.GetAllBuiltInParameters()`
 - `ForgeTypeId.GetAllBuiltInGroups()`
+- `ForgeTypeId.GetAllSpecs()`
+- `ForgeTypeId.GetAllMeasurableSpecs()`
+- `ForgeTypeId.GetAllDisciplines()`
+- `ForgeTypeId.GetAllUnits()`
 
 ### Label
 
