@@ -239,6 +239,27 @@ public static class UnitUtilsExtensions
             return UnitUtils.GetDiscipline(typeId);
         }
 #endif
+
+        /// <summary>Gets the identifiers of all available disciplines.</summary>
+        /// <returns>The discipline identifiers.</returns>
+        public static IList<ForgeTypeId> GetAllDisciplines()
+        {
+            return UnitUtils.GetAllDisciplines();
+        }
+
+        /// <summary>Gets the identifiers of all available units.</summary>
+        /// <returns>The unit identifiers.</returns>
+        public static IList<ForgeTypeId> GetAllUnits()
+        {
+            return UnitUtils.GetAllUnits();
+        }
+
+        /// <summary>Gets the identifiers of all available measurable specs.</summary>
+        /// <returns>The spec identifiers.</returns>
+        public static IList<ForgeTypeId> GetAllMeasurableSpecs()
+        {
+            return UnitUtils.GetAllMeasurableSpecs();
+        }
     }
 #endif
 }

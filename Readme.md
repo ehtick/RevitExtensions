@@ -1374,6 +1374,24 @@ var ids = ForgeTypeId.GetAllBuiltInGroups();
 var ids = ForgeTypeId.GetAllSpecs();
 ```
 
+**GetAllMeasurableSpecs** gets the identifiers of all available measurable specs.
+
+```csharp
+var ids = ForgeTypeId.GetAllMeasurableSpecs();
+```
+
+**GetAllDisciplines** gets the identifiers of all available disciplines.
+
+```csharp
+var ids = ForgeTypeId.GetAllDisciplines();
+```
+
+**GetAllUnits** gets the identifiers of all available units.
+
+```csharp
+var ids = ForgeTypeId.GetAllUnits();
+```
+
 **GetParameterTypeId** gets the ForgeTypeId identifying the built-in parameter corresponding to the given BuiltInParameter value.
 
 ```csharp
