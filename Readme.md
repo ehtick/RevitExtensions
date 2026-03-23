@@ -1368,6 +1368,12 @@ var ids = ForgeTypeId.GetAllBuiltInParameters();
 var ids = ForgeTypeId.GetAllBuiltInGroups();
 ```
 
+**GetAllSpecs** gets the identifiers of all specs.
+
+```csharp
+var ids = ForgeTypeId.GetAllSpecs();
+```
+
 **GetParameterTypeId** gets the ForgeTypeId identifying the built-in parameter corresponding to the given BuiltInParameter value.
 
 ```csharp

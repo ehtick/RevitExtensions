@@ -30,6 +30,13 @@ public static class SpecUtilsExtensions
         ///    True if the ForgeTypeId identifies either a spec or a category, false otherwise.
         /// </returns>
         public bool IsValidDataType => SpecUtils.IsValidDataType(typeId);
+
+        /// <summary>Gets the identifiers of all specs.</summary>
+        /// <returns>The spec identifiers.</returns>
+        public static IList<ForgeTypeId> GetAllSpecs()
+        {
+            return SpecUtils.GetAllSpecs();
+        }
     }
 }
 #endif
