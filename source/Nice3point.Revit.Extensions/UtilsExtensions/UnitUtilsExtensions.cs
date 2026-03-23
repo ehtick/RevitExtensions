@@ -221,7 +221,15 @@ public static class UnitUtilsExtensions
         {
             return UnitUtils.GetTypeCatalogStringForUnit(typeId);
         }
+
+        /// <summary>Gets the identifiers of all available units.</summary>
+        /// <returns>The unit identifiers.</returns>
+        public static IList<ForgeTypeId> GetAllUnits()
+        {
+            return UnitUtils.GetAllUnits();
+        }
 #if REVIT2022_OR_GREATER
+
         /// <summary>
         ///    Checks whether a ForgeTypeId identifies a spec associated with units of measurement.
         /// </summary>
@@ -238,7 +246,6 @@ public static class UnitUtilsExtensions
         {
             return UnitUtils.GetDiscipline(typeId);
         }
-#endif
 
         /// <summary>Gets the identifiers of all available disciplines.</summary>
         /// <returns>The discipline identifiers.</returns>
@@ -247,19 +254,13 @@ public static class UnitUtilsExtensions
             return UnitUtils.GetAllDisciplines();
         }
 
-        /// <summary>Gets the identifiers of all available units.</summary>
-        /// <returns>The unit identifiers.</returns>
-        public static IList<ForgeTypeId> GetAllUnits()
-        {
-            return UnitUtils.GetAllUnits();
-        }
-
         /// <summary>Gets the identifiers of all available measurable specs.</summary>
         /// <returns>The spec identifiers.</returns>
         public static IList<ForgeTypeId> GetAllMeasurableSpecs()
         {
             return UnitUtils.GetAllMeasurableSpecs();
         }
+#endif
     }
 #endif
 }
