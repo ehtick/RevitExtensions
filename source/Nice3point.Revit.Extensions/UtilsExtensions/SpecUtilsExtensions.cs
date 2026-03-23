@@ -33,6 +33,7 @@ public static class SpecUtilsExtensions
 
         /// <summary>Gets the identifiers of all specs.</summary>
         /// <returns>The spec identifiers.</returns>
+        [Pure]
         public static IList<ForgeTypeId> GetAllSpecs()
         {
             return SpecUtils.GetAllSpecs();

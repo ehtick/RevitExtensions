@@ -249,6 +249,7 @@ public static class UnitUtilsExtensions
 
         /// <summary>Gets the identifiers of all available disciplines.</summary>
         /// <returns>The discipline identifiers.</returns>
+        [Pure]
         public static IList<ForgeTypeId> GetAllDisciplines()
         {
             return UnitUtils.GetAllDisciplines();
@@ -256,6 +257,7 @@ public static class UnitUtilsExtensions
 
         /// <summary>Gets the identifiers of all available measurable specs.</summary>
         /// <returns>The spec identifiers.</returns>
+        [Pure]
         public static IList<ForgeTypeId> GetAllMeasurableSpecs()
         {
             return UnitUtils.GetAllMeasurableSpecs();
