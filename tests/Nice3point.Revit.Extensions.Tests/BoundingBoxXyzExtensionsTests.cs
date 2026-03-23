@@ -1,13 +1,10 @@
 using Nice3point.TUnit.Revit;
-using Nice3point.TUnit.Revit.Executors;
-using TUnit.Core.Executors;
 
 namespace Nice3point.Revit.Extensions.Tests;
 
 public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
 {
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Contains_PointInsideBox_ReturnsTrue()
     {
         var boundingBox = new BoundingBoxXYZ
@@ -22,7 +19,6 @@ public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Contains_PointOutsideBox_ReturnsFalse()
     {
         var boundingBox = new BoundingBoxXYZ
@@ -37,7 +33,6 @@ public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Contains_PointOnBorder_ReturnsTrue()
     {
         var boundingBox = new BoundingBoxXYZ
@@ -52,7 +47,6 @@ public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Contains_PointOnBorderStrictMode_ReturnsFalse()
     {
         var boundingBox = new BoundingBoxXYZ
@@ -67,7 +61,6 @@ public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Contains_BoxInsideBox_ReturnsTrue()
     {
         var outerBox = new BoundingBoxXYZ
@@ -86,7 +79,6 @@ public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Contains_BoxOutsideBox_ReturnsFalse()
     {
         var box1 = new BoundingBoxXYZ
@@ -105,7 +97,6 @@ public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Overlaps_OverlappingBoxes_ReturnsTrue()
     {
         var box1 = new BoundingBoxXYZ
@@ -124,7 +115,6 @@ public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Overlaps_NonOverlappingBoxes_ReturnsFalse()
     {
         var box1 = new BoundingBoxXYZ
@@ -143,7 +133,6 @@ public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ComputeCentroid_ValidBox_ReturnsCenter()
     {
         var boundingBox = new BoundingBoxXYZ
@@ -163,7 +152,6 @@ public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ComputeVolume_ValidBox_ReturnsCorrectVolume()
     {
         var boundingBox = new BoundingBoxXYZ
@@ -178,7 +166,6 @@ public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ComputeSurfaceArea_ValidBox_ReturnsCorrectArea()
     {
         var boundingBox = new BoundingBoxXYZ
@@ -194,7 +181,6 @@ public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ComputeVertices_ValidBox_ReturnsEightVertices()
     {
         var boundingBox = new BoundingBoxXYZ
@@ -209,7 +195,6 @@ public sealed class BoundingBoxXyzExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ComputeVertices_ValidBox_ContainsMinAndMax()
     {
         var boundingBox = new BoundingBoxXYZ

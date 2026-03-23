@@ -1,14 +1,11 @@
 using Nice3point.Revit.Extensions.Runtime;
 using Nice3point.TUnit.Revit;
-using Nice3point.TUnit.Revit.Executors;
-using TUnit.Core.Executors;
 
 namespace Nice3point.Revit.Extensions.Tests;
 
 public sealed class SystemExtensionsTests : RevitApiTest
 {
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Round_DefaultPrecision_RoundsTo9Decimals()
     {
         var value = 6.56170000000000000000000001;
@@ -19,7 +16,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Round_ZeroDecimals_RoundsToInteger()
     {
         var value = 6.56170000000000000000000001;
@@ -30,7 +26,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Round_TwoDecimals_RoundsCorrectly()
     {
         var value = 6.56789;
@@ -41,7 +36,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsAlmostEqual_DefaultTolerance_SmallDifferenceReturnsTrue()
     {
         var value1 = 6.56170000000000000000000001;
@@ -53,7 +47,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsAlmostEqual_DefaultTolerance_LargeDifferenceReturnsFalse()
     {
         var value1 = 6.5617;
@@ -65,7 +58,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsAlmostEqual_CustomTolerance_WithinToleranceReturnsTrue()
     {
         var value1 = 6.56170000000001;
@@ -77,7 +69,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsAlmostEqual_CustomTolerance_OutsideToleranceReturnsFalse()
     {
         var value1 = 6.5;
@@ -89,7 +80,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsNullOrEmpty_EmptyString_ReturnsTrue()
     {
         var value = string.Empty;
@@ -100,7 +90,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsNullOrEmpty_NullString_ReturnsTrue()
     {
         string? value = null;
@@ -111,7 +100,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsNullOrEmpty_NonEmptyString_ReturnsFalse()
     {
         var value = "Hello";
@@ -122,7 +110,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsNullOrWhiteSpace_WhiteSpaceString_ReturnsTrue()
     {
         var value = "   ";
@@ -133,7 +120,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsNullOrWhiteSpace_NullString_ReturnsTrue()
     {
         string? value = null;
@@ -144,7 +130,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsNullOrWhiteSpace_NonWhiteSpaceString_ReturnsFalse()
     {
         var value = "Hello";
@@ -155,7 +140,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task AppendPath_TwoPaths_CombinesCorrectly()
     {
         var basePath = @"C:\Folder";
@@ -167,7 +151,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Cast_ValidCast_ReturnsCorrectType()
     {
         object obj = "Hello World";
@@ -182,7 +165,6 @@ public sealed class SystemExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Cast_InvalidCast_ThrowsException()
     {
         object obj = "Hello World";

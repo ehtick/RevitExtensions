@@ -1,13 +1,10 @@
 using Nice3point.TUnit.Revit;
-using Nice3point.TUnit.Revit.Executors;
-using TUnit.Core.Executors;
 
 namespace Nice3point.Revit.Extensions.Tests;
 
 public sealed class GeometryExtensionsTests : RevitApiTest
 {
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Distance_ParallelLines_ReturnsCorrectDistance()
     {
         var line1 = Line.CreateBound(new XYZ(0, 0, 0), new XYZ(10, 0, 0));
@@ -19,7 +16,6 @@ public sealed class GeometryExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Distance_IntersectingLines_ReturnsZero()
     {
         var line1 = Line.CreateBound(new XYZ(0, 0, 0), new XYZ(10, 0, 0));
@@ -31,7 +27,6 @@ public sealed class GeometryExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task Distance_SkewLines_ReturnsCorrectDistance()
     {
         var line1 = Line.CreateBound(new XYZ(0, 0, 0), new XYZ(10, 0, 0));
@@ -43,7 +38,6 @@ public sealed class GeometryExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task SetCoordinateX_ValidLine_ReturnsNewLineWithUpdatedX()
     {
         var line = Line.CreateBound(new XYZ(0, 5, 10), new XYZ(0, 15, 20));
@@ -61,7 +55,6 @@ public sealed class GeometryExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task SetCoordinateY_ValidLine_ReturnsNewLineWithUpdatedY()
     {
         var line = Line.CreateBound(new XYZ(5, 0, 10), new XYZ(15, 0, 20));
@@ -79,7 +72,6 @@ public sealed class GeometryExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task SetCoordinateZ_ValidLine_ReturnsNewLineWithUpdatedZ()
     {
         var line = Line.CreateBound(new XYZ(5, 10, 0), new XYZ(15, 20, 0));
@@ -97,7 +89,6 @@ public sealed class GeometryExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task SetCoordinateX_Arc_ReturnsNewArcWithUpdatedX()
     {
         var arc = Arc.Create(new XYZ(0, 0, 0), new XYZ(0, 10, 0), new XYZ(0, 5, 5));
@@ -114,7 +105,6 @@ public sealed class GeometryExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task SetCoordinateY_Arc_ReturnsNewArcWithUpdatedY()
     {
         var arc = Arc.Create(new XYZ(0, 0, 0), new XYZ(10, 0, 0), new XYZ(5, 0, 5));
@@ -131,7 +121,6 @@ public sealed class GeometryExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task SetCoordinateZ_Arc_ReturnsNewArcWithUpdatedZ()
     {
         var arc = Arc.Create(new XYZ(0, 0, 0), new XYZ(10, 0, 0), new XYZ(5, 5, 0));

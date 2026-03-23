@@ -23,7 +23,6 @@ public sealed class BuiltInExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ToParameter_ValidBuiltInParameter_ReturnsParameter()
     {
         var parameter = BuiltInParameter.ELEM_CATEGORY_PARAM.ToParameter(_document);
@@ -32,7 +31,6 @@ public sealed class BuiltInExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ToParameter_ValidBuiltInParameter_ReturnsCorrectDefinitionName()
     {
         var parameter = BuiltInParameter.ELEM_CATEGORY_PARAM.ToParameter(_document);
@@ -41,7 +39,6 @@ public sealed class BuiltInExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ToParameter_DifferentParameters_ReturnDifferentDefinitions()
     {
         var parameter1 = BuiltInParameter.ELEM_CATEGORY_PARAM.ToParameter(_document);
@@ -51,7 +48,6 @@ public sealed class BuiltInExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ToCategory_ValidBuiltInCategory_ReturnsCategory()
     {
         var category = BuiltInCategory.OST_Walls.ToCategory(_document);
@@ -60,7 +56,6 @@ public sealed class BuiltInExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ToCategory_ValidBuiltInCategory_ReturnsCorrectName()
     {
         var category = BuiltInCategory.OST_Walls.ToCategory(_document);
@@ -69,7 +64,6 @@ public sealed class BuiltInExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ToCategory_ValidBuiltInCategory_ReturnsMatchingId()
     {
         var category = BuiltInCategory.OST_Walls.ToCategory(_document);
@@ -78,7 +72,6 @@ public sealed class BuiltInExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ToCategory_DifferentCategories_ReturnDifferentNames()
     {
         var walls = BuiltInCategory.OST_Walls.ToCategory(_document);
@@ -88,7 +81,6 @@ public sealed class BuiltInExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task ToCategory_DifferentCategories_ReturnDifferentIds()
     {
         var walls = BuiltInCategory.OST_Walls.ToCategory(_document);

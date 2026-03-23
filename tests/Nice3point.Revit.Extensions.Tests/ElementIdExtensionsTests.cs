@@ -1,41 +1,10 @@
-using Nice3point.TUnit.Revit;
-using Nice3point.TUnit.Revit.Executors;
-using TUnit.Core.Executors;
+using Nice3point.Revit.Extensions.Tests.Abstractions;
 
 namespace Nice3point.Revit.Extensions.Tests;
 
-public sealed class ElementIdExtensionsTests : RevitApiTest
+public sealed class ElementIdExtensionsTests : RevitFamilySampleTest
 {
-    private static readonly string SamplesPath = $@"C:\Program Files\Autodesk\Revit {Application.VersionNumber}\Samples";
-
-    [Before(Class)]
-    public static void ValidateSamples()
-    {
-        if (!Directory.Exists(SamplesPath))
-        {
-            Skip.Test($"Samples folder not found at {SamplesPath}");
-            return;
-        }
-
-        if (!Directory.EnumerateFiles(SamplesPath, "*.rfa").Any())
-        {
-            Skip.Test($"No .rfa files found in {SamplesPath}");
-        }
-    }
-
-    public static IEnumerable<string> GetSampleFiles()
-    {
-        if (!Directory.Exists(SamplesPath))
-        {
-            yield return string.Empty;
-            yield break;
-        }
-
-        foreach (var file in Directory.EnumerateFiles(SamplesPath, "*.rfa")) yield return file;
-    }
-
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsCategory_BuiltInCategory_MatchingCategory_ReturnsTrue()
     {
         var wallCategoryId = new ElementId(BuiltInCategory.OST_Walls);
@@ -46,7 +15,6 @@ public sealed class ElementIdExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsCategory_BuiltInCategory_DifferentCategory_ReturnsFalse()
     {
         var wallCategoryId = new ElementId(BuiltInCategory.OST_Walls);
@@ -57,7 +25,6 @@ public sealed class ElementIdExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsCategory_BuiltInParameter_MatchingParameter_ReturnsTrue()
     {
         var parameterId = new ElementId(BuiltInParameter.WALL_BOTTOM_IS_ATTACHED);
@@ -68,7 +35,6 @@ public sealed class ElementIdExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
     public async Task IsCategory_BuiltInParameter_DifferentParameter_ReturnsFalse()
     {
         var parameterId = new ElementId(BuiltInParameter.WALL_BOTTOM_IS_ATTACHED);
@@ -79,248 +45,160 @@ public sealed class ElementIdExtensionsTests : RevitApiTest
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
-    [MethodDataSource(nameof(GetSampleFiles))]
-    public async Task ToElement_ValidElementId_ReturnsElement(string filePath)
+    [MethodDataSource(nameof(RevitFamilies))]
+    public async Task ToElement_ValidElementId_ReturnsElement(string path)
     {
-        Document? document = null;
+        var document = FamilyDocuments[path];
+        var elementIds = new FilteredElementCollector(document)
+            .WhereElementIsNotElementType()
+            .ToElementIds();
 
-        try
+        var firstId = elementIds.FirstOrDefault();
+        if (firstId is null)
         {
-            document = Application.OpenDocumentFile(filePath);
-
-            var elementIds = new FilteredElementCollector(document)
-                .WhereElementIsNotElementType()
-                .ToElementIds();
-
-            var firstId = elementIds.FirstOrDefault();
-            if (firstId is null)
-            {
-                Skip.Test("No elements found in document");
-                return;
-            }
-
-            var element = firstId.ToElement(document!);
-
-            await Assert.That(element).IsNotNull();
+            Skip.Test("No elements found in document");
+            return;
         }
-        finally
-        {
-            document?.Close(false);
-        }
+
+        var element = firstId.ToElement(document);
+
+        await Assert.That(element).IsNotNull();
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
-    [MethodDataSource(nameof(GetSampleFiles))]
-    public async Task ToElement_InvalidElementId_ReturnsNull(string filePath)
+    [MethodDataSource(nameof(RevitFamilies))]
+    public async Task ToElement_InvalidElementId_ReturnsNull(string path)
     {
-        Document? document = null;
-
-        try
-        {
-            document = Application.OpenDocumentFile(filePath);
+        var document = FamilyDocuments[path];
 
 #if REVIT2024_OR_GREATER
-            var invalidId = new ElementId(999999999L);
+        var invalidId = new ElementId(999999999L);
 #else
-            var invalidId = new ElementId(999999999);
+        var invalidId = new ElementId(999999999);
 #endif
 
-            var element = invalidId.ToElement(document!);
+        var element = invalidId.ToElement(document);
 
-            await Assert.That(element).IsNull();
-        }
-        finally
+        await Assert.That(element).IsNull();
+    }
+
+    [Test]
+    [MethodDataSource(nameof(RevitFamilies))]
+    public async Task ToElementGeneric_ValidElementId_ReturnsTypedElement(string path)
+    {
+        var document = FamilyDocuments[path];
+        var elementIds = new FilteredElementCollector(document)
+            .WhereElementIsElementType()
+            .ToElementIds();
+
+        var firstId = elementIds.FirstOrDefault();
+        if (firstId is null)
         {
-            document?.Close(false);
+            Skip.Test("No element types found in document");
+            return;
+        }
+
+        var elementType = firstId.ToElement<ElementType>(document);
+
+        using (Assert.Multiple())
+        {
+            await Assert.That(elementType).IsNotNull();
+            await Assert.That(elementType).IsAssignableTo<ElementType>();
         }
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
-    [MethodDataSource(nameof(GetSampleFiles))]
-    public async Task ToElementGeneric_ValidElementId_ReturnsTypedElement(string filePath)
+    [MethodDataSource(nameof(RevitFamilies))]
+    public async Task ToElements_MultipleElementIds_ReturnsAllElements(string path)
     {
-        Document? document = null;
+        var document = FamilyDocuments[path];
+        var elementIds = new FilteredElementCollector(document)
+            .WhereElementIsNotElementType()
+            .ToElementIds()
+            .Take(5)
+            .ToList();
 
-        try
+        var elements = elementIds.ToElements(document);
+
+        await Assert.That(elements.Count).IsEqualTo(elementIds.Count);
+    }
+
+    [Test]
+    [MethodDataSource(nameof(RevitFamilies))]
+    public async Task ToElements_EmptyCollection_ReturnsEmptyList(string path)
+    {
+        var document = FamilyDocuments[path];
+        var elementIds = new List<ElementId>();
+        var elements = elementIds.ToElements(document);
+
+        await Assert.That(elements).IsEmpty();
+    }
+
+    [Test]
+    [MethodDataSource(nameof(RevitFamilies))]
+    public async Task ToElementsGeneric_MultipleElementIds_ReturnsTypedElements(string path)
+    {
+        var document = FamilyDocuments[path];
+        var elementIds = new FilteredElementCollector(document)
+            .WhereElementIsElementType()
+            .ToElementIds()
+            .Take(5)
+            .ToList();
+
+        var elementTypes = elementIds.ToElements<ElementType>(document);
+
+        using (Assert.Multiple())
         {
-            document = Application.OpenDocumentFile(filePath);
+            await Assert.That(elementTypes.Count).IsEqualTo(elementIds.Count);
+            await Assert.That(elementTypes).All().Satisfy(source => source.IsAssignableTo<ElementType>());
+        }
+    }
 
-            var elementIds = new FilteredElementCollector(document)
-                .WhereElementIsElementType()
-                .ToElementIds();
+    [Test]
+    [MethodDataSource(nameof(RevitFamilies))]
+    public async Task ToOrderedElements_MultipleElementIds_PreservesOrder(string path)
+    {
+        var document = FamilyDocuments[path];
+        var elementIds = new FilteredElementCollector(document)
+            .WhereElementIsNotElementType()
+            .ToElementIds()
+            .Take(5)
+            .ToList();
 
-            var firstId = elementIds.FirstOrDefault();
-            if (firstId is null)
+        var orderedElements = elementIds.ToOrderedElements(document);
+
+        using (Assert.Multiple())
+        {
+            await Assert.That(orderedElements.Count).IsEqualTo(elementIds.Count);
+            for (var i = 0; i < elementIds.Count; i++)
             {
-                Skip.Test("No element types found in document");
-                return;
-            }
-
-            var elementType = firstId.ToElement<ElementType>(document!);
-
-            using (Assert.Multiple())
-            {
-                await Assert.That(elementType).IsNotNull();
-                await Assert.That(elementType).IsAssignableTo<ElementType>();
-            }
-        }
-        finally
-        {
-            document?.Close(false);
-        }
-    }
-
-    [Test]
-    [TestExecutor<RevitThreadExecutor>]
-    [MethodDataSource(nameof(GetSampleFiles))]
-    public async Task ToElements_MultipleElementIds_ReturnsAllElements(string filePath)
-    {
-        Document? document = null;
-
-        try
-        {
-            document = Application.OpenDocumentFile(filePath);
-
-            var elementIds = new FilteredElementCollector(document)
-                .WhereElementIsNotElementType()
-                .ToElementIds()
-                .Take(5)
-                .ToList();
-
-            var elements = elementIds.ToElements(document!);
-
-            await Assert.That(elements.Count).IsEqualTo(elementIds.Count);
-        }
-        finally
-        {
-            document?.Close(false);
-        }
-    }
-
-    [Test]
-    [TestExecutor<RevitThreadExecutor>]
-    [MethodDataSource(nameof(GetSampleFiles))]
-    public async Task ToElements_EmptyCollection_ReturnsEmptyList(string filePath)
-    {
-        Document? document = null;
-
-        try
-        {
-            document = Application.OpenDocumentFile(filePath);
-
-            var elementIds = new List<ElementId>();
-
-            var elements = elementIds.ToElements(document!);
-
-            await Assert.That(elements).IsEmpty();
-        }
-        finally
-        {
-            document?.Close(false);
-        }
-    }
-
-    [Test]
-    [TestExecutor<RevitThreadExecutor>]
-    [MethodDataSource(nameof(GetSampleFiles))]
-    public async Task ToElementsGeneric_MultipleElementIds_ReturnsTypedElements(string filePath)
-    {
-        Document? document = null;
-
-        try
-        {
-            document = Application.OpenDocumentFile(filePath);
-
-            var elementIds = new FilteredElementCollector(document)
-                .WhereElementIsElementType()
-                .ToElementIds()
-                .Take(5)
-                .ToList();
-
-            var elementTypes = elementIds.ToElements<ElementType>(document!);
-
-            using (Assert.Multiple())
-            {
-                await Assert.That(elementTypes.Count).IsEqualTo(elementIds.Count);
-                await Assert.That(elementTypes).All().Satisfy(source => source.IsAssignableTo<ElementType>());
+                await Assert.That(orderedElements[i].Id).IsEqualTo(elementIds[i]);
             }
         }
-        finally
-        {
-            document?.Close(false);
-        }
     }
 
     [Test]
-    [TestExecutor<RevitThreadExecutor>]
-    [MethodDataSource(nameof(GetSampleFiles))]
-    public async Task ToOrderedElements_MultipleElementIds_PreservesOrder(string filePath)
+    [MethodDataSource(nameof(RevitFamilies))]
+    public async Task ToOrderedElementsGeneric_MultipleElementIds_PreservesOrderAndType(string path)
     {
-        Document? document = null;
+        var document = FamilyDocuments[path];
+        var elementIds = new FilteredElementCollector(document)
+            .WhereElementIsElementType()
+            .ToElementIds()
+            .Take(5)
+            .ToList();
 
-        try
+        var orderedElementTypes = elementIds.ToOrderedElements<ElementType>(document);
+
+        using (Assert.Multiple())
         {
-            document = Application.OpenDocumentFile(filePath);
-
-            var elementIds = new FilteredElementCollector(document)
-                .WhereElementIsNotElementType()
-                .ToElementIds()
-                .Take(5)
-                .ToList();
-
-            var orderedElements = elementIds.ToOrderedElements(document!);
-
-            using (Assert.Multiple())
+            await Assert.That(orderedElementTypes.Count).IsEqualTo(elementIds.Count);
+            for (var i = 0; i < elementIds.Count; i++)
             {
-                await Assert.That(orderedElements.Count).IsEqualTo(elementIds.Count);
-                for (var i = 0; i < elementIds.Count; i++)
-                {
-                    await Assert.That(orderedElements[i].Id).IsEqualTo(elementIds[i]);
-                }
+                await Assert.That(orderedElementTypes[i].Id).IsEqualTo(elementIds[i]);
             }
-        }
-        finally
-        {
-            document?.Close(false);
-        }
-    }
 
-    [Test]
-    [TestExecutor<RevitThreadExecutor>]
-    [MethodDataSource(nameof(GetSampleFiles))]
-    public async Task ToOrderedElementsGeneric_MultipleElementIds_PreservesOrderAndType(string filePath)
-    {
-        Document? document = null;
-
-        try
-        {
-            document = Application.OpenDocumentFile(filePath);
-
-            var elementIds = new FilteredElementCollector(document)
-                .WhereElementIsElementType()
-                .ToElementIds()
-                .Take(5)
-                .ToList();
-
-            var orderedElementTypes = elementIds.ToOrderedElements<ElementType>(document!);
-
-            using (Assert.Multiple())
-            {
-                await Assert.That(orderedElementTypes.Count).IsEqualTo(elementIds.Count);
-                for (var i = 0; i < elementIds.Count; i++)
-                {
-                    await Assert.That(orderedElementTypes[i].Id).IsEqualTo(elementIds[i]);
-                }
-
-                await Assert.That(orderedElementTypes).All().Satisfy(source => source.IsAssignableTo<ElementType>());
-            }
-        }
-        finally
-        {
-            document?.Close(false);
+            await Assert.That(orderedElementTypes).All().Satisfy(source => source.IsAssignableTo<ElementType>());
         }
     }
 }
