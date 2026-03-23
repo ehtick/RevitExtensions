@@ -1,4 +1,5 @@
 using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.DB.Structure.StructuralSections;
 using JetBrains.Annotations;
 
 // ReSharper disable once CheckNamespace
@@ -55,8 +56,8 @@ public static class LabelUtilsExtensions
         {
             return LabelUtils.GetLabelForUnit(typeId);
         }
-
 #if REVIT2022_OR_GREATER
+
         /// <summary>
         ///     Gets the user-visible name for a discipline
         /// </summary>
@@ -168,7 +169,6 @@ public static class LabelUtilsExtensions
             return LabelUtils.GetLabelFor(category);
         }
     }
-
 #if !REVIT2025_OR_GREATER
     /// <param name="parameterGroup">The builtin parameter group</param>
     extension(BuiltInParameterGroup parameterGroup)
@@ -186,7 +186,6 @@ public static class LabelUtilsExtensions
             return LabelUtils.GetLabelFor(parameterGroup);
         }
     }
-
 #endif
 #if !REVIT2022_OR_GREATER
     /// <param name="displayUnitType">The display unit type</param>
@@ -211,7 +210,6 @@ public static class LabelUtilsExtensions
             return LabelUtils.GetLabelFor(displayUnitType);
         }
     }
-
 #endif
 #if !REVIT2023_OR_GREATER
     /// <param name="parameterType">The parameter type</param>
@@ -234,4 +232,38 @@ public static class LabelUtilsExtensions
         }
     }
 #endif
+#if REVIT2026_OR_GREATER
+
+    /// <param name="severity">The Severity enum value</param>
+    extension(FailureSeverity severity)
+    {
+        /// <summary>Gets the user-visible name for the Severity of a Warning</summary>
+        /// <remarks>The name is obtained in the current Revit language.</remarks>
+        /// <returns>Returns the user-visible name for the Severity of a Warning.</returns>
+        /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentOutOfRangeException">
+        ///    A value passed for an enumeration argument is not a member of that enumeration
+        /// </exception>
+        [Pure]
+        public string ToLabel()
+        {
+            return LabelUtils.GetFailureSeverityName(severity);
+        }
+    }
+#endif
+
+    /// <param name="sectionShape">The StructuralSectionShape enum value.</param>
+    extension(StructuralSectionShape sectionShape)
+    {
+        /// <summary>Gets the user-visible name for a StructuralSectionShape.</summary>
+        /// <remarks>The name is obtained in the current Revit language.</remarks>
+        /// <returns>Returns the user-visible name for the StructuralSectionShape.</returns>
+        /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentOutOfRangeException">
+        ///    A value passed for an enumeration argument is not a member of that enumeration
+        /// </exception>
+        [Pure]
+        public string ToLabel()
+        {
+            return LabelUtils.GetStructuralSectionShapeName(sectionShape);
+        }
+    }
 }

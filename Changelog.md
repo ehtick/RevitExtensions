@@ -252,6 +252,8 @@ This update focuses on improved API design through C# 14 extension methods synta
 - `typeId.ToUnitLabel()`
 - `typeId.ToGroupLabel()`
 - `typeId.ToParameterLabel()`
+- `failureSeverity.ToLabel()`
+- `structuralSectionShape.ToLabel()`
 
 ### Families and modeling
 

@@ -1461,6 +1461,9 @@ var parameterTypeIdLabel = ParameterTypeId.DoorCost.ToLabel(); // "Cost"
 var specTypeLabel = SpecTypeId.SheetLength.ToLabel(); // "Sheet Length"
 var symbolTypeLabel = SymbolTypeId.Hour.ToLabel(); // "h"
 var unitTypeLabel = UnitTypeId.Hertz.ToLabel(); // "Hertz"
+
+var failureLabel = FailureSeverity.DocumentCorruption.ToLabel(); // "Document Corruption"
+var sectionShapeLabel = StructuralSectionShape.RectangleParameterized.ToLabel() // "Rectangle Parameterized"
 ```
 
 **ToDisciplineLabel** converts ForgeTypeId to user-visible name for a discipline.
