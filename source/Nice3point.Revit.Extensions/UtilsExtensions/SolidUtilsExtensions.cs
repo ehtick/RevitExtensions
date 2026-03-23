@@ -79,6 +79,50 @@ public static class SolidUtilsExtensions
         {
             return SolidUtils.TessellateSolidOrShell(solid, tessellationControls);
         }
+#if REVIT2026_OR_GREATER
+
+        /// <summary>
+        ///    Computes whether the input Solid is geometrically closed to within Revit's tolerances.
+        /// </summary>
+        /// <remarks>
+        ///    A solid is geometrically closed if it is topologically closed and also meets certain
+        ///    geometric criteria. In particular, every pair of faces adjoining an edge must intersect
+        ///    along the edge, and edge loops must have no gaps between consecutive edges of the loop,
+        ///    when evaluated on the edge loop's face.
+        ///    If the geometry contains multiple connected components, the function returns true
+        ///    if and only if every connected component is geometrically closed. If the input Solid
+        ///    contains grossly invalid geometry, an InvalidOperationException will be thrown.
+        /// </remarks>
+        /// <returns>True if the geometry is geometrically closed, false otherwise.</returns>
+        /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentNullException">
+        ///    A non-optional argument was null
+        /// </exception>
+        /// <exception cref="T:Autodesk.Revit.Exceptions.InvalidOperationException">
+        ///    Failed to compute whether the geometry is geometrically closed.
+        /// </exception>
+        [Pure]
+        public bool ComputeIsGeometricallyClosed()
+        {
+            return SolidUtils.ComputeIsGeometricallyClosed(solid);
+        }
+
+        /// <summary>Compute whether the input Solid is topologically closed.</summary>
+        /// <remarks>
+        ///    A solid is topologically closed if every face has at least one edge loop and
+        ///    every edge is shared by exactly two faces. If the geometry contains multiple
+        ///    connected components, the function returns true if and only if every connected
+        ///    component is topologically closed.
+        /// </remarks>
+        /// <returns>True if the geometry is topologically closed, false otherwise.</returns>
+        /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentNullException">
+        ///    A non-optional argument was null
+        /// </exception>
+        [Pure]
+        public bool ComputeIsTopologicallyClosed()
+        {
+            return SolidUtils.ComputeIsTopologicallyClosed(solid);
+        }
+#endif
     }
 
 #if REVIT2021_OR_GREATER

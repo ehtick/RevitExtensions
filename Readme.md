@@ -1054,6 +1054,18 @@ var solid = Solid.CreateFixedReferenceSweptGeometry(sweepPath, pathAttachmentCur
 var solid = Solid.CreateLoftGeometry(profileLoops, solidOptions);
 ```
 
+**ComputeIsGeometricallyClosed** computes whether the Solid is geometrically closed to within Revit's tolerances.
+
+```csharp
+var closed = solid.ComputeIsGeometricallyClosed(profileLoops, solidOptions);
+```
+
+**ComputeIsTopologicallyClosed** computes whether the Solid is is topologically closed.
+
+```csharp
+var closed = solid.ComputeIsTopologicallyClosed(profileLoops, solidOptions);
+```
+
 **SplitVolumes** splits a solid geometry into several separate solids.
 
 ```csharp
