@@ -255,6 +255,146 @@ This update focuses on improved API design through C# 14 extension methods synta
 - `failureSeverity.ToLabel()`
 - `structuralSectionShape.ToLabel()`
 
+### FilteredElementCollector
+
+- `document.CollectElements()`
+- `document.CollectElements(ElementId)`
+- `document.CollectElements(View)`
+- `document.CollectElements(ICollection<ElementId>)`
+- `collector.OfClass<T>()`
+- `collector.OfClasses(IList<Type>)`
+- `collector.OfClasses(params Type[])`
+- `collector.ExcludingClass<T>()`
+- `collector.ExcludingClasses(IList<Type>)`
+- `collector.ExcludingClasses(params Type[])`
+- `collector.OfCategories(ICollection<BuiltInCategory>)`
+- `collector.OfCategories(params BuiltInCategory[])`
+- `collector.ExcludingCategory(BuiltInCategory)`
+- `collector.ExcludingCategories(ICollection<BuiltInCategory>)`
+- `collector.ExcludingCategories(params BuiltInCategory[])`
+- `collector.OfElements(ICollection<ElementId>)`
+- `collector.OfCurveElementType(CurveElementType)`
+- `collector.ExcludingCurveElementType(CurveElementType)`
+- `collector.OfStructuralType(StructuralType)`
+- `collector.ExcludingStructuralType(StructuralType)`
+- `collector.Types()`
+- `collector.Instances()`
+- `collector.Rooms()`
+- `collector.RoomTags()`
+- `collector.Areas()`
+- `collector.AreaTags()`
+- `collector.Spaces()`
+- `collector.SpaceTags()`
+- `collector.FamilySymbols(ElementId)`
+- `collector.FamilySymbols(Family)`
+- `collector.FamilyInstances(Document, ElementId)`
+- `collector.FamilyInstances(FamilySymbol)`
+- `collector.IsCurveDriven()`
+- `collector.IsViewIndependent()`
+- `collector.IsPrimaryDesignOptionMember()`
+- `collector.IsNotPrimaryDesignOptionMember()`
+- `collector.OwnedByView(ElementId)`
+- `collector.OwnedByView(View)`
+- `collector.NotOwnedByView(ElementId)`
+- `collector.NotOwnedByView(View)`
+- `collector.VisibleInView(Document, ElementId)`
+- `collector.VisibleInView(View)`
+- `collector.NotVisibleInView(Document, ElementId)`
+- `collector.NotVisibleInView(View)`
+- `collector.OnLevel(ElementId)`
+- `collector.OnLevel(Level)`
+- `collector.NotOnLevel(ElementId)`
+- `collector.NotOnLevel(Level)`
+- `collector.InDesignOption(ElementId)`
+- `collector.InDesignOption(DesignOption)`
+- `collector.NotInDesignOption(ElementId)`
+- `collector.NotInDesignOption(DesignOption)`
+- `collector.InWorkset(WorksetId)`
+- `collector.NotInWorkset(WorksetId)`
+- `collector.WithStructuralUsage(StructuralInstanceUsage)`
+- `collector.WithoutStructuralUsage(StructuralInstanceUsage)`
+- `collector.WithStructuralWallUsage(StructuralWallUsage)`
+- `collector.WithoutStructuralWallUsage(StructuralWallUsage)`
+- `collector.WithStructuralMaterial(StructuralMaterialType)`
+- `collector.WithoutStructuralMaterial(StructuralMaterialType)`
+- `collector.WithFamilyStructuralMaterial(StructuralMaterialType)`
+- `collector.WithoutFamilyStructuralMaterial(StructuralMaterialType)`
+- `collector.WithPhaseStatus(ElementId, ICollection<ElementOnPhaseStatus>)`
+- `collector.WithPhaseStatus(ElementId, params ElementOnPhaseStatus[])`
+- `collector.WithPhaseStatus(Phase, ICollection<ElementOnPhaseStatus>)`
+- `collector.WithPhaseStatus(Phase, params ElementOnPhaseStatus[])`
+- `collector.WithoutPhaseStatus(ElementId, ICollection<ElementOnPhaseStatus>)`
+- `collector.WithoutPhaseStatus(ElementId, params ElementOnPhaseStatus[])`
+- `collector.WithoutPhaseStatus(Phase, ICollection<ElementOnPhaseStatus>)`
+- `collector.WithoutPhaseStatus(Phase, params ElementOnPhaseStatus[])`
+- `collector.WithExtensibleStorage(Guid)`
+- `collector.WithExtensibleStorage(Schema)`
+- `collector.HasSharedParameter(string)`
+- `collector.IntersectingBoundingBox(Outline)`
+- `collector.IntersectingBoundingBox(Outline, double)`
+- `collector.NotIntersectingBoundingBox(Outline)`
+- `collector.NotIntersectingBoundingBox(Outline, double)`
+- `collector.InsideBoundingBox(Outline)`
+- `collector.InsideBoundingBox(Outline, double)`
+- `collector.NotInsideBoundingBox(Outline)`
+- `collector.NotInsideBoundingBox(Outline, double)`
+- `collector.ContainingPoint(XYZ)`
+- `collector.ContainingPoint(XYZ, double)`
+- `collector.NotContainingPoint(XYZ)`
+- `collector.NotContainingPoint(XYZ, double)`
+- `collector.IntersectingElement(Element)`
+- `collector.NotIntersectingElement(Element)`
+- `collector.IntersectingSolid(Solid)`
+- `collector.NotIntersectingSolid(Solid)`
+- `collector.SelectableInView(Document, ElementId)`
+- `collector.SelectableInView(View)`
+- `collector.NotSelectableInView(Document, ElementId)`
+- `collector.NotSelectableInView(View)`
+- `collector.WhereParameter(BuiltInParameter)`
+- `collector.WhereParameter(ElementId)`
+- `collector.First()`
+- `collector.FirstOrDefault()`
+- `collector.Count()`
+- `collector.Any()`
+
+#### ParameterFilterRuleFactory
+
+- `collector.WhereParameter(parameter).Equals(string)`
+- `collector.WhereParameter(parameter).Equals(int)`
+- `collector.WhereParameter(parameter).Equals(double, double)`
+- `collector.WhereParameter(parameter).Equals(ElementId)`
+- `collector.WhereParameter(parameter).NotEquals(string)`
+- `collector.WhereParameter(parameter).NotEquals(int)`
+- `collector.WhereParameter(parameter).NotEquals(double, double)`
+- `collector.WhereParameter(parameter).NotEquals(ElementId)`
+- `collector.WhereParameter(parameter).IsGreaterThan(string)`
+- `collector.WhereParameter(parameter).IsGreaterThan(int)`
+- `collector.WhereParameter(parameter).IsGreaterThan(double)`
+- `collector.WhereParameter(parameter).IsGreaterThan(double, double)`
+- `collector.WhereParameter(parameter).IsGreaterThan(ElementId)`
+- `collector.WhereParameter(parameter).IsGreaterThanOrEqualTo(string)`
+- `collector.WhereParameter(parameter).IsGreaterThanOrEqualTo(int)`
+- `collector.WhereParameter(parameter).IsGreaterThanOrEqualTo(double, double)`
+- `collector.WhereParameter(parameter).IsGreaterThanOrEqualTo(ElementId)`
+- `collector.WhereParameter(parameter).IsLessThan(string)`
+- `collector.WhereParameter(parameter).IsLessThan(int)`
+- `collector.WhereParameter(parameter).IsLessThan(double, double)`
+- `collector.WhereParameter(parameter).IsLessThan(ElementId)`
+- `collector.WhereParameter(parameter).IsLessThanOrEqualTo(string)`
+- `collector.WhereParameter(parameter).IsLessThanOrEqualTo(int)`
+- `collector.WhereParameter(parameter).IsLessThanOrEqualTo(double, double)`
+- `collector.WhereParameter(parameter).IsLessThanOrEqualTo(ElementId)`
+- `collector.WhereParameter(parameter).Contains(string)`
+- `collector.WhereParameter(parameter).NotContains(string)`
+- `collector.WhereParameter(parameter).StartsWith(string)`
+- `collector.WhereParameter(parameter).NotStartsWith(string)`
+- `collector.WhereParameter(parameter).EndsWith(string)`
+- `collector.WhereParameter(parameter).NotEndsWith(string)`
+- `collector.WhereParameter(parameter).HasValue()`
+- `collector.WhereParameter(parameter).HasNoValue()`
+- `collector.WhereParameter(parameter).IsAssociatedWithGlobalParameter(ElementId)`
+- `collector.WhereParameter(parameter).IsNotAssociatedWithGlobalParameter(ElementId)`
+
 ### Families and modeling
 
 #### Family
