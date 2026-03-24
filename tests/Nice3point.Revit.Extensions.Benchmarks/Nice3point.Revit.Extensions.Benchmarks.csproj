@@ -10,8 +10,13 @@
 
     <ItemGroup>
         <PackageReference Include="Nice3point.Revit.Api.RevitAPI"/>
+        <PackageReference Include="Nice3point.Revit.Toolkit"/>
         <PackageReference Include="Nice3point.BenchmarkDotNet.Revit"/>
         <PackageReference Include="BenchmarkDotNet"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\source\Nice3point.Revit.Extensions\Nice3point.Revit.Extensions.csproj"/>
     </ItemGroup>
 
 </Project>

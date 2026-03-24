@@ -6,7 +6,7 @@ using Nice3point.BenchmarkDotNet.Revit;
 using Nice3point.Revit.Extensions.Benchmarks.Benchmarks;
 
 var configuration = ManualConfig.Create(DefaultConfig.Instance)
-    .AddJob(Job.ShortRun.WithCurrentConfiguration())
+    .AddJob(Job.Default.WithCurrentConfiguration())
     .AddDiagnoser(MemoryDiagnoser.Default);
 
-BenchmarkRunner.Run<ToParameterBenchmark>(configuration);
+BenchmarkRunner.Run<FilteredElementCollectorBenchmark>(configuration);
