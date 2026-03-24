@@ -40,7 +40,6 @@ Package included by default in [Revit Templates](https://github.com/Nice3point/R
 ## Table of contents
 
 <!-- TOC -->
-
 * [Element](#element)
     * [Transformation](#transformation)
     * [Joins and cuts](#joins-and-cuts)
@@ -75,6 +74,7 @@ Package included by default in [Revit Templates](https://github.com/Nice3point/R
     * [Family](#family)
     * [FamilySymbol](#familysymbol)
     * [FamilyInstance](#familyinstance)
+    * [Form](#form)
     * [HostObject](#hostobject)
     * [Wall](#wall)
     * [Adaptive components](#adaptive-components)
@@ -104,7 +104,6 @@ Package included by default in [Revit Templates](https://github.com/Nice3point/R
     * [Point clouds](#point-clouds)
 * [DirectContext3D](#directcontext3d)
 * [System](#system)
-
 <!-- TOC -->
 
 ## Element
@@ -1590,60 +1589,558 @@ var decimalColor = color.ToDecimal();
 
 ## FilteredElementCollector
 
-This set of extensions encapsulates all the work of searching for elements in the Revit database.
-
-**GetElements** constructs a new FilteredElementCollector that will search and filter the set of elements in a document.
-Filter criteria are not applied to the method.
+**CollectElements** creates a new FilteredElementCollector for the document.
 
 ```csharp
-var elements = document.GetElements().WhereElementIsViewIndependent().ToElements();
-var elements = document.GetElements(elementIds).WhereElementIsViewIndependent().ToElements();
-var elements = document.GetElements(viewId).ToElements();
+var collector = document.CollectElements();
+var collector = document.CollectElements(viewId);
+var collector = document.CollectElements(view);
+var collector = document.CollectElements(elementIds);
 ```
 
-The remaining methods contain a ready implementation of the collector, with filters applied:
+**OfClass** applies an `ElementClassFilter` to the collector with generic type support.
 
 ```csharp
-var elements = document.GetInstances();
-var elements = document.GetInstances(new ElementParameterFilter());
-var elements = document.GetInstances([elementParameterFilter, logicalFilter]);
-
-var elements = document.GetInstances(BuiltInCategory.OST_Walls);
-var elements = document.GetInstances(BuiltInCategory.OST_Walls, new ElementParameterFilter());
-var elements = document.GetInstances(BuiltInCategory.OST_Walls, [elementParameterFilter, logicalFilter]);
-
-var elements = document.EnumerateInstances();
-var elements = document.EnumerateInstances(new ElementParameterFilter());
-var elements = document.EnumerateInstances([elementParameterFilter, logicalFilter]);
-
-var elements = document.EnumerateInstances(BuiltInCategory.OST_Walls);
-var elements = document.EnumerateInstances(BuiltInCategory.OST_Walls, new ElementParameterFilter());
-var elements = document.EnumerateInstances(BuiltInCategory.OST_Walls, [elementParameterFilter, logicalFilter]);
-
-var elements = document.EnumerateInstances<Wall>();
-var elements = document.EnumerateInstances<Wall>(new ElementParameterFilter());
-var elements = document.EnumerateInstances<Wall>([elementParameterFilter, logicalFilter]);
-
-var elements = document.EnumerateInstances<Wall>(BuiltInCategory.OST_Walls);
-var elements = document.EnumerateInstances<Wall>(BuiltInCategory.OST_Walls, new ElementParameterFilter());
-var elements = document.EnumerateInstances<Wall>(BuiltInCategory.OST_Walls, [elementParameterFilter, logicalFilter]);
+var walls = document.CollectElements()
+    .OfClass<Wall>()
+    .ToElements();
 ```
 
-The same overloads exist for `InstanceIds`, `Types`, and `TypeIds`:
+**OfClasses** applies an `ElementMulticlassFilter` to the collector to match elements whose class matches any of the given types.
 
 ```csharp
-var types = document.GetTypes();
-var types = document.GetTypeIds();
-var types = document.GetInstanceIds();
-var types = document.EnumerateTypes();
-var types = document.EnumerateTypeIds();
-var types = document.EnumerateInstanceIds();
+var elements = document.CollectElements()
+    .OfClasses(typeof(Wall), typeof(Floor))
+    .ToElements();
 ```
 
-> [!NOTE]
-> `Get` methods are faster than `Enumerate` due to RevitAPI internal optimizations.
-> However, enumeration allows for more flexibility in finding elements.
-> Don't call `GetInstances().Select().ToList()` instead of `EnumerateInstances().Select().ToList()` — you will degrade performance.
+**ExcludingClass** applies an inverted `ElementClassFilter` to match all elements that are not of the given type.
+
+```csharp
+var elements = document.CollectElements()
+    .ExcludingClass<Wall>()
+    .ToElements();
+```
+
+**ExcludingClasses** applies an inverted `ElementMulticlassFilter` to match all elements whose class does not match any of the given types.
+
+```csharp
+var elements = document.CollectElements()
+    .ExcludingClasses(typeof(Wall), typeof(Grid))
+    .ToElements();
+```
+
+**OfCategories** applies an `ElementMulticategoryFilter` to the collector to match elements belonging to any of the given categories.
+
+```csharp
+var elements = document.CollectElements()
+    .OfCategories(BuiltInCategory.OST_Walls, BuiltInCategory.OST_Floors)
+    .ToElements();
+```
+
+**ExcludingCategory** applies an inverted `ElementCategoryFilter` to match all elements not belonging to the given category.
+
+```csharp
+var elements = document.CollectElements()
+    .ExcludingCategory(BuiltInCategory.OST_Walls)
+    .ToElements();
+```
+
+**ExcludingCategories** applies an inverted `ElementMulticategoryFilter` to match all elements not belonging to any of the given categories.
+
+```csharp
+var elements = document.CollectElements()
+    .ExcludingCategories(BuiltInCategory.OST_Walls, BuiltInCategory.OST_Grids)
+    .ToElements();
+```
+
+**OfElements** applies an `ElementIdSetFilter` to match only elements with the given ids.
+
+```csharp
+var elements = document.CollectElements()
+    .OfElements(ids)
+    .ToElements();
+```
+
+**OfCurveElementType** applies a `CurveElementFilter` to match curve elements of the given type.
+
+```csharp
+var modelCurves = document.CollectElements()
+    .OfCurveElementType(CurveElementType.ModelCurve)
+    .ToElements();
+```
+
+**ExcludingCurveElementType** applies an inverted `CurveElementFilter` to match all curve elements not of the given type.
+
+```csharp
+var elements = document.CollectElements()
+    .ExcludingCurveElementType(CurveElementType.DetailCurve)
+    .ToElements();
+```
+
+**OfStructuralType** applies an `ElementStructuralTypeFilter` to match elements of the given structural type.
+
+```csharp
+var nonStructural = document.CollectElements()
+    .OfStructuralType(StructuralType.NonStructural)
+    .ToElements();
+```
+
+**ExcludingStructuralType** applies an inverted `ElementStructuralTypeFilter` to match all elements not of the given structural type.
+
+```csharp
+var elements = document.CollectElements()
+    .ExcludingStructuralType(StructuralType.NonStructural)
+    .ToElements();
+```
+
+**Types** applies an `ElementIsElementTypeFilter`. Only element types will pass the collector.
+
+```csharp
+var types = document.CollectElements()
+    .Types()
+    .ToElements();
+```
+
+**Instances** applies an inverted `ElementIsElementTypeFilter`. Only element instances will pass the collector.
+
+```csharp
+var instances = document.CollectElements()
+    .Instances()
+    .ToElements();
+```
+
+**Rooms** applies a `RoomFilter` to match room elements.
+
+```csharp
+var rooms = document.CollectElements()
+    .Rooms()
+    .ToElements();
+```
+
+**RoomTags** applies a `RoomTagFilter` to match room tag elements.
+
+```csharp
+var roomTags = document.CollectElements()
+    .RoomTags()
+    .ToElements();
+```
+
+**Areas** applies an `AreaFilter` to match area elements.
+
+```csharp
+var areas = document.CollectElements()
+    .Areas()
+    .ToElements();
+```
+
+**AreaTags** applies an `AreaTagFilter` to match area tag elements.
+
+```csharp
+var areaTags = document.CollectElements()
+    .AreaTags()
+    .ToElements();
+```
+
+**Spaces** applies a `SpaceFilter` to match space elements.
+
+```csharp
+var spaces = document.CollectElements()
+    .Spaces()
+    .ToElements();
+```
+
+**SpaceTags** applies a `SpaceTagFilter` to match space tag elements.
+
+```csharp
+var spaceTags = document.CollectElements()
+    .SpaceTags()
+    .ToElements();
+```
+
+**FamilySymbols** applies a `FamilySymbolFilter` to match all family symbols belonging to the given family.
+
+```csharp
+var symbols = document.CollectElements()
+    .FamilySymbols(family)
+    .ToElements();
+```
+
+**FamilyInstances** applies a `FamilyInstanceFilter` to match family instances of the given family symbol.
+
+```csharp
+var instances = document.CollectElements()
+    .FamilyInstances(symbol)
+    .ToElements();
+```
+
+**IsCurveDriven** applies an `ElementIsCurveDrivenFilter` to match elements that are curve-driven.
+
+```csharp
+var curveDriven = document.CollectElements()
+    .IsCurveDriven()
+    .ToElements();
+```
+
+**IsViewIndependent** applies an `ElementIsCurveDrivenFilter` to match elements that are view-independent.
+
+```csharp
+var viewIndependent = document.CollectElements()
+    .IsViewIndependent()
+    .ToElements();
+```
+
+**IsPrimaryDesignOptionMember** applies a `PrimaryDesignOptionMemberFilter` to match elements contained in any primary design option of any design option set.
+
+```csharp
+var primary = document.CollectElements()
+    .IsPrimaryDesignOptionMember()
+    .ToElements();
+```
+
+**IsNotPrimaryDesignOptionMember** applies an inverted `PrimaryDesignOptionMemberFilter` to match all elements not contained in any primary design option.
+
+```csharp
+var nonPrimary = document.CollectElements()
+    .IsNotPrimaryDesignOptionMember()
+    .ToElements();
+```
+
+**OwnedByView** applies an `ElementOwnerViewFilter` to match elements owned by the given view.
+
+```csharp
+var viewElements = document.CollectElements(viewId)
+    .OwnedByView(view)
+    .ToElements();
+```
+
+**NotOwnedByView** applies an inverted `ElementOwnerViewFilter` to match all elements not owned by the given view.
+
+```csharp
+var nonViewElements = document.CollectElements()
+    .NotOwnedByView(view)
+    .ToElements();
+```
+
+**VisibleInView** applies a `VisibleInViewFilter` to match elements visible in the given view.
+
+```csharp
+var visible = document.CollectElements(view.Id)
+    .VisibleInView(view)
+    .ToElements();
+```
+
+**NotVisibleInView** applies an inverted `VisibleInViewFilter` to match all elements not visible in the given view.
+
+```csharp
+var notVisible = document.CollectElements(view.Id)
+    .NotVisibleInView(view)
+    .ToElements();
+```
+
+**SelectableInView** applies a `SelectableInViewFilter` to match elements that are selectable in the given view.
+
+```csharp
+var selectable = document.CollectElements(viewId)
+    .SelectableInView(view)
+    .ToElements();
+```
+
+**NotSelectableInView** applies an inverted `SelectableInViewFilter` to match all elements that are not selectable in the given view.
+
+```csharp 
+var notSelectable = document.CollectElements(viewId)
+    .NotSelectableInView(view)
+    .ToElements();
+```
+
+**OnLevel** applies an `ElementLevelFilter` to match elements associated with the given level.
+
+```csharp
+var onGround = document.CollectElements()
+    .OnLevel(level)
+    .ToElements();
+```
+
+**NotOnLevel** applies an inverted `ElementLevelFilter` to match all elements not associated with the given level.
+
+```csharp
+var notOnGround = document.CollectElements()
+    .NotOnLevel(level)
+    .ToElements();
+```
+
+**InDesignOption** applies an `ElementDesignOptionFilter` to match elements contained within the given design option.
+
+```csharp
+var elements = document.CollectElements()
+    .InDesignOption(designOption)
+    .ToElements();
+```
+
+**NotInDesignOption** applies an inverted `ElementDesignOptionFilter` to match all elements not contained within the given design option.
+
+```csharp
+var elements = document.CollectElements()
+    .NotInDesignOption(designOption)
+    .ToElements();
+```
+
+**InWorkset** applies an `ElementWorksetFilter` to match elements in the given workset.
+
+```csharp
+var elements = document.CollectElements()
+    .InWorkset(worksetId)
+    .ToElements();
+```
+
+**NotInWorkset** applies an inverted `ElementWorksetFilter` to match all elements not in the given workset.
+
+```csharp
+var elements = document.CollectElements()
+    .NotInWorkset(worksetId)
+    .ToElements();
+```
+
+**WithStructuralUsage** applies a `StructuralInstanceUsageFilter` to match structural family instances with the given structural usage.
+
+```csharp
+var columns = document.CollectElements()
+    .WithStructuralUsage(StructuralInstanceUsage.Column)
+    .ToElements();
+```
+
+**WithoutStructuralUsage** applies an inverted `StructuralInstanceUsageFilter` to match all family instances not of the given structural usage.
+
+```csharp
+var nonColumns = document.CollectElements()
+    .WithoutStructuralUsage(StructuralInstanceUsage.Column)
+    .ToElements();
+```
+
+**WithStructuralWallUsage** applies a `StructuralWallUsageFilter` to match walls with the given structural wall usage.
+
+```csharp
+var bearingWalls = document.CollectElements()
+    .WithStructuralWallUsage(StructuralWallUsage.Bearing)
+    .ToElements();
+```
+
+**WithoutStructuralWallUsage** applies an inverted `StructuralWallUsageFilter` to match all walls not of the given structural wall usage.
+
+```csharp
+var nonBearing = document.CollectElements()
+    .WithoutStructuralWallUsage(StructuralWallUsage.Bearing)
+    .ToElements();
+```
+
+**WithStructuralMaterial** applies a `StructuralMaterialTypeFilter` to match family instances that have the given structural material type.
+
+```csharp
+var steelElements = document.CollectElements()
+    .WithStructuralMaterial(StructuralMaterialType.Steel)
+    .ToElements();
+```
+
+**WithoutStructuralMaterial** applies an inverted `StructuralMaterialTypeFilter` to match all family instances not of the given structural material type.
+
+```csharp
+var nonSteel = document.CollectElements()
+    .WithoutStructuralMaterial(StructuralMaterialType.Steel)
+    .ToElements();
+```
+
+**WithFamilyStructuralMaterial** applies a `FamilyStructuralMaterialTypeFilter` to match families that have the given structural material type.
+
+```csharp
+var concreteFamilies = document.CollectElements()
+    .WithFamilyStructuralMaterial(StructuralMaterialType.Concrete)
+    .ToElements();
+```
+
+**WithoutFamilyStructuralMaterial** applies an inverted `FamilyStructuralMaterialTypeFilter` to match all families not of the given structural material type.
+
+```csharp
+var nonConcrete = document.CollectElements()
+    .WithoutFamilyStructuralMaterial(StructuralMaterialType.Concrete)
+    .ToElements();
+```
+
+**WithPhaseStatus** applies an `ElementPhaseStatusFilter` to match elements that have any of the given phase statuses on the given phase.
+
+```csharp
+var newElements = document.CollectElements()
+    .WithPhaseStatus(phase, ElementOnPhaseStatus.New)
+    .ToElements();
+```
+
+**WithoutPhaseStatus** applies an inverted `ElementPhaseStatusFilter` to match all elements that do not have any of the given phase statuses on the given phase.
+
+```csharp
+var notNew = document.CollectElements()
+    .WithoutPhaseStatus(phase, ElementOnPhaseStatus.New)
+    .ToElements();
+```
+
+**WithExtensibleStorage** applies an `ExtensibleStorageFilter` to match elements that have extensible storage data for the given schema.
+
+```csharp
+var elements = document.CollectElements()
+    .WithExtensibleStorage(schemaGuid)
+    .ToElements();
+```
+
+**HasSharedParameter** applies a `SharedParameterApplicableRule` filter to match elements that support a shared parameter with the given name.
+
+```csharp
+var elements = document.CollectElements()
+    .HasSharedParameter("SharedParameter")
+    .ToElements();
+```
+
+**IntersectingBoundingBox** applies a `BoundingBoxIntersectsFilter` to match elements whose bounding box intersects the given outline.
+
+```csharp
+var elements = document.CollectElements()
+    .IntersectingBoundingBox(outline)
+    .ToElements();
+```
+
+**NotIntersectingBoundingBox** applies an inverted `BoundingBoxIntersectsFilter` to match all elements whose bounding box does not intersect the given outline.
+
+```csharp
+var elements = document.CollectElements()
+    .NotIntersectingBoundingBox(outline)
+    .ToElements();
+```
+
+**InsideBoundingBox** applies a `BoundingBoxIsInsideFilter` to match elements whose bounding box is fully contained by the given outline.
+
+```csharp
+var elements = document.CollectElements()
+    .InsideBoundingBox(outline)
+    .ToElements();
+```
+
+**NotInsideBoundingBox** applies an inverted `BoundingBoxIsInsideFilter` to match all elements whose bounding box is not fully contained by the given outline.
+
+```csharp
+var elements = document.CollectElements()
+    .NotInsideBoundingBox(outline)
+    .ToElements();
+```
+
+**ContainingPoint** applies a `BoundingBoxContainsPointFilter` to match elements whose bounding box contains the given point.
+
+```csharp
+var elements = document.CollectElements()
+    .ContainingPoint(point)
+    .ToElements();
+```
+
+**NotContainingPoint** applies an inverted `BoundingBoxContainsPointFilter` to match all elements whose bounding box does not contain the given point.
+
+```csharp
+var elements = document.CollectElements()
+    .NotContainingPoint(point)
+    .ToElements();
+```
+
+**IntersectingElement** applies an `ElementIntersectsElementFilter` to match elements whose geometry intersects the given element.
+
+```csharp
+var intersecting = document.CollectElements()
+    .IntersectingElement(wall)
+    .ToElements();
+```
+
+**NotIntersectingElement** applies an inverted `ElementIntersectsElementFilter` to match all elements whose geometry does not intersect the given element.
+
+```csharp
+var notIntersecting = document.CollectElements()
+    .NotIntersectingElement(wall)
+    .ToElements();
+```
+
+**IntersectingSolid** applies an `ElementIntersectsSolidFilter` to match elements whose geometry intersects the given solid.
+
+```csharp
+var intersecting = document.CollectElements()
+    .IntersectingSolid(solid)
+    .ToElements();
+```
+
+**NotIntersectingSolid** applies an inverted `ElementIntersectsSolidFilter` to match all elements whose geometry does not intersect the given solid.
+
+```csharp
+var notIntersecting = document.CollectElements()
+    .NotIntersectingSolid(solid)
+    .ToElements();
+```
+
+**WhereParameter** begins a fluent parameter filter expression for the given built-in parameter or parameter id.
+It applies `ElementParameterFilter` with `ParameterFilterRuleFactory` rules — Revit's native filtering engine that evaluates parameters at the database level before element expansion, unlike LINQ post-filtering which
+requires loading every element into memory first.
+
+```csharp
+var wallsOnLevel = document.CollectElements()
+    .WhereParameter(BuiltInParameter.WALL_BASE_CONSTRAINT).Equals(levelId)
+    .ToElements();
+
+var tallWalls = document.CollectElements()
+    .WhereParameter(BuiltInParameter.WALL_USER_HEIGHT_PARAM).IsGreaterThan(3.0, 1e-6)
+    .ToElements();
+
+var genericTypes = document.CollectElements()
+    .WhereParameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).Contains("Generic")
+    .ToElements();
+
+// Supports all Rulus provided by Revit API:
+//.Equals(string | int | double | ElementId)
+//.NotEquals(string | int | double | ElementId)
+//.IsGreaterThan(string | int | double | ElementId)
+//.IsGreaterThanOrEqualTo(string | int | double | ElementId)
+//.IsLessThan(string | int | double | ElementId)
+//.IsLessThanOrEqualTo(string | int | double | ElementId)
+//.Contains(string)
+//.NotContains(string)
+//.StartsWith(string)
+//.NotStartsWith(string)
+//.EndsWith(string)
+//.NotEndsWith(string)
+//.HasValue()
+//.HasNoValue()
+//.IsAssociatedWithGlobalParameter(ElementId)
+//.IsNotAssociatedWithGlobalParameter(ElementId)
+```
+
+**First** and **FirstOrDefault** return the first element in the collector. These use Revit native fast implementation instead of LINQ.
+
+```csharp
+var first = document.CollectElements()
+    .Types()
+    .First();
+
+var firstOrNull = document.CollectElements()
+    .Types()
+    .FirstOrDefault();
+```
+
+**Count** returns the number of elements in the collector using Revit's native `GetElementCount()`. This use Revit native fast implementation instead of LINQ
+
+```csharp
+var count = document.CollectElements()
+    .OfClass<Wall>()
+    .Count();
+```
+
+**Any** returns `true` if the collector contains at least one element. These use Revit native fast implementation instead of LINQ.
+
+```csharp
+var hasWalls = document.CollectElements()
+    .OfClass<Wall>()
+    .Any();
+```
 
 ## Families and modeling
 
