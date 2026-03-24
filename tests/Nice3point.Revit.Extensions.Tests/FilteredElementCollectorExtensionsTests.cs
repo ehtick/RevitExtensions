@@ -491,7 +491,7 @@ public sealed class FilteredElementCollectorExtensionsTests : RevitApiTest
     public async Task OwnedByView_ByElementId_ReturnsViewOwnedElements()
     {
         // Act
-        var elements = _document.CollectElements(_floorPlan.Id)
+        var elements = _document.CollectElements(_floorPlan)
             .OwnedByView(_floorPlan.Id)
             .ToElements();
 
@@ -503,7 +503,7 @@ public sealed class FilteredElementCollectorExtensionsTests : RevitApiTest
     public async Task OwnedByView_ByView_ReturnsViewOwnedElements()
     {
         // Act
-        var elements = _document.CollectElements(_floorPlan.Id)
+        var elements = _document.CollectElements(_floorPlan)
             .OwnedByView(_floorPlan)
             .ToElements();
 
@@ -542,7 +542,7 @@ public sealed class FilteredElementCollectorExtensionsTests : RevitApiTest
     public async Task VisibleInView_ByDocumentAndElementId_ReturnsVisibleElements()
     {
         // Act
-        var elements = _document.CollectElements(_floorPlan.Id)
+        var elements = _document.CollectElements(_floorPlan)
             .VisibleInView(_document, _floorPlan.Id)
             .ToElements();
 
@@ -554,7 +554,7 @@ public sealed class FilteredElementCollectorExtensionsTests : RevitApiTest
     public async Task VisibleInView_ByView_ReturnsVisibleElements()
     {
         // Act
-        var elements = _document.CollectElements(_floorPlan.Id)
+        var elements = _document.CollectElements(_floorPlan)
             .VisibleInView(_floorPlan)
             .ToElements();
 
@@ -570,11 +570,11 @@ public sealed class FilteredElementCollectorExtensionsTests : RevitApiTest
             .WhereElementIsNotElementType()
             .GetElementCount();
 
-        var visibleCount = _document.CollectElements(_floorPlan.Id)
+        var visibleCount = _document.CollectElements(_floorPlan)
             .VisibleInView(_document, _floorPlan.Id)
             .GetElementCount();
 
-        var notVisibleCount = _document.CollectElements(_floorPlan.Id)
+        var notVisibleCount = _document.CollectElements(_floorPlan)
             .NotVisibleInView(_document, _floorPlan.Id)
             .GetElementCount();
 
