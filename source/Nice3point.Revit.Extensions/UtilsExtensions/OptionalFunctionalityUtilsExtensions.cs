@@ -155,6 +155,9 @@ public static class OptionalFunctionalityUtilsExtensions
         /// <returns>
         ///    True if the AXM Import/Link functionality is available in the installed Revit.
         /// </returns>
+#if REVIT2027
+        [Obsolete("This method is deprecated in Revit 2027 and may be removed in a later version of Revit.")]
+#endif
         public bool IsAxmImportLinkAvailable => OptionalFunctionalityUtils.IsAXMImportLinkAvailable();
 
         /// <summary>
