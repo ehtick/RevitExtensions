@@ -241,7 +241,7 @@ public static partial class FilteredElementCollectorExtensions
         {
             return collector.WherePasses(new ElementMulticategoryFilter(categories, inverted: true));
         }
-
+#if REVIT2021_OR_GREATER
         /// <summary>
         ///     Applies an <see cref="ElementIdSetFilter" /> to the collector to match only elements with the given ids.
         /// </summary>
@@ -257,6 +257,7 @@ public static partial class FilteredElementCollectorExtensions
         {
             return collector.WherePasses(new ElementIdSetFilter(ids));
         }
+#endif
 
         /// <summary>
         ///     Applies a <see cref="CurveElementFilter" /> to the collector to match curve elements of the given type.
@@ -576,7 +577,7 @@ public static partial class FilteredElementCollectorExtensions
         {
             return collector.WherePasses(new ElementOwnerViewFilter(view.Id, inverted: true));
         }
-
+#if REVIT2021_OR_GREATER
         /// <summary>
         ///     Applies a <see cref="VisibleInViewFilter" /> to the collector to match elements visible in the given view.
         /// </summary>
@@ -648,6 +649,7 @@ public static partial class FilteredElementCollectorExtensions
         {
             return collector.WherePasses(new VisibleInViewFilter(view.Document, view.Id, inverted: true));
         }
+#endif
 
         /// <summary>
         ///     Applies an <see cref="ElementLevelFilter" /> to the collector to match elements associated with the given level.
@@ -1380,7 +1382,11 @@ public static partial class FilteredElementCollectorExtensions
         [Pure]
         public bool Any()
         {
+#if REVIT2024_OR_GREATER
             return collector.FirstElementId().Value > 0;
+#else
+            return collector.FirstElementId().IntegerValue > 0;
+#endif
         }
     }
 }
@@ -1410,7 +1416,11 @@ public sealed class ParameterFilterBuilder
     /// </exception>
     public FilteredElementCollector Equals(string value)
     {
+#if REVIT2023_OR_GREATER
         return ApplyFilter(ParameterFilterRuleFactory.CreateEqualsRule(_parameterId, value));
+#else
+        return ApplyFilter(ParameterFilterRuleFactory.CreateEqualsRule(_parameterId, value, true));
+#endif
     }
 
     /// <summary>
@@ -1466,7 +1476,11 @@ public sealed class ParameterFilterBuilder
     /// </exception>
     public FilteredElementCollector NotEquals(string value)
     {
+#if REVIT2023_OR_GREATER
         return ApplyFilter(ParameterFilterRuleFactory.CreateNotEqualsRule(_parameterId, value));
+#else
+        return ApplyFilter(ParameterFilterRuleFactory.CreateNotEqualsRule(_parameterId, value, true));
+#endif
     }
 
     /// <summary>
@@ -1522,7 +1536,11 @@ public sealed class ParameterFilterBuilder
     /// </exception>
     public FilteredElementCollector IsGreaterThan(string value)
     {
+#if REVIT2023_OR_GREATER
         return ApplyFilter(ParameterFilterRuleFactory.CreateGreaterRule(_parameterId, value));
+#else
+        return ApplyFilter(ParameterFilterRuleFactory.CreateGreaterRule(_parameterId, value, true));
+#endif
     }
 
     /// <summary>
@@ -1599,7 +1617,11 @@ public sealed class ParameterFilterBuilder
     /// </exception>
     public FilteredElementCollector IsGreaterThanOrEqualTo(string value)
     {
+#if REVIT2023_OR_GREATER
         return ApplyFilter(ParameterFilterRuleFactory.CreateGreaterOrEqualRule(_parameterId, value));
+#else
+        return ApplyFilter(ParameterFilterRuleFactory.CreateGreaterOrEqualRule(_parameterId, value, true));
+#endif
     }
 
     /// <summary>
@@ -1659,7 +1681,11 @@ public sealed class ParameterFilterBuilder
     /// </exception>
     public FilteredElementCollector IsLessThan(string value)
     {
+#if REVIT2023_OR_GREATER
         return ApplyFilter(ParameterFilterRuleFactory.CreateLessRule(_parameterId, value));
+#else
+        return ApplyFilter(ParameterFilterRuleFactory.CreateLessRule(_parameterId, value, true));
+#endif
     }
 
     /// <summary>
@@ -1719,7 +1745,11 @@ public sealed class ParameterFilterBuilder
     /// </exception>
     public FilteredElementCollector IsLessThanOrEqualTo(string value)
     {
+#if REVIT2023_OR_GREATER
         return ApplyFilter(ParameterFilterRuleFactory.CreateLessOrEqualRule(_parameterId, value));
+#else
+        return ApplyFilter(ParameterFilterRuleFactory.CreateLessOrEqualRule(_parameterId, value, true));
+#endif
     }
 
     /// <summary>
@@ -1779,7 +1809,11 @@ public sealed class ParameterFilterBuilder
     /// </exception>
     public FilteredElementCollector Contains(string value)
     {
+#if REVIT2023_OR_GREATER
         return ApplyFilter(ParameterFilterRuleFactory.CreateContainsRule(_parameterId, value));
+#else
+        return ApplyFilter(ParameterFilterRuleFactory.CreateContainsRule(_parameterId, value, true));
+#endif
     }
 
     /// <summary>
@@ -1792,7 +1826,11 @@ public sealed class ParameterFilterBuilder
     /// </exception>
     public FilteredElementCollector NotContains(string value)
     {
+#if REVIT2023_OR_GREATER
         return ApplyFilter(ParameterFilterRuleFactory.CreateNotContainsRule(_parameterId, value));
+#else
+        return ApplyFilter(ParameterFilterRuleFactory.CreateNotContainsRule(_parameterId, value, true));
+#endif
     }
 
     /// <summary>
@@ -1805,7 +1843,11 @@ public sealed class ParameterFilterBuilder
     /// </exception>
     public FilteredElementCollector StartsWith(string value)
     {
+#if REVIT2023_OR_GREATER
         return ApplyFilter(ParameterFilterRuleFactory.CreateBeginsWithRule(_parameterId, value));
+#else
+        return ApplyFilter(ParameterFilterRuleFactory.CreateBeginsWithRule(_parameterId, value, true));
+#endif
     }
 
     /// <summary>
@@ -1818,7 +1860,11 @@ public sealed class ParameterFilterBuilder
     /// </exception>
     public FilteredElementCollector NotStartsWith(string value)
     {
+#if REVIT2023_OR_GREATER
         return ApplyFilter(ParameterFilterRuleFactory.CreateNotBeginsWithRule(_parameterId, value));
+#else
+        return ApplyFilter(ParameterFilterRuleFactory.CreateNotBeginsWithRule(_parameterId, value, true));
+#endif
     }
 
     /// <summary>
@@ -1831,7 +1877,11 @@ public sealed class ParameterFilterBuilder
     /// </exception>
     public FilteredElementCollector EndsWith(string value)
     {
+#if REVIT2023_OR_GREATER
         return ApplyFilter(ParameterFilterRuleFactory.CreateEndsWithRule(_parameterId, value));
+#else
+        return ApplyFilter(ParameterFilterRuleFactory.CreateEndsWithRule(_parameterId, value, true));
+#endif
     }
 
     /// <summary>
@@ -1844,7 +1894,11 @@ public sealed class ParameterFilterBuilder
     /// </exception>
     public FilteredElementCollector NotEndsWith(string value)
     {
+#if REVIT2023_OR_GREATER
         return ApplyFilter(ParameterFilterRuleFactory.CreateNotEndsWithRule(_parameterId, value));
+#else
+        return ApplyFilter(ParameterFilterRuleFactory.CreateNotEndsWithRule(_parameterId, value, true));
+#endif
     }
 
     /// <summary>

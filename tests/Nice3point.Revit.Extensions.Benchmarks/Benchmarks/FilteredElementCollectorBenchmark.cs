@@ -139,7 +139,11 @@ public class FilteredElementCollectorBenchmark : RevitApiBenchmark
     {
         return new FilteredElementCollector(_document)
             .WhereElementIsElementType()
+#if REVIT2024_OR_GREATER
             .FirstElementId().Value > 0;
+#else
+            .FirstElementId().IntegerValue > 0;
+#endif
     }
 
     [Benchmark(Description = "Enumerable.Any()")]

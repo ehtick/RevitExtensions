@@ -208,7 +208,11 @@ public sealed class FilteredElementCollectorExtensionsTests : RevitApiTest
         // Assert
         await Assert.That(elements).IsNotEmpty();
         await Assert.That(elements).All().Satisfy(
+#if REVIT2023_OR_GREATER
             element => element.Category?.BuiltInCategory != BuiltInCategory.OST_Walls,
+#else
+            element => !element.Category?.Id.IsCategory(BuiltInCategory.OST_Walls),
+#endif
             source => source.IsTrue());
     }
 
@@ -242,6 +246,7 @@ public sealed class FilteredElementCollectorExtensionsTests : RevitApiTest
         await Assert.That(elements).IsNotEmpty();
         await Assert.That(elements).All().Satisfy(element => element is not Wall and not Grid, source => source.IsTrue());
     }
+#if REVIT2021_OR_GREATER
 
     [Test]
     public async Task OfElements_ReturnsOnlyRequestedElements()
@@ -258,6 +263,7 @@ public sealed class FilteredElementCollectorExtensionsTests : RevitApiTest
         await Assert.That(elements).Count().IsEqualTo(2);
         await Assert.That(elements).All().Satisfy(element => ids.Contains(element.Id), source => source.IsTrue());
     }
+#endif
 
     [Test]
     public async Task OfCurveElementType_ReturnsMatchingCurveElements()
@@ -530,6 +536,7 @@ public sealed class FilteredElementCollectorExtensionsTests : RevitApiTest
         await Assert.That(elements).IsNotEmpty();
         await Assert.That(elements).All().Satisfy(element => element.OwnerViewId != _floorPlan.Id, source => source.IsTrue());
     }
+#if REVIT2021_OR_GREATER
 
     [Test]
     public async Task VisibleInView_ByDocumentAndElementId_ReturnsVisibleElements()
@@ -594,6 +601,7 @@ public sealed class FilteredElementCollectorExtensionsTests : RevitApiTest
         // Assert
         await Assert.That(visibleCount + notVisibleCount).IsEqualTo(allCount);
     }
+#endif
 
     [Test]
     public async Task OnLevel_ByElementId_ReturnsElementsOnLevel()
