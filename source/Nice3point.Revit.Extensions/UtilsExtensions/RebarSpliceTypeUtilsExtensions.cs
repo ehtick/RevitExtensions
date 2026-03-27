@@ -36,8 +36,8 @@ public static class RebarSpliceTypeUtilsExtensions
         }
     }
 
-    /// <param name="element">The source rebar splice type element.</param>
-    extension(Element element)
+    /// <param name="rebarSpliceType">The source rebar splice type element.</param>
+    extension(ElementType rebarSpliceType)
     {
         /// <summary>Gets the lap length multiplier value.</summary>
         /// <returns>Returns the lap length multiplier value.</returns>
@@ -47,7 +47,7 @@ public static class RebarSpliceTypeUtilsExtensions
         [Pure]
         public double GetRebarSpliceLapLengthMultiplier()
         {
-            return RebarSpliceTypeUtils.GetLapLengthMultiplier(element.Document, element.Id);
+            return RebarSpliceTypeUtils.GetLapLengthMultiplier(rebarSpliceType.Document, rebarSpliceType.Id);
         }
 
         /// <summary>Identifies the way bars are shifted in the splice relation.</summary>
@@ -58,7 +58,7 @@ public static class RebarSpliceTypeUtilsExtensions
         [Pure]
         public RebarSpliceShiftOption GetRebarSpliceShiftOption()
         {
-            return RebarSpliceTypeUtils.GetShiftOption(element.Document, element.Id);
+            return RebarSpliceTypeUtils.GetShiftOption(rebarSpliceType.Document, rebarSpliceType.Id);
         }
 
         /// <summary>Gets the stagger multiplier value.</summary>
@@ -69,7 +69,7 @@ public static class RebarSpliceTypeUtilsExtensions
         [Pure]
         public double GetRebarSpliceStaggerLengthMultiplier()
         {
-            return RebarSpliceTypeUtils.GetStaggerLengthMultiplier(element.Document, element.Id);
+            return RebarSpliceTypeUtils.GetStaggerLengthMultiplier(rebarSpliceType.Document, rebarSpliceType.Id);
         }
 
         /// <summary>Sets the lap length multiplier value.</summary>
@@ -82,7 +82,7 @@ public static class RebarSpliceTypeUtilsExtensions
         /// </exception>
         public void SetRebarSpliceLapLengthMultiplier(double lapLengthMultiplier)
         {
-            RebarSpliceTypeUtils.SetLapLengthMultiplier(element.Document, element.Id, lapLengthMultiplier);
+            RebarSpliceTypeUtils.SetLapLengthMultiplier(rebarSpliceType.Document, rebarSpliceType.Id, lapLengthMultiplier);
         }
 
         /// <summary>Sets the way bars are shifted in the splice relation.</summary>
@@ -95,7 +95,7 @@ public static class RebarSpliceTypeUtilsExtensions
         /// </exception>
         public void SetRebarSpliceShiftOption(RebarSpliceShiftOption shiftOption)
         {
-            RebarSpliceTypeUtils.SetShiftOption(element.Document, element.Id, shiftOption);
+            RebarSpliceTypeUtils.SetShiftOption(rebarSpliceType.Document, rebarSpliceType.Id, shiftOption);
         }
 
         /// <summary>Sets the lap length multiplier value.</summary>
@@ -111,12 +111,12 @@ public static class RebarSpliceTypeUtilsExtensions
         /// </exception>
         public void SetRebarSpliceStaggerLengthMultiplier(double staggerLengthMultiplier)
         {
-            RebarSpliceTypeUtils.SetStaggerLengthMultiplier(element.Document, element.Id, staggerLengthMultiplier);
+            RebarSpliceTypeUtils.SetStaggerLengthMultiplier(rebarSpliceType.Document, rebarSpliceType.Id, staggerLengthMultiplier);
         }
     }
 
-    /// <param name="elementId">The rebar splice type element id.</param>
-    extension(ElementId elementId)
+    /// <param name="rebarSpliceTypeId">The rebar splice type element id.</param>
+    extension(ElementId rebarSpliceTypeId)
     {
         /// <summary>Gets the lap length multiplier value.</summary>
         /// <param name="document">The document.</param>
@@ -130,7 +130,7 @@ public static class RebarSpliceTypeUtilsExtensions
         [Pure]
         public double GetRebarSpliceLapLengthMultiplier(Autodesk.Revit.DB.Document document)
         {
-            return RebarSpliceTypeUtils.GetLapLengthMultiplier(document, elementId);
+            return RebarSpliceTypeUtils.GetLapLengthMultiplier(document, rebarSpliceTypeId);
         }
 
         /// <summary>Identifies the way bars are shifted in the splice relation.</summary>
@@ -145,7 +145,7 @@ public static class RebarSpliceTypeUtilsExtensions
         [Pure]
         public RebarSpliceShiftOption GetRebarSpliceShiftOption(Autodesk.Revit.DB.Document document)
         {
-            return RebarSpliceTypeUtils.GetShiftOption(document, elementId);
+            return RebarSpliceTypeUtils.GetShiftOption(document, rebarSpliceTypeId);
         }
 
         /// <summary>Gets the stagger multiplier value.</summary>
@@ -160,7 +160,7 @@ public static class RebarSpliceTypeUtilsExtensions
         [Pure]
         public double GetRebarSpliceStaggerLengthMultiplier(Autodesk.Revit.DB.Document document)
         {
-            return RebarSpliceTypeUtils.GetStaggerLengthMultiplier(document, elementId);
+            return RebarSpliceTypeUtils.GetStaggerLengthMultiplier(document, rebarSpliceTypeId);
         }
 
         /// <summary>Sets the lap length multiplier value.</summary>
@@ -177,7 +177,7 @@ public static class RebarSpliceTypeUtilsExtensions
         /// </exception>
         public void SetRebarSpliceLapLengthMultiplier(Autodesk.Revit.DB.Document document, double lapLengthMultiplier)
         {
-            RebarSpliceTypeUtils.SetLapLengthMultiplier(document, elementId, lapLengthMultiplier);
+            RebarSpliceTypeUtils.SetLapLengthMultiplier(document, rebarSpliceTypeId, lapLengthMultiplier);
         }
 
         /// <summary>Sets the way bars are shifted in the splice relation.</summary>
@@ -194,7 +194,7 @@ public static class RebarSpliceTypeUtilsExtensions
         /// </exception>
         public void SetRebarSpliceShiftOption(Autodesk.Revit.DB.Document document, RebarSpliceShiftOption shiftOption)
         {
-            RebarSpliceTypeUtils.SetShiftOption(document, elementId, shiftOption);
+            RebarSpliceTypeUtils.SetShiftOption(document, rebarSpliceTypeId, shiftOption);
         }
 
         /// <summary>Sets the lap length multiplier value.</summary>
@@ -211,7 +211,7 @@ public static class RebarSpliceTypeUtilsExtensions
         /// </exception>
         public void SetRebarSpliceStaggerLengthMultiplier(Autodesk.Revit.DB.Document document, double staggerLengthMultiplier)
         {
-            RebarSpliceTypeUtils.SetStaggerLengthMultiplier(document, elementId, staggerLengthMultiplier);
+            RebarSpliceTypeUtils.SetStaggerLengthMultiplier(document, rebarSpliceTypeId, staggerLengthMultiplier);
         }
     }
 }

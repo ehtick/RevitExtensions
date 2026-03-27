@@ -36,8 +36,8 @@ public static class RebarCrankTypeUtilsExtensions
         }
     }
 
-    /// <param name="element">The source rebar crank type element.</param>
-    extension(Element element)
+    /// <param name="rebarCrankType">The source rebar crank type element.</param>
+    extension(ElementType rebarCrankType)
     {
         /// <summary>Gets the crank length multiplier value.</summary>
         /// <returns>Returns the crank length multiplier value.</returns>
@@ -47,7 +47,7 @@ public static class RebarCrankTypeUtilsExtensions
         [Pure]
         public double GetRebarCrankLengthMultiplier()
         {
-            return RebarCrankTypeUtils.GetCrankLengthMultiplier(element.Document, element.Id);
+            return RebarCrankTypeUtils.GetCrankLengthMultiplier(rebarCrankType.Document, rebarCrankType.Id);
         }
 
         /// <summary>Gets the crank offset multiplier value.</summary>
@@ -58,7 +58,7 @@ public static class RebarCrankTypeUtilsExtensions
         [Pure]
         public double GetRebarCrankOffsetMultiplier()
         {
-            return RebarCrankTypeUtils.GetCrankOffsetMultiplier(element.Document, element.Id);
+            return RebarCrankTypeUtils.GetCrankOffsetMultiplier(rebarCrankType.Document, rebarCrankType.Id);
         }
 
         /// <summary>Gets the crank ratio value.</summary>
@@ -70,7 +70,7 @@ public static class RebarCrankTypeUtilsExtensions
         [Pure]
         public double GetRebarCrankRatio()
         {
-            return RebarCrankTypeUtils.GetCrankRatio(element.Document, element.Id);
+            return RebarCrankTypeUtils.GetCrankRatio(rebarCrankType.Document, rebarCrankType.Id);
         }
 
         /// <summary>Sets the crank length multiplier value.</summary>
@@ -83,7 +83,7 @@ public static class RebarCrankTypeUtilsExtensions
         /// </exception>
         public void SetRebarCrankLengthMultiplier(double crankLengthMultiplier)
         {
-            RebarCrankTypeUtils.SetCrankLengthMultiplier(element.Document, element.Id, crankLengthMultiplier);
+            RebarCrankTypeUtils.SetCrankLengthMultiplier(rebarCrankType.Document, rebarCrankType.Id, crankLengthMultiplier);
         }
 
         /// <summary>Sets the crank offset multiplier value.</summary>
@@ -96,7 +96,7 @@ public static class RebarCrankTypeUtilsExtensions
         /// </exception>
         public void SetRebarCrankOffsetMultiplier(double crankOffsetMultiplier)
         {
-            RebarCrankTypeUtils.SetCrankOffsetMultiplier(element.Document, element.Id, crankOffsetMultiplier);
+            RebarCrankTypeUtils.SetCrankOffsetMultiplier(rebarCrankType.Document, rebarCrankType.Id, crankOffsetMultiplier);
         }
 
         /// <summary>Sets the crank ratio value.</summary>
@@ -110,12 +110,12 @@ public static class RebarCrankTypeUtilsExtensions
         /// </exception>
         public void SetRebarCrankRatio(double crankRatio)
         {
-            RebarCrankTypeUtils.SetCrankRatio(element.Document, element.Id, crankRatio);
+            RebarCrankTypeUtils.SetCrankRatio(rebarCrankType.Document, rebarCrankType.Id, crankRatio);
         }
     }
 
-    /// <param name="elementId">The rebar crank type element id.</param>
-    extension(ElementId elementId)
+    /// <param name="rebarCrankTypeId">The rebar crank type element id.</param>
+    extension(ElementId rebarCrankTypeId)
     {
         /// <summary>Gets the crank length multiplier value.</summary>
         /// <param name="document">The document.</param>
@@ -129,7 +129,7 @@ public static class RebarCrankTypeUtilsExtensions
         [Pure]
         public double GetRebarCrankLengthMultiplier(Autodesk.Revit.DB.Document document)
         {
-            return RebarCrankTypeUtils.GetCrankLengthMultiplier(document, elementId);
+            return RebarCrankTypeUtils.GetCrankLengthMultiplier(document, rebarCrankTypeId);
         }
 
         /// <summary>Gets the crank offset multiplier value.</summary>
@@ -144,7 +144,7 @@ public static class RebarCrankTypeUtilsExtensions
         [Pure]
         public double GetRebarCrankOffsetMultiplier(Autodesk.Revit.DB.Document document)
         {
-            return RebarCrankTypeUtils.GetCrankOffsetMultiplier(document, elementId);
+            return RebarCrankTypeUtils.GetCrankOffsetMultiplier(document, rebarCrankTypeId);
         }
 
         /// <summary>Gets the crank ratio value.</summary>
@@ -160,7 +160,7 @@ public static class RebarCrankTypeUtilsExtensions
         [Pure]
         public double GetRebarCrankRatio(Autodesk.Revit.DB.Document document)
         {
-            return RebarCrankTypeUtils.GetCrankRatio(document, elementId);
+            return RebarCrankTypeUtils.GetCrankRatio(document, rebarCrankTypeId);
         }
 
         /// <summary>Sets the crank length multiplier value.</summary>
@@ -177,7 +177,7 @@ public static class RebarCrankTypeUtilsExtensions
         /// </exception>
         public void SetRebarCrankLengthMultiplier(Autodesk.Revit.DB.Document document, double crankLengthMultiplier)
         {
-            RebarCrankTypeUtils.SetCrankLengthMultiplier(document, elementId, crankLengthMultiplier);
+            RebarCrankTypeUtils.SetCrankLengthMultiplier(document, rebarCrankTypeId, crankLengthMultiplier);
         }
 
         /// <summary>Sets the crank offset multiplier value.</summary>
@@ -194,7 +194,7 @@ public static class RebarCrankTypeUtilsExtensions
         /// </exception>
         public void SetRebarCrankOffsetMultiplier(Autodesk.Revit.DB.Document document, double crankOffsetMultiplier)
         {
-            RebarCrankTypeUtils.SetCrankOffsetMultiplier(document, elementId, crankOffsetMultiplier);
+            RebarCrankTypeUtils.SetCrankOffsetMultiplier(document, rebarCrankTypeId, crankOffsetMultiplier);
         }
 
         /// <summary>Sets the crank ratio value.</summary>
@@ -212,7 +212,7 @@ public static class RebarCrankTypeUtilsExtensions
         /// </exception>
         public void SetRebarCrankRatio(Autodesk.Revit.DB.Document document, double crankRatio)
         {
-            RebarCrankTypeUtils.SetCrankRatio(document, elementId, crankRatio);
+            RebarCrankTypeUtils.SetCrankRatio(document, rebarCrankTypeId, crankRatio);
         }
     }
 }
