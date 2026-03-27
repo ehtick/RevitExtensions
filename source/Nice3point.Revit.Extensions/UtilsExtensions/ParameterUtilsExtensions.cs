@@ -83,8 +83,8 @@ public static class ParameterUtilsExtensions
         /// <exception cref="T:Autodesk.Revit.Exceptions.UnauthenticatedException">
         ///    Thrown when the user is not signed in.
         /// </exception>
-#if REVIT2027_OR_GREATER
         [Pure]
+#if REVIT2027_OR_GREATER
         [Obsolete("This method is deprecated in Revit 2027 and may be removed in a later version of Revit. We suggest you use the overload which accepts a region input instead.")]
         [CodeTemplate(
             searchTemplate: "$expr$.DownloadParameterOptions()",
@@ -125,8 +125,8 @@ public static class ParameterUtilsExtensions
         /// <exception cref="T:Autodesk.Revit.Exceptions.UnauthenticatedException">
         ///    Thrown when the user is not signed in.
         /// </exception>
-#if REVIT2027_OR_GREATER
         [Pure]
+#if REVIT2027_OR_GREATER
         [Obsolete("This method is deprecated in Revit 2027 and may be removed in a later version of Revit. We suggest you use the overload which accepts a region input instead.")]
         [CodeTemplate(
             searchTemplate: "$expr$.DownloadCompanyName($document$)",
@@ -210,6 +210,20 @@ public static class ParameterUtilsExtensions
         public SharedParameterElement DownloadParameter(Document document, ParameterDownloadOptions options)
         {
             return ParameterUtils.DownloadParameter(document, options, typeId);
+        }
+#endif
+#if REVIT2026_OR_GREATER
+        /// <summary>
+        ///    The parameter group identifier corresponding to the given built-in parameter identifier.
+        /// </summary>
+        /// <remarks>
+        ///    A ForgeTypeId identifies a built-in parameter if it corresponds to a valid BuiltInParameter value.
+        /// </remarks>
+        /// <returns>The parameter group identifier.</returns>
+        [Pure]
+        public ForgeTypeId GetBuiltInParameterGroupTypeId()
+        {
+            return ParameterUtils.GetBuiltInParameterGroupTypeId(typeId);
         }
 #endif
 #if REVIT2027_OR_GREATER
