@@ -1355,6 +1355,12 @@ var isValid = specTypeId.IsValidUnit(unitTypeId);
 var builtInParameter = forgeId.GetBuiltInParameter();
 ```
 
+**GetBuiltInParameterGroupTypeId** gets the parameter group identifier corresponding to the given built-in parameter identifier.
+
+```csharp
+var builtInParameterGroup = forgeId.GetBuiltInParameterGroupTypeId();
+```
+
 **GetAllBuiltInParameters** gets the identifiers of all built-in parameters.
 
 ```csharp

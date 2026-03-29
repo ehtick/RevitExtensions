@@ -231,6 +231,7 @@ This update focuses on improved API design through C# 14 extension methods synta
 - `typeId.GetValidUnits()`
 - `typeId.GetTypeCatalogStringForSpec()`
 - `typeId.GetTypeCatalogStringForUnit()`
+- `typeId.GetBuiltInParameterGroupTypeId()`
 - `typeId.DownloadCompanyName(Document)`
 - `typeId.DownloadCompanyName(Document, string)`
 - `typeId.DownloadParameterOptions()`
