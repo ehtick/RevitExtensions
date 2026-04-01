@@ -44,7 +44,7 @@ This update focuses on improved API design through C# 14 extension methods synta
 - `element.GetCuttingVoidInstances()`
 - `element.AddInstanceVoidCut(FamilyInstance)`
 - `element.RemoveInstanceVoidCut(FamilyInstance)`
-- `element.InstanceVoidCutExists(FamilyInstance)`
+- `element.IsInstanceVoidCutExists(FamilyInstance)`
 - `element.IsAllowedForSolidCut`
 - `element.IsElementFromAppropriateContext`
 - `element.GetCuttingSolids()`

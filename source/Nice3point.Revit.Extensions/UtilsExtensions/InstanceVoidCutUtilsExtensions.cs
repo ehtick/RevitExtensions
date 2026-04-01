@@ -75,7 +75,7 @@ public static class InstanceVoidCutUtilsExtensions
         /// <param name="cuttingInstance">The cutting family instance</param>
         /// <returns>Returns true if the instance is cutting the element.</returns>
         [Pure]
-        public bool InstanceVoidCutExists(FamilyInstance cuttingInstance)
+        public bool IsInstanceVoidCutExists(FamilyInstance cuttingInstance)
         {
             return InstanceVoidCutUtils.InstanceVoidCutExists(element, cuttingInstance);
         }

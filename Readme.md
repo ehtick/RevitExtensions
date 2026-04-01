@@ -284,10 +284,10 @@ element.AddInstanceVoidCut(cuttingInstance);
 element.RemoveInstanceVoidCut(cuttingInstance);
 ```
 
-**InstanceVoidCutExists** checks whether the instance is cutting the element.
+**IsInstanceVoidCutExists** checks whether the instance is cutting the element.
 
 ```csharp
-var exists = element.InstanceVoidCutExists(cuttingInstance);
+var exists = element.IsInstanceVoidCutExists(cuttingInstance);
 ```
 
 ### Extensible storage
