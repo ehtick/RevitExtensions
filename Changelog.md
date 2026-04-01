@@ -459,7 +459,7 @@ This update focuses on improved API design through C# 14 extension methods synta
 
 #### Annotation
 
-- `element.SupportsMultiAlign`
+- `element.IsMultiAlignSupported`
 - `element.GetAnnotationOutlineWithoutLeaders()`
 - `element.MoveWithAnchoredLeaders(XYZ)`
 

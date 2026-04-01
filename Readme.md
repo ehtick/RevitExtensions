@@ -2398,10 +2398,10 @@ var instance = familySymbol.CreateAdaptiveComponentInstance();
 
 ### Annotation
 
-**SupportsMultiAlign** returns true if the element can be aligned to other similar elements.
+**IsMultiAlignSupported** returns true if the element can be aligned to other similar elements.
 
 ```csharp
-var supports = element.SupportsMultiAlign;
+var supports = element.IsMultiAlignSupported;
 ```
 
 **GetAnnotationOutlineWithoutLeaders** gets the four corners of the alignable element in model space without its leaders.

@@ -17,7 +17,7 @@ public static class AnnotationMultipleAlignmentUtilsExtensions
         /// <returns>
         ///    True if the element can be aligned using the multiple alignment commands, false otherwise.
         /// </returns>
-        public bool SupportsMultiAlign => AnnotationMultipleAlignmentUtils.ElementSupportsMultiAlign(element);
+        public bool IsMultiAlignSupported => AnnotationMultipleAlignmentUtils.ElementSupportsMultiAlign(element);
 
         /// <summary>
         ///    Gets the four corners of the alignable element in model space without its leaders.
