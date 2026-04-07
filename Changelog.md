@@ -1,4 +1,4 @@
-# Release 2027.0.0-preview.4.20260324
+# 2027.0.0
 
 This update focuses on improved API design through C# 14 extension methods syntax, .NET 10 support, Revit 2027 support, and covers all known Utils classes.
 
@@ -831,7 +831,7 @@ The following members have been removed without a replacement or superseded by b
 
 **ImperialExtensions** are marked `[Obsolete]`. Use the **UnitsNet** package instead.
 
-# Release 2026.0.1
+# 2026.0.1
 
 This update focuses on increased utility class coverage, new extensions for global parameter management, for ForgeTypeId handling, advanced geometry extensions, and many-many more.
 
@@ -1006,7 +1006,7 @@ This update focuses on increased utility class coverage, new extensions for glob
 
 **Readme** has been updated, you can find a detailed description and code samples in it.
 
-# Release 2025.0.0
+# 2025.0.0
 
 - Revit 2025 support
 - New `FindParameter()` overloads with GUID and Definition. This method combines all API methods for getting a parameter, such as `get_Parameter`, `LookupParameter`, `GetParameter`. It also searches for a parameter in the element type if there is no such parameter in the element
@@ -1062,11 +1062,11 @@ The **SetAvailabilityController()** method specifies the class type that decides
 menuItem.SetAvailabilityController<Controller>()
 ```
 
-# Release 2024.0.0
+# 2024.0.0
 
 Revit 2024 support
 
-# Release 2023.1.9
+# 2023.1.9
 
 ElementExtensions:
 
@@ -1084,14 +1084,14 @@ SystemExtensions:
 
 - AppendPath overload with params
 
-# Release 2023.1.8
+# 2023.1.8
 
 UnitExtensions:
 
 - New FromUnit extension
 - New ToUnit extension
 
-# Release 2023.1.7
+# 2023.1.7
 
 RibbonExtensions:
 
@@ -1104,7 +1104,7 @@ ParameterExtensions:
 
 Nuget symbol server support: https://symbols.nuget.org/download/symbols
 
-# Release 2023.1.6
+# 2023.1.6
 
 CollectorExtensions:
 
@@ -1112,24 +1112,24 @@ CollectorExtensions:
 - New GetElements(ICollection<ElementId> elementIds) extension
 - New overloads for instances with ViewId
 
-# Release 2023.1.5
+# 2023.1.5
 
 New Parameter extensions
 
 Fixed GetParameter extensions for cases where the parameter value was not initialized
 
-# Release 2023.1.4
+# 2023.1.4
 
 New Application extensions
 New Collector extensions
 
 Updated TargetFramework. It now matches the framework that Revit is running on
 
-# Release 2023.1.3
+# 2023.1.3
 
 New Schema extensions
 
-# Release 2023.1.2
+# 2023.1.2
 
 Geometry extensions
 
@@ -1140,16 +1140,16 @@ Geometry extensions
 - New arc.SetCoordinateY extension
 - New arc.SetCoordinateZ extension
 
-# Release 2023.1.1
+# 2023.1.1
 
 New JoinGeometryUtils extensions
 
-# Release 2023.1.0
+# 2023.1.0
 
 - Revit 2023 support
 - Update attributes
 
-# Release 2022.0.5
+# 2022.0.5
 
 Unit extensions
 
@@ -1169,7 +1169,7 @@ Ribbon Extensions
 - New AddPushButton<TCommand> extensions
 - Uri changed to UriKind.RelativeOrAbsolute
 
-# Release 2022.0.4
+# 2022.0.4
 
 Element extensions
 
@@ -1183,7 +1183,7 @@ Host Extensions
 - New GetTopFaces() extension
 - New GetSideFaces() extension
 
-# Release 2022.0.3
+# 2022.0.3
 
 Element extensions
 
@@ -1206,7 +1206,7 @@ Label Extensions
 - New ToSymbolLabel(ForgeTypeId) extension
 - New ToUnitLabel(ForgeTypeId) extension
 
-# Release 2022.0.2
+# 2022.0.2
 
 Ribbon extensions
 
@@ -1226,10 +1226,10 @@ ElementId extensions
 
 - New AreEquals(BuiltInParameter) extension
 
-# Release 2022.0.1
+# 2022.0.1
 
 - Connected JetBrains annotations
 
-# Release 2022.0.0
+# 2022.0.0
 
 - Initial release
