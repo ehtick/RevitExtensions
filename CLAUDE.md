@@ -8,7 +8,7 @@ Nice3point.Revit.Extensions is a public NuGet library of fluent extension method
 * Use C# 14 `extension(Type) { }` blocks. Mutation methods return the source object for chaining.
 * Wrap the Revit API directly; do not reimplement it. Mark read-only methods `[Pure]`, mark public classes `[PublicAPI]`.
 * When a method works through `element.Document`/`element.Id`, provide a sibling `ElementId` overload that takes an explicit `Document`, with a descriptive name.
-* Every extension must compile under every supported Revit configuration (`Debug.R19`–`Debug.R27`, `Release.R19`–`Release.R27`). Gate version-specific APIs with `#if REVIT2024_OR_GREATER`-style directives.
+* Every extension must compile under every supported Revit configuration (`Debug.RNN`/`Release.RNN`) declared by the project SDK. Gate version-specific APIs with `#if REVIT2024_OR_GREATER`-style directives.
 * Test only custom logic in `tests/Nice3point.Revit.Extensions.Tests` (TUnit on the Revit thread); skip thin Revit-API wrappers and all UI extensions.
 * Update `Readme.md`, `Changelog.md`, and XML docs in the same change as any public-surface change.
 

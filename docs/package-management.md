@@ -7,7 +7,7 @@ The solution uses centralized NuGet package management. All versions live in `Di
 * Define every package version in `Directory.Packages.props`. Do not add `<Version>` to individual `PackageReference` items.
 * Keep Revit-version-specific packages conditional on `$(RevitVersion)`. Revit API packages float to `$(RevitVersion).*`; the Toolkit, TUnit.Revit, and BenchmarkDotNet.Revit packages are pinned per version.
 * Keep shared dependency versions unconditional unless they truly vary by Revit version.
-* Use `GlobalPackageReference` only for packages that apply solution-wide (currently `Polyfill` and `JetBrains.Annotations.Sources`).
+* Use `GlobalPackageReference` only for packages that apply solution-wide (analyzers, polyfills, and similar); the current set lives in the `<GlobalPackageReference>` entries of `Directory.Packages.props`.
 * Revit API references in the library are `PrivateAssets="all"` — they are build-time only and never flow to consumers of the package.
 
 ## Adding Dependencies
@@ -18,7 +18,7 @@ The solution uses centralized NuGet package management. All versions live in `Di
 
 ## Updating Dependencies
 
-* When updating Revit-specific packages, verify all supported Revit versions (`R19`–`R27`) still resolve.
+* When updating Revit-specific packages, verify every supported Revit configuration (each `RNN` the project SDK declares) still resolves.
 * Keep dependency updates focused and easy to review; do not mix them with feature work.
 * Run the relevant build/tests after any dependency change.
 * Renovate (`renovate.json`) manages routine version bumps.
