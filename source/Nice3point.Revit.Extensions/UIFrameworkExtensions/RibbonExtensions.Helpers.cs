@@ -31,19 +31,19 @@ public static partial class RibbonExtensions
 #endif
 
     /// <summary>
-    ///     List of pending keyboard shortcut changes.
+    ///     Queue of keyboard shortcut updates awaiting the next batched flush.
     /// </summary>
-    private static readonly List<(string ItemId, string Representation, bool CheckConflicts)> PendingShortcuts = [];
+    private static readonly List<(string ItemId, string Representation, bool CheckUsage)> ShortcutUpdateQueue = [];
 
     /// <summary>
-    ///     Shortcuts reserved by the current batch update.
+    ///     Shortcut key combinations already assigned or claimed during the current batch.
     /// </summary>
     private static HashSet<string>? _reservedShortcuts;
 
     /// <summary>
     ///     Indicates whether a deferred shortcut flush is already scheduled.
     /// </summary>
-    private static bool _shortcutsFlushScheduled;
+    private static bool _shortcutsUpdateScheduled;
 
     /// <summary>
     ///     Adds keyboard shortcuts for the specified <see cref="PushButton"/> using the provided string representation.
@@ -53,6 +53,14 @@ public static partial class RibbonExtensions
     private static void AddButtonShortcuts(PushButton button, string representation)
     {
         var internalItem = button.GetInternalItem();
+        if (_reservedShortcuts is not null)
+        {
+            foreach (var shortcut in representation.Split(['#'], StringSplitOptions.RemoveEmptyEntries))
+            {
+                _reservedShortcuts.Add(shortcut);
+            }
+        }
+
         ScheduleShortcutsUpdate(internalItem.Id, representation, checkUsage: false);
     }
 
@@ -68,7 +76,7 @@ public static partial class RibbonExtensions
         var newShortcuts = representation.Split(['#'], StringSplitOptions.RemoveEmptyEntries);
         if (newShortcuts.Length == 0) return false;
 
-        _reservedShortcuts ??= LoadUsedShortcuts();
+        _reservedShortcuts ??= LoadReservedShortcuts();
 
         var shortcutAdded = false;
         foreach (var newShortcut in newShortcuts)
@@ -91,10 +99,10 @@ public static partial class RibbonExtensions
     /// <param name="checkUsage">Whether the shortcuts must be re-validated against existing commands before applying.</param>
     private static void ScheduleShortcutsUpdate(string itemId, string representation, bool checkUsage)
     {
-        PendingShortcuts.Add((itemId, representation, checkUsage));
+        ShortcutUpdateQueue.Add((itemId, representation, checkUsage));
 
-        if (_shortcutsFlushScheduled) return;
-        _shortcutsFlushScheduled = true;
+        if (_shortcutsUpdateScheduled) return;
+        _shortcutsUpdateScheduled = true;
 
         var dispatcher = ComponentManager.Ribbon.Dispatcher ?? Dispatcher.CurrentDispatcher;
         dispatcher.InvokeAsync(FlushShortcuts, DispatcherPriority.ApplicationIdle);
@@ -106,13 +114,13 @@ public static partial class RibbonExtensions
     private static void FlushShortcuts()
     {
         _reservedShortcuts = null;
-        _shortcutsFlushScheduled = false;
-        if (PendingShortcuts.Count == 0) return;
+        _shortcutsUpdateScheduled = false;
+        if (ShortcutUpdateQueue.Count == 0) return;
 
-        var hasChanges = false;
+        var changedCommands = new Dictionary<string, ShortcutItem>();
         var usedShortcuts = LoadUsedShortcuts();
 
-        foreach (var (itemId, representation, checkUsage) in PendingShortcuts)
+        foreach (var (itemId, representation, checkUsage) in ShortcutUpdateQueue)
         {
             if (!ShortcutsHelper.Commands.TryGetValue(itemId, out var shortcutItem)) continue;
 
@@ -123,7 +131,7 @@ public static partial class RibbonExtensions
                     if (!usedShortcuts.Add(newShortcut)) continue;
 
                     shortcutItem.Shortcuts.Add(newShortcut);
-                    hasChanges = true;
+                    changedCommands[itemId] = shortcutItem;
                 }
             }
             else
@@ -136,25 +144,43 @@ public static partial class RibbonExtensions
                     usedShortcuts.Add(shortcut);
                 }
 
-                hasChanges = true;
+                changedCommands[itemId] = shortcutItem;
             }
         }
 
-        PendingShortcuts.Clear();
+        ShortcutUpdateQueue.Clear();
 
-        if (hasChanges)
+        if (changedCommands.Count > 0)
         {
-            KeyboardShortcutService.applyShortcutChanges(ShortcutsHelper.Commands);
+            KeyboardShortcutService.applyShortcutChanges(changedCommands);
         }
     }
 
     /// <summary>
-    ///     Reloads the command list and collects all shortcuts currently assigned to commands.
+    ///     Collects all shortcuts that are already assigned to commands or queued for the current batch.
+    /// </summary>
+    /// <returns>A set of the shortcuts reserved for the current batch.</returns>
+    private static HashSet<string> LoadReservedShortcuts()
+    {
+        var reserved = LoadUsedShortcuts();
+        foreach (var update in ShortcutUpdateQueue)
+        {
+            foreach (var shortcut in update.Representation.Split(['#'], StringSplitOptions.RemoveEmptyEntries))
+            {
+                reserved.Add(shortcut);
+            }
+        }
+
+        return reserved;
+    }
+
+    /// <summary>
+    ///     Collects all shortcuts currently assigned to commands.
     /// </summary>
     /// <returns>A set of the shortcuts currently in use.</returns>
     private static HashSet<string> LoadUsedShortcuts()
     {
-        ShortcutsHelper.LoadCommands();
+        if (ShortcutsHelper.Commands.Count == 0) ShortcutsHelper.LoadCommands();
 
         var shortcuts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var command in ShortcutsHelper.Commands.Values)

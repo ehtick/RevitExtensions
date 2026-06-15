@@ -1,3 +1,7 @@
+# 2027.0.2
+
+- Optimize shortcuts performance and cases when it cleans up in memory
+
 # 2027.0.1
 
 - Fixed AddShortcuts memory leak https://github.com/Nice3point/RevitExtensions/issues/74
